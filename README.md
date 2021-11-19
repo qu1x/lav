@@ -34,8 +34,8 @@ By enabling the [`libm`] feature this crate becomes [`no_std`] without loss of f
 [Portable SIMD]: https://doc.rust-lang.org/nightly/core/simd/index.html
 [`example`]: src/example/mod.rs
 [AoS, SoA, or AoSoA]: https://en.wikipedia.org/wiki/AoS_and_SoA
-[`pga`]: https:/docs.rs/pga
-[`libm`]: https:/docs.rs/libm
+[`pga`]: https://docs.rs/pga
+[`libm`]: https://docs.rs/libm
 [`no_std`]: https://docs.rust-embedded.org/book/intro/no-std.html
 
 See the [release history] to keep track of the development.
