@@ -229,7 +229,7 @@ where
 	}
 	/// Tests lanes for approximate inequality wrt `epsilon` and `ulp`, "and" in the sense of `&&`.
 	fn lanes_approx_ne(self, other: Self, epsilon: Self, ulp: Self::Bits) -> Self::Mask {
-		self.lanes_approx_eq(other, epsilon, ulp)
+		!self.lanes_approx_eq(other, epsilon, ulp)
 	}
 
 	/// Test if each lane is equal to the corresponding lane in `other`.
