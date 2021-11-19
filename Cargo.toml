@@ -1,0 +1,35 @@
+[package]
+name = "lav"
+version = "0.1.0"
+edition = "2021"
+description = "Lane-Associated Vector (LAV): Portable SIMD vector trait as GAT of SIMD lane trait."
+documentation = "https://docs.rs/lav"
+repository = "https://github.com/qu1x/lav"
+readme = "README.md"
+license = "MPL-2.0"
+keywords = [
+	"simd-traits",
+	"portable-simd",
+	"computer-graphics",
+]
+categories = [
+	"no-std",
+	"science",
+	"graphics",
+	"mathematics",
+	"game-development",
+]
+include = [
+	"src/**/*.rs",
+	"Cargo.toml",
+	"README.md",
+	"RELEASES.md",
+	"LICENSES/*",
+]
+
+[package.metadata.docs.rs]
+rustdoc-args = [ "--html-in-header", "katex.html" ]
+
+[dependencies.libm]
+version = "0.2"
+optional = true

@@ -1,0 +1,36 @@
+name: CI
+on: [push, pull_request]
+env:
+  CARGO_TERM_COLOR: always
+jobs:
+  std:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout (std)
+      uses: actions/checkout@v2
+    - name: Toolchain (std)
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: nightly
+        override: true
+    - name: Test (std)
+      uses: actions-rs/cargo@v1
+      with:
+        command: test
+  libm:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout (libm)
+      uses: actions/checkout@v2
+    - name: Toolchain (libm)
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: nightly
+        override: true
+    - name: Test (libm)
+      uses: actions-rs/cargo@v1
+      with:
+        command: test
+        args: --features libm

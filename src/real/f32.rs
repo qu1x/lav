@@ -1,0 +1,434 @@
+// Copyright © 2021 Rouven Spreckels <rs@qu1x.dev>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+use super::Real;
+use core::simd::{LaneCount, Simd, SupportedLaneCount};
+
+impl Real for f32 {
+	type Bits = u32;
+	type Simd<const LANES: usize>
+	where
+		LaneCount<LANES>: SupportedLaneCount,
+	= Simd<Self, LANES>;
+
+	const ZERO: Self = 0.0;
+	const ONE: Self = 1.0;
+	const TWO: Self = 2.0;
+
+	const PI: Self = core::f32::consts::PI;
+	const TAU: Self = core::f32::consts::TAU;
+	const SQRT_2: Self = core::f32::consts::SQRT_2;
+
+	const FRAC_1_2: Self = 1.0 / 2.0;
+	const FRAC_1_3: Self = 1.0 / 3.0;
+	const FRAC_1_4: Self = 1.0 / 4.0;
+	const FRAC_1_6: Self = 1.0 / 6.0;
+	const FRAC_1_8: Self = 1.0 / 8.0;
+
+	const FRAC_PI_2: Self = core::f32::consts::FRAC_PI_2;
+	const FRAC_PI_3: Self = core::f32::consts::FRAC_PI_3;
+	const FRAC_PI_4: Self = core::f32::consts::FRAC_PI_4;
+	const FRAC_PI_6: Self = core::f32::consts::FRAC_PI_6;
+	const FRAC_PI_8: Self = core::f32::consts::FRAC_PI_8;
+
+	const FRAC_1_PI: Self = core::f32::consts::FRAC_1_PI;
+	const FRAC_1_TAU: Self = Self::FRAC_1_PI * Self::FRAC_1_2;
+	const FRAC_1_SQRT_2: Self = core::f32::consts::FRAC_1_SQRT_2;
+	const FRAC_2_PI: Self = core::f32::consts::FRAC_2_PI;
+	const FRAC_2_SQRT_PI: Self = core::f32::consts::FRAC_2_SQRT_PI;
+
+	const EPSILON: Self = Self::EPSILON;
+	const SQRT_EPSILON: Self = 0.00034526698;
+	const CBRT_EPSILON: Self = 0.0049215667;
+
+	const RADIX: u32 = Self::RADIX;
+	const MANTISSA_DIGITS: u32 = Self::MANTISSA_DIGITS;
+	const DIGITS: u32 = Self::DIGITS;
+	const MIN: Self = Self::MIN;
+	const MIN_POSITIVE: Self = Self::MIN_POSITIVE;
+	const MAX: Self = Self::MAX;
+	const MIN_EXP: i32 = Self::MIN_EXP;
+	const MAX_EXP: i32 = Self::MAX_EXP;
+	const MIN_10_EXP: i32 = Self::MIN_10_EXP;
+	const MAX_10_EXP: i32 = Self::MAX_10_EXP;
+
+	const NAN: Self = Self::NAN;
+	const INFINITY: Self = Self::INFINITY;
+	const NEG_INFINITY: Self = Self::NEG_INFINITY;
+
+	fn from_bits(bits: Self::Bits) -> Self {
+		Self::from_bits(bits)
+	}
+	fn to_bits(self) -> Self::Bits {
+		self.to_bits()
+	}
+
+	fn is_sign_positive(self) -> bool {
+		self.is_sign_positive()
+	}
+	fn is_sign_negative(self) -> bool {
+		self.is_sign_negative()
+	}
+	fn is_nan(self) -> bool {
+		self.is_nan()
+	}
+	fn is_infinite(self) -> bool {
+		self.is_infinite()
+	}
+	fn is_finite(self) -> bool {
+		self.is_finite()
+	}
+	fn is_subnormal(self) -> bool {
+		self.is_subnormal()
+	}
+	fn is_normal(self) -> bool {
+		self.is_normal()
+	}
+	fn classify(self) -> core::num::FpCategory {
+		self.classify()
+	}
+
+	#[cfg(feature = "libm")]
+	fn floor(self) -> Self {
+		libm::floorf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn floor(self) -> Self {
+		self.floor()
+	}
+	#[cfg(feature = "libm")]
+	fn ceil(self) -> Self {
+		libm::ceilf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn ceil(self) -> Self {
+		self.ceil()
+	}
+	#[cfg(feature = "libm")]
+	fn round(self) -> Self {
+		libm::roundf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn round(self) -> Self {
+		self.round()
+	}
+	#[cfg(feature = "libm")]
+	fn trunc(self) -> Self {
+		libm::truncf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn trunc(self) -> Self {
+		self.trunc()
+	}
+	#[cfg(feature = "libm")]
+	fn fract(self) -> Self {
+		self - self.trunc()
+	}
+	#[cfg(not(feature = "libm"))]
+	fn fract(self) -> Self {
+		self.fract()
+	}
+
+	#[cfg(feature = "libm")]
+	fn abs(self) -> Self {
+		libm::fabsf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn abs(self) -> Self {
+		self.abs()
+	}
+	#[cfg(feature = "libm")]
+	fn signum(self) -> Self {
+		if self.is_nan() {
+			Self::NAN
+		} else {
+			1.0_f32.copysign(self)
+		}
+	}
+	#[cfg(not(feature = "libm"))]
+	fn signum(self) -> Self {
+		self.signum()
+	}
+	#[cfg(feature = "libm")]
+	fn copysign(self, sign: Self) -> Self {
+		libm::copysignf(self, sign)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn copysign(self, sign: Self) -> Self {
+		self.copysign(sign)
+	}
+	fn min(self, other: Self) -> Self {
+		self.min(other)
+	}
+	fn max(self, other: Self) -> Self {
+		self.max(other)
+	}
+	fn clamp(self, min: Self, max: Self) -> Self {
+		self.clamp(min, max)
+	}
+
+	fn recip(self) -> Self {
+		self.recip()
+	}
+
+	fn to_radians(self) -> Self {
+		self.to_radians()
+	}
+	fn to_degrees(self) -> Self {
+		self.to_degrees()
+	}
+
+	#[cfg(feature = "libm")]
+	fn mul_add(self, a: Self, b: Self) -> Self {
+		libm::fmaf(self, a, b)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn mul_add(self, a: Self, b: Self) -> Self {
+		self.mul_add(a, b)
+	}
+
+	#[cfg(feature = "libm")]
+	fn div_euclid(self, rhs: Self) -> Self {
+		let q = (self / rhs).trunc();
+		if self % rhs < 0.0 {
+			return if rhs > 0.0 { q - 1.0 } else { q + 1.0 };
+		}
+		q
+	}
+	#[cfg(not(feature = "libm"))]
+	fn div_euclid(self, rhs: Self) -> Self {
+		self.div_euclid(rhs)
+	}
+	#[cfg(feature = "libm")]
+	fn rem_euclid(self, rhs: Self) -> Self {
+		let r = self % rhs;
+		if r < 0.0 {
+			r + rhs.abs()
+		} else {
+			r
+		}
+	}
+	#[cfg(not(feature = "libm"))]
+	fn rem_euclid(self, rhs: Self) -> Self {
+		self.rem_euclid(rhs)
+	}
+
+	#[cfg(feature = "libm")]
+	fn powf(self, n: Self) -> Self {
+		libm::powf(self, n)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn powf(self, n: Self) -> Self {
+		self.powf(n)
+	}
+	#[cfg(feature = "libm")]
+	fn exp(self) -> Self {
+		libm::expf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn exp(self) -> Self {
+		self.exp()
+	}
+	#[cfg(feature = "libm")]
+	fn exp_m1(self) -> Self {
+		libm::expm1f(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn exp_m1(self) -> Self {
+		self.exp_m1()
+	}
+	#[cfg(feature = "libm")]
+	fn exp2(self) -> Self {
+		libm::exp2f(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn exp2(self) -> Self {
+		self.exp2()
+	}
+	#[cfg(feature = "libm")]
+	fn ln(self) -> Self {
+		libm::logf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn ln(self) -> Self {
+		self.ln()
+	}
+	#[cfg(feature = "libm")]
+	fn ln_1p(self) -> Self {
+		libm::log1pf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn ln_1p(self) -> Self {
+		self.ln_1p()
+	}
+	#[cfg(feature = "libm")]
+	fn log(self, base: Self) -> Self {
+		self.ln() / base.ln()
+	}
+	#[cfg(not(feature = "libm"))]
+	fn log(self, base: Self) -> Self {
+		self.log(base)
+	}
+	#[cfg(feature = "libm")]
+	fn log2(self) -> Self {
+		libm::log2f(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn log2(self) -> Self {
+		self.log2()
+	}
+	#[cfg(feature = "libm")]
+	fn log10(self) -> Self {
+		libm::log10f(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn log10(self) -> Self {
+		self.log10()
+	}
+
+	#[cfg(feature = "libm")]
+	fn sqrt(self) -> Self {
+		libm::sqrtf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn sqrt(self) -> Self {
+		self.sqrt()
+	}
+	#[cfg(feature = "libm")]
+	fn cbrt(self) -> Self {
+		libm::cbrtf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn cbrt(self) -> Self {
+		self.cbrt()
+	}
+
+	#[cfg(feature = "libm")]
+	fn hypot(self, other: Self) -> Self {
+		libm::hypotf(self, other)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn hypot(self, other: Self) -> Self {
+		self.hypot(other)
+	}
+
+	#[cfg(feature = "libm")]
+	fn sin(self) -> Self {
+		libm::sinf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn sin(self) -> Self {
+		self.sin()
+	}
+	#[cfg(feature = "libm")]
+	fn sinh(self) -> Self {
+		libm::sinhf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn sinh(self) -> Self {
+		self.sinh()
+	}
+	#[cfg(feature = "libm")]
+	fn cos(self) -> Self {
+		libm::cosf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn cos(self) -> Self {
+		self.cos()
+	}
+	#[cfg(feature = "libm")]
+	fn cosh(self) -> Self {
+		libm::coshf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn cosh(self) -> Self {
+		self.cosh()
+	}
+	#[cfg(feature = "libm")]
+	fn sin_cos(self) -> (Self, Self) {
+		libm::sincosf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn sin_cos(self) -> (Self, Self) {
+		self.sin_cos()
+	}
+	#[cfg(feature = "libm")]
+	fn tan(self) -> Self {
+		libm::tanf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn tan(self) -> Self {
+		self.tan()
+	}
+	#[cfg(feature = "libm")]
+	fn asin(self) -> Self {
+		libm::asinf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn asin(self) -> Self {
+		self.asin()
+	}
+	#[cfg(feature = "libm")]
+	fn asinh(self) -> Self {
+		libm::asinhf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn asinh(self) -> Self {
+		self.asinh()
+	}
+	#[cfg(feature = "libm")]
+	fn acos(self) -> Self {
+		libm::acosf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn acos(self) -> Self {
+		self.acos()
+	}
+	#[cfg(feature = "libm")]
+	fn acosh(self) -> Self {
+		libm::acoshf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn acosh(self) -> Self {
+		self.acosh()
+	}
+	#[cfg(feature = "libm")]
+	fn atan(self) -> Self {
+		libm::atanf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn atan(self) -> Self {
+		self.atan()
+	}
+	#[cfg(feature = "libm")]
+	fn atanh(self) -> Self {
+		libm::atanhf(self)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn atanh(self) -> Self {
+		self.atanh()
+	}
+	#[cfg(feature = "libm")]
+	fn atan2(self, other: Self) -> Self {
+		libm::atan2f(self, other)
+	}
+	#[cfg(not(feature = "libm"))]
+	fn atan2(self, other: Self) -> Self {
+		self.atan2(other)
+	}
+
+	fn lerp(self, start: Self, end: Self) -> Self {
+		if start == end {
+			start
+		} else {
+			self.mul_add(end, (-self).mul_add(start, start))
+		}
+	}
+
+	fn total_cmp(&self, other: &Self) -> core::cmp::Ordering {
+		self.total_cmp(other)
+	}
+}

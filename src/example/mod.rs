@@ -1,0 +1,428 @@
+// Copyright © 2021 Rouven Spreckels <rs@qu1x.dev>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+//! Portably SIMD-optimized 3D rotor implementation generic over lane type [`f32`] and [`f64`].
+//!
+//! ```
+//! #![allow(non_snake_case)]
+//! #![feature(portable_simd)]
+//!
+//! use core::ops::{
+//! 	Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Shl, ShlAssign, Sub, SubAssign,
+//! };
+//! use lav::{swizzle, Real, SimdMask, SimdReal};
+//!
+//! #[derive(Debug, Copy, Clone, PartialEq, Eq)]
+//! pub struct Rotor3<R: Real> {
+//! 	wxyz: R::Simd<4>,
+//! }
+//!
+//! impl<R: Real> Rotor3<R> {
+//! 	pub fn new(alpha: R, x: R, y: R, z: R) -> Self {
+//! 		let (sin, cos) = (alpha * -R::FRAC_1_2).sin_cos();
+//! 		(Self::from([R::ZERO, x, y, z]).unit() * sin).set_w(cos)
+//! 	}
+//! 	pub fn from_wxyz(wxyz: [R; 4]) -> Self {
+//! 		Self { wxyz: wxyz.into() }
+//! 	}
+//! 	pub fn from_xyzw(xyzw: [R; 4]) -> Self {
+//! 		Self {
+//! 			wxyz: R::Simd::from_array(xyzw).rotate_lanes_right::<1>(),
+//! 		}
+//! 	}
+//! 	pub fn norm(&self) -> R {
+//! 		self.norm_squared().sqrt()
+//! 	}
+//! 	pub fn norm_squared(&self) -> R {
+//! 		(self.wxyz * self.wxyz).horizontal_sum()
+//! 	}
+//! 	pub fn unit(self) -> Self {
+//! 		self / self.norm()
+//! 	}
+//! 	pub fn inv(self) -> Self {
+//! 		self.rev() / self.norm_squared()
+//! 	}
+//! 	pub fn rev(self) -> Self {
+//! 		let tfff = R::Simd::mask_from_array([true, false, false, false]);
+//! 		Self {
+//! 			wxyz: tfff.select(self.wxyz, -self.wxyz),
+//! 		}
+//! 	}
+//! 	pub fn constrain(self) -> Self {
+//! 		if self.w().is_sign_negative() {
+//! 			-self
+//! 		} else {
+//! 			self
+//! 		}
+//! 	}
+//! 	pub fn to_wxyz(self) -> [R; 4] {
+//! 		self.wxyz.to_array()
+//! 	}
+//! 	pub fn to_xyzw(self) -> [R; 4] {
+//! 		self.wxyz.rotate_lanes_left::<1>().to_array()
+//! 	}
+//! 	pub fn w(&self) -> R {
+//! 		self.wxyz[0]
+//! 	}
+//! 	pub fn x(&self) -> R {
+//! 		self.wxyz[1]
+//! 	}
+//! 	pub fn y(&self) -> R {
+//! 		self.wxyz[2]
+//! 	}
+//! 	pub fn z(&self) -> R {
+//! 		self.wxyz[3]
+//! 	}
+//! 	pub fn set_w(mut self, w: R) -> Self {
+//! 		self.wxyz[0] = w;
+//! 		self
+//! 	}
+//! 	pub fn set_x(mut self, x: R) -> Self {
+//! 		self.wxyz[1] = x;
+//! 		self
+//! 	}
+//! 	pub fn set_y(mut self, y: R) -> Self {
+//! 		self.wxyz[2] = y;
+//! 		self
+//! 	}
+//! 	pub fn set_z(mut self, z: R) -> Self {
+//! 		self.wxyz[3] = z;
+//! 		self
+//! 	}
+//! 	pub fn approx_eq(self, other: Self, epsilon: R, ulp: R::Bits) -> bool {
+//! 		self.wxyz.approx_eq(other.wxyz, epsilon, ulp)
+//! 	}
+//! 	pub fn approx_ne(self, other: Self, epsilon: R, ulp: R::Bits) -> bool {
+//! 		self.wxyz.approx_ne(other.wxyz, epsilon, ulp)
+//! 	}
+//! 	pub fn point_fn(self) -> impl Fn(Point3<R>) -> Point3<R> {
+//! 		// +(+[+1ww+1zz+(+1xx+1yy)]~w+[+0zy+0wx]~w+[+0yw-0zx]~w)e123
+//! 		// +(+[+1xx+1ww-(+1yy+1zz)]~X+[+2wz+2xy]~Y+[+2zx-2wy]~Z)e032
+//! 		// +(+[+1yy+1ww-(+1zz+1xx)]~Y+[+2wx+2yz]~Z+[+2xy-2wz]~X)e013
+//! 		// +(+[+1zz+1ww-(+1xx+1yy)]~Z+[+2wy+2zx]~X+[+2yz-2wx]~Y)e021
+//! 		let wxyz = self.wxyz;
+//! 		let zwww = swizzle!(wxyz, [3, 0, 0, 0]);
+//! 		let xyzx = swizzle!(wxyz, [1, 2, 3, 1]);
+//! 		let yzxy = swizzle!(wxyz, [2, 3, 1, 2]);
+//! 		let zttt = R::Simd::from_array([R::ZERO, R::TWO, R::TWO, R::TWO]);
+//! 		let tfff = R::Simd::mask_from_array([true, false, false, false]);
+//! 		let pin0 = wxyz * wxyz + zwww * zwww - tfff.negate(xyzx * xyzx + yzxy * yzxy);
+//! 		let pin1 = (zwww * yzxy + wxyz * xyzx) * zttt;
+//! 		let pin2 = (yzxy * wxyz - zwww * xyzx) * zttt;
+//! 		move |point3| {
+//! 			let wXYZ = point3.wXYZ;
+//! 			let wYZX = swizzle!(wXYZ, [0, 2, 3, 1]);
+//! 			let wZXY = swizzle!(wXYZ, [0, 3, 1, 2]);
+//! 			let wXYZ = pin0 * wXYZ + pin1 * wYZX + pin2 * wZXY;
+//! 			Point3 { wXYZ }
+//! 		}
+//! 	}
+//! }
+//!
+//! impl<R: Real> Default for Rotor3<R> {
+//! 	fn default() -> Self {
+//! 		Self::from([R::ONE, R::ZERO, R::ZERO, R::ZERO])
+//! 	}
+//! }
+//!
+//! impl<R: Real> From<[R; 4]> for Rotor3<R> {
+//! 	fn from(wxyz: [R; 4]) -> Self {
+//! 		Self::from_wxyz(wxyz)
+//! 	}
+//! }
+//!
+//! impl<R: Real> Into<[R; 4]> for Rotor3<R> {
+//! 	fn into(self) -> [R; 4] {
+//! 		self.to_wxyz()
+//! 	}
+//! }
+//!
+//! impl<R: Real> Add for Rotor3<R> {
+//! 	type Output = Self;
+//!
+//! 	fn add(self, other: Self) -> Self::Output {
+//! 		Self {
+//! 			wxyz: self.wxyz + other.wxyz,
+//! 		}
+//! 	}
+//! }
+//!
+//! impl<R: Real> AddAssign for Rotor3<R> {
+//! 	fn add_assign(&mut self, other: Self) {
+//! 		*self = *self + other;
+//! 	}
+//! }
+//!
+//! impl<R: Real> Div<R> for Rotor3<R> {
+//! 	type Output = Self;
+//!
+//! 	fn div(self, other: R) -> Self::Output {
+//! 		Self {
+//! 			wxyz: self.wxyz / other.splat(),
+//! 		}
+//! 	}
+//! }
+//!
+//! impl<R: Real> DivAssign<R> for Rotor3<R> {
+//! 	fn div_assign(&mut self, other: R) {
+//! 		*self = *self / other;
+//! 	}
+//! }
+//!
+//! impl<R: Real> Mul for Rotor3<R> {
+//! 	type Output = Self;
+//!
+//! 	fn mul(self, other: Self) -> Self::Output {
+//! 		// +(+1LwRw-1LxRx-(+1LyRy+1LzRz))e
+//! 		// +(+1LwRx-1LyRz+(+1LxRw+1LzRy))e23
+//! 		// +(+1LwRy-1LzRx+(+1LxRz+1LyRw))e31
+//! 		// +(+1LwRz-1LxRy+(+1LyRx+1LzRw))e12
+//! 		let tfff = R::Simd::mask_from_array([true, false, false, false]);
+//! 		let wxyz = swizzle!(self.wxyz, [0, 0, 0, 0]) * other.wxyz
+//! 			- swizzle!(self.wxyz, [1, 2, 3, 1]) * swizzle!(other.wxyz, [1, 3, 1, 2])
+//! 			+ tfff.negate(
+//! 				swizzle!(self.wxyz, [2, 1, 1, 2]) * swizzle!(other.wxyz, [2, 0, 3, 1])
+//! 					+ swizzle!(self.wxyz, [3, 3, 2, 3]) * swizzle!(other.wxyz, [3, 2, 0, 0]),
+//! 			);
+//! 		Self { wxyz }
+//! 	}
+//! }
+//!
+//! impl<R: Real> Mul<R> for Rotor3<R> {
+//! 	type Output = Self;
+//!
+//! 	fn mul(self, other: R) -> Self::Output {
+//! 		Self {
+//! 			wxyz: self.wxyz * other.splat(),
+//! 		}
+//! 	}
+//! }
+//!
+//! impl<R: Real> MulAssign<R> for Rotor3<R> {
+//! 	fn mul_assign(&mut self, other: R) {
+//! 		*self = *self * other;
+//! 	}
+//! }
+//!
+//! impl<R: Real> Neg for Rotor3<R> {
+//! 	type Output = Self;
+//!
+//! 	fn neg(self) -> Self::Output {
+//! 		Self { wxyz: -self.wxyz }
+//! 	}
+//! }
+//!
+//! impl<R: Real> Sub for Rotor3<R> {
+//! 	type Output = Self;
+//!
+//! 	fn sub(self, other: Self) -> Self::Output {
+//! 		Self {
+//! 			wxyz: self.wxyz - other.wxyz,
+//! 		}
+//! 	}
+//! }
+//!
+//! impl<R: Real> SubAssign for Rotor3<R> {
+//! 	fn sub_assign(&mut self, other: Self) {
+//! 		*self = *self - other;
+//! 	}
+//! }
+//!
+//! #[derive(Debug, Copy, Clone, PartialEq, Eq)]
+//! pub struct Point3<R: Real> {
+//! 	wXYZ: R::Simd<4>,
+//! }
+//!
+//! impl<R: Real> Point3<R> {
+//! 	pub fn new(w: R, X: R, Y: R, Z: R) -> Self {
+//! 		Self::from([w, X, Y, Z])
+//! 	}
+//! 	pub fn from_wXYZ(wXYZ: [R; 4]) -> Self {
+//! 		Self { wXYZ: wXYZ.into() }
+//! 	}
+//! 	pub fn from_XYZw(XYZw: [R; 4]) -> Self {
+//! 		Self {
+//! 			wXYZ: R::Simd::from_array(XYZw).rotate_lanes_right::<1>(),
+//! 		}
+//! 	}
+//! 	pub fn norm(&self) -> R {
+//! 		self.w().abs()
+//! 	}
+//! 	pub fn norm_squared(&self) -> R {
+//! 		let w = self.w();
+//! 		w * w
+//! 	}
+//! 	pub fn unit(self) -> Self {
+//! 		self / self.norm()
+//! 	}
+//! 	pub fn inv(self) -> Self {
+//! 		self.rev() / self.norm_squared()
+//! 	}
+//! 	pub fn rev(self) -> Self {
+//! 		-self
+//! 	}
+//! 	pub fn to_wXYZ(self) -> [R; 4] {
+//! 		self.wXYZ.to_array()
+//! 	}
+//! 	pub fn to_XYZw(self) -> [R; 4] {
+//! 		self.wXYZ.rotate_lanes_left::<1>().to_array()
+//! 	}
+//! 	pub fn w(&self) -> R {
+//! 		self.wXYZ[0]
+//! 	}
+//! 	pub fn X(&self) -> R {
+//! 		self.wXYZ[1]
+//! 	}
+//! 	pub fn Y(&self) -> R {
+//! 		self.wXYZ[2]
+//! 	}
+//! 	pub fn Z(&self) -> R {
+//! 		self.wXYZ[3]
+//! 	}
+//! 	pub fn set_w(mut self, w: R) -> Self {
+//! 		self.wXYZ[0] = w;
+//! 		self
+//! 	}
+//! 	pub fn set_X(mut self, X: R) -> Self {
+//! 		self.wXYZ[1] = X;
+//! 		self
+//! 	}
+//! 	pub fn set_Y(mut self, Y: R) -> Self {
+//! 		self.wXYZ[2] = Y;
+//! 		self
+//! 	}
+//! 	pub fn set_Z(mut self, Z: R) -> Self {
+//! 		self.wXYZ[3] = Z;
+//! 		self
+//! 	}
+//! 	pub fn approx_eq(self, other: Self, epsilon: R, ulp: R::Bits) -> bool {
+//! 		self.wXYZ.approx_eq(other.wXYZ, epsilon, ulp)
+//! 	}
+//! 	pub fn approx_ne(self, other: Self, epsilon: R, ulp: R::Bits) -> bool {
+//! 		self.wXYZ.approx_ne(other.wXYZ, epsilon, ulp)
+//! 	}
+//! }
+//!
+//! impl<R: Real> Default for Point3<R> {
+//! 	fn default() -> Self {
+//! 		Self::from([R::ONE, R::ZERO, R::ZERO, R::ZERO])
+//! 	}
+//! }
+//!
+//! impl<R: Real> From<[R; 4]> for Point3<R> {
+//! 	fn from(wXYZ: [R; 4]) -> Self {
+//! 		Self::from_wXYZ(wXYZ)
+//! 	}
+//! }
+//!
+//! impl<R: Real> Into<[R; 4]> for Point3<R> {
+//! 	fn into(self) -> [R; 4] {
+//! 		self.to_wXYZ()
+//! 	}
+//! }
+//!
+//! impl<R: Real> Add for Point3<R> {
+//! 	type Output = Self;
+//!
+//! 	fn add(self, other: Self) -> Self::Output {
+//! 		Self {
+//! 			wXYZ: self.wXYZ + other.wXYZ,
+//! 		}
+//! 	}
+//! }
+//!
+//! impl<R: Real> AddAssign for Point3<R> {
+//! 	fn add_assign(&mut self, other: Self) {
+//! 		*self = *self + other;
+//! 	}
+//! }
+//!
+//! impl<R: Real> Div<R> for Point3<R> {
+//! 	type Output = Self;
+//!
+//! 	fn div(self, other: R) -> Self::Output {
+//! 		Self {
+//! 			wXYZ: self.wXYZ / other.splat(),
+//! 		}
+//! 	}
+//! }
+//!
+//! impl<R: Real> DivAssign<R> for Point3<R> {
+//! 	fn div_assign(&mut self, other: R) {
+//! 		*self = *self / other;
+//! 	}
+//! }
+//!
+//! impl<R: Real> Mul<R> for Point3<R> {
+//! 	type Output = Self;
+//!
+//! 	fn mul(self, other: R) -> Self::Output {
+//! 		Self {
+//! 			wXYZ: self.wXYZ * other.splat(),
+//! 		}
+//! 	}
+//! }
+//!
+//! impl<R: Real> MulAssign<R> for Point3<R> {
+//! 	fn mul_assign(&mut self, other: R) {
+//! 		*self = *self * other;
+//! 	}
+//! }
+//!
+//! impl<R: Real> Neg for Point3<R> {
+//! 	type Output = Self;
+//!
+//! 	fn neg(self) -> Self::Output {
+//! 		Self { wXYZ: -self.wXYZ }
+//! 	}
+//! }
+//!
+//! impl<R: Real> Shl<Rotor3<R>> for Point3<R> {
+//! 	type Output = Self;
+//!
+//! 	fn shl(self, other: Rotor3<R>) -> Self::Output {
+//! 		other.point_fn()(self)
+//! 	}
+//! }
+//!
+//! impl<R: Real> ShlAssign<Rotor3<R>> for Point3<R> {
+//! 	fn shl_assign(&mut self, other: Rotor3<R>) {
+//! 		*self = *self << other
+//! 	}
+//! }
+//!
+//! impl<R: Real> Sub for Point3<R> {
+//! 	type Output = Self;
+//!
+//! 	fn sub(self, other: Self) -> Self::Output {
+//! 		Self {
+//! 			wXYZ: self.wXYZ - other.wXYZ,
+//! 		}
+//! 	}
+//! }
+//!
+//! impl<R: Real> SubAssign for Point3<R> {
+//! 	fn sub_assign(&mut self, other: Self) {
+//! 		*self = *self - other;
+//! 	}
+//! }
+//!
+//! let r030x = Rotor3::new(030f64.to_radians(), 1.0, 0.0, 0.0);
+//! let r060x = Rotor3::new(060f64.to_radians(), 1.0, 0.0, 0.0);
+//! let r330x = Rotor3::new(330f64.to_radians(), 1.0, 0.0, 0.0);
+//! assert!((r030x * r030x).approx_eq(r060x, 0.0, 0));
+//! assert!((r030x * 42.0).unit().approx_eq(r030x, 0.0, 0));
+//! assert!(((r030x * 42.0) * (r030x * 42.0).inv()).approx_eq(Rotor3::default(), 1.0, 0));
+//! assert!((r030x * r030x.rev()).approx_eq(Rotor3::default(), 0.0, 0));
+//! assert!(r330x.constrain().approx_eq(r030x.rev(), 0.0, 5));
+//!
+//! let r090x = Rotor3::new(090f64.to_radians(), 1.0, 0.0, 0.0);
+//! let x5 = Point3::new(1.0, 5.0, 0.0, 0.0);
+//! let y5 = Point3::new(1.0, 0.0, 5.0, 0.0);
+//! let z5 = Point3::new(1.0, 0.0, 0.0, 5.0);
+//! assert!((x5 << r090x).approx_eq(x5, 0.0, 0));
+//! assert!((y5 << r090x).approx_eq(z5, 1.0, 0));
+//! ```
