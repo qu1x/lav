@@ -2,14 +2,14 @@
 
 Lane-Associated Vector (LAV): [Portable SIMD] vector trait as GAT of SIMD lane trait.
 
-[![CI][]](https://github.com/qu1x/lav/actions/workflows/ci.yml)
+[![Build][]](https://github.com/qu1x/lav/actions/workflows/build.yml)
 [![Downloads][]](https://crates.io/crates/lav)
 [![Rust][]](https://www.rust-lang.org)
 [![Version][]](https://crates.io/crates/lav)
 [![Documentation][]](https://docs.rs/lav)
 [![License][]](https://mozilla.org/MPL)
 
-[ci]: https://github.com/qu1x/lav/actions/workflows/ci.yml/badge.svg
+[Build]: https://github.com/qu1x/lav/actions/workflows/build.yml/badge.svg
 [Downloads]: https://img.shields.io/crates/d/lav.svg
 [Rust]: https://img.shields.io/badge/rust-nightly-orange.svg
 [Version]: https://img.shields.io/crates/v/lav.svg
