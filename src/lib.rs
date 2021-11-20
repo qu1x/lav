@@ -27,8 +27,8 @@
 //! [`Simd<f32, LANES>`]: `core::simd::Simd`
 //! [`Simd<f64, LANES>`]: `core::simd::Simd`
 //! [`Real::Simd<LANES>`]: `Real::Simd`
-//! [`pga`]: https:/docs.rs/pga
-//! [`libm`]: https:/docs.rs/libm
+//! [`pga`]: https://docs.rs/pga
+//! [`libm`]: https://docs.rs/libm
 //! [`no_std`]: https://docs.rust-embedded.org/book/intro/no-std.html
 //! [ULP]: https://en.wikipedia.org/wiki/Unit_in_the_last_place
 //! [AoS, SoA, or AoSoA]: https://en.wikipedia.org/wiki/AoS_and_SoA
