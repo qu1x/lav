@@ -7,10 +7,12 @@
 // Derivative work of `core::{f32, f64}` licensed under `MIT OR Apache-2.0`.
 
 use super::{Bits, SimdReal};
-use core::simd::{LaneCount, SimdElement, SupportedLaneCount};
 use core::{
+	cmp::Ordering,
 	fmt::{Debug, Display, LowerExp, UpperExp},
+	num::FpCategory,
 	ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssign, Sub, SubAssign},
+	simd::{LaneCount, SimdElement, SupportedLaneCount},
 };
 
 mod f32;
@@ -183,7 +185,7 @@ where
 	///
 	/// If only one property is going to be tested, it is generally faster to use the specific
 	/// predicate instead.
-	fn classify(self) -> core::num::FpCategory;
+	fn classify(self) -> FpCategory;
 
 	/// Returns the largest integer less than or equal to a number.
 	fn floor(self) -> Self;
@@ -387,7 +389,7 @@ where
 	/// Note that this function does not always agree with the [`PartialOrd`] and [`PartialEq`]
 	/// implementations of floating-point type. In particular, they regard negative and positive
 	/// zero as equal, while [`Self::total_cmp()`] does not.
-	fn total_cmp(&self, other: &Self) -> core::cmp::Ordering;
+	fn total_cmp(&self, other: &Self) -> Ordering;
 
 	/// Tests for approximate equality wrt `epsilon` or `ulp`, "or" in the sense of `||`.
 	fn approx_eq(self, other: Self, epsilon: Self, ulp: Self::Bits) -> bool {

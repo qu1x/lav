@@ -5,7 +5,11 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 use super::Real;
-use core::simd::{LaneCount, Simd, SupportedLaneCount};
+use core::{
+	cmp::Ordering,
+	num::FpCategory,
+	simd::{LaneCount, Simd, SupportedLaneCount},
+};
 
 impl Real for f64 {
 	type Bits = u64;
@@ -87,7 +91,7 @@ impl Real for f64 {
 	fn is_normal(self) -> bool {
 		self.is_normal()
 	}
-	fn classify(self) -> core::num::FpCategory {
+	fn classify(self) -> FpCategory {
 		self.classify()
 	}
 
@@ -428,7 +432,7 @@ impl Real for f64 {
 		}
 	}
 
-	fn total_cmp(&self, other: &Self) -> core::cmp::Ordering {
+	fn total_cmp(&self, other: &Self) -> Ordering {
 		self.total_cmp(other)
 	}
 }

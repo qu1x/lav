@@ -5,11 +5,11 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 use super::SimdBits;
-use core::simd::{LaneCount, SimdElement, SupportedLaneCount};
 use core::{
 	fmt::{Debug, Display},
 	ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign},
 	ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXor, BitXorAssign, Not},
+	simd::{LaneCount, SimdElement, SupportedLaneCount},
 };
 
 mod u32;

@@ -5,12 +5,12 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 use super::{Bits, SimdMask};
-use core::simd::Select;
 use core::{
 	fmt::Debug,
 	ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign},
 	ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXor, BitXorAssign, Not},
 	ops::{Index, IndexMut},
+	simd::Select,
 };
 
 mod u32;
