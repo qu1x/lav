@@ -1,5 +1,6 @@
-# Version 0.1.2 (WIP)
+# Version 0.1.2 (2021-11-20)
 
+  * Rephrase description.
   * Fix `SimdReal::lanes_approx_ne()`.
   * Fix links and badge.
 
