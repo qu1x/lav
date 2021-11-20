@@ -3,17 +3,17 @@
 Lane-Associated Vector (LAV): [Portable SIMD] vector trait as GAT of SIMD lane trait.
 
 [![Build][]](https://github.com/qu1x/lav/actions/workflows/build.yml)
-[![Downloads][]](https://crates.io/crates/lav)
-[![Rust][]](https://www.rust-lang.org)
-[![Version][]](https://crates.io/crates/lav)
 [![Documentation][]](https://docs.rs/lav)
+[![Downloads][]](https://crates.io/crates/lav)
+[![Version][]](https://crates.io/crates/lav)
+[![Rust][]](https://www.rust-lang.org)
 [![License][]](https://mozilla.org/MPL)
 
 [Build]: https://github.com/qu1x/lav/actions/workflows/build.yml/badge.svg
-[Downloads]: https://img.shields.io/crates/d/lav.svg
-[Rust]: https://img.shields.io/badge/rust-nightly-orange.svg
-[Version]: https://img.shields.io/crates/v/lav.svg
 [Documentation]: https://docs.rs/lav/badge.svg
+[Downloads]: https://img.shields.io/crates/d/lav.svg
+[Version]: https://img.shields.io/crates/v/lav.svg
+[Rust]: https://img.shields.io/badge/rust-nightly-orange.svg
 [License]: https://img.shields.io/crates/l/lav
 
 **NOTE**: This crate requires nightly Rust.
