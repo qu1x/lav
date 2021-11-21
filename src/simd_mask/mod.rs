@@ -45,6 +45,13 @@ where
 	/// Converts a SIMD vector mask to an array.
 	fn to_array(self) -> [bool; LANES];
 
+	/// Constructs a mask with `lane` set to `value` and all the other lanes set to `!value`.
+	fn flag(lane: usize, value: bool) -> Self {
+		let mut array = [!value; LANES];
+		array[lane] = value;
+		Self::from_array(array)
+	}
+
 	/// Returns true if all lanes are set, or false otherwise.
 	fn all(self) -> bool;
 	/// Returns true if any lane is set, or false otherwise.

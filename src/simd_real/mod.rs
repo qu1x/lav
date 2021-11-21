@@ -152,9 +152,9 @@ where
 	/// Raw transmutation to an unsigned integer vector type with the same size and number of lanes.
 	fn to_bits(self) -> Self::Bits;
 
-	/// Inserts `value` at lane selected by `index`.
-	fn insert(mut self, value: R, index: usize) -> Self {
-		self[index] = value;
+	/// Inserts `value` at `lane`.
+	fn insert(mut self, lane: usize, value: R) -> Self {
+		self[lane] = value;
 		self
 	}
 
@@ -302,5 +302,9 @@ where
 	/// Converts an array to a SIMD vector mask.
 	fn mask_from_array(array: [bool; LANES]) -> Self::Mask {
 		Self::Mask::from_array(array)
+	}
+	/// Constructs a mask with `lane` set to `value` and all the other lanes set to `!value`.
+	fn mask_flag(lane: usize, value: bool) -> Self::Mask {
+		Self::Mask::flag(lane, value)
 	}
 }
