@@ -1,3 +1,9 @@
+# Version 0.2.0 (2021-11-21)
+
+  * Add `SimdReal::mask_flag()` and `SimdMask::flag()`.
+  * Swap arguments of `SimdReal::insert()`.
+  * Fix links and shorten description.
+
 # Version 0.1.2 (2021-11-20)
 
   * Rephrase description.
