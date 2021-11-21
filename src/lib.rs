@@ -20,18 +20,14 @@
 //!   * [`no_std`] without loss of functionality by enabling the [`libm`] feature.
 //!
 //! This [`example`] uses SIMD generically over floating-point types while hiding it from the user.
-//! This is useful for crates that can be efficiently implemented without [AoS, SoA, or AoSoA] like
-//! the projective geometric algebra crate [`pga`] (work in progress).
 //!
 //! [Portable SIMD]: `core::simd`
 //! [`Simd<f32, LANES>`]: `core::simd::Simd`
 //! [`Simd<f64, LANES>`]: `core::simd::Simd`
 //! [`Real::Simd<LANES>`]: `Real::Simd`
-//! [`pga`]: https://docs.rs/pga
 //! [`libm`]: https://docs.rs/libm
 //! [`no_std`]: https://docs.rust-embedded.org/book/intro/no-std.html
 //! [ULP]: https://en.wikipedia.org/wiki/Unit_in_the_last_place
-//! [AoS, SoA, or AoSoA]: https://en.wikipedia.org/wiki/AoS_and_SoA
 
 #![forbid(missing_docs)]
 #![forbid(unsafe_code)]
