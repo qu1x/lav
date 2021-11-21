@@ -47,12 +47,12 @@ where
 	/// $1$
 	const ONE: Self;
 
-	/// Lanewise saturating add.
+	/// Saturating add.
 	fn saturating_add(self, other: Self) -> Self;
-	/// Lanewise saturating subtract.
+	/// Saturating subtract.
 	fn saturating_sub(self, other: Self) -> Self;
 
-	/// Lanewise absolute subtract.
+	/// Absolute subtract.
 	///
 	/// Equals `self.saturating_sub(other) | other.saturating_sub(self)`.
 	fn abs_sub(self, other: Self) -> Self {
