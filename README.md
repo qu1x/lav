@@ -20,25 +20,32 @@ Lane-Associated Vector (LAV): [Portable SIMD] vector trait as GAT of SIMD lane t
 
 # Features
 
-  * SIMD lane trait `Real` abstracting over `f32` and `f64`.
-  * SIMD vector trait `SimdReal<Real, LANES>` abstracting over `Simd<f32, LANES>` and
-    `Simd<f64, LANES>`.
-  * Generic associated type (GAT) `Real::Simd<LANES>` as part of SIMD lane trait `Real`
-    implementing SIMD vector trait `SimdReal<Self, LANES>` for itself as lane type where the
+  * SIMD lane trait [`Real`] abstracting over [`f32`] and [`f64`].
+  * SIMD vector trait [`SimdReal<Real, LANES>`] abstracting over [`Simd<f32, LANES>`] and
+    [`Simd<f64, LANES>`].
+  * Generic associated type (GAT) [`Real::Simd<LANES>`] as part of SIMD lane trait [`Real`]
+    implementing SIMD vector trait [`SimdReal<Self, LANES>`] for itself as lane type where the
     GAT is generic over the number of SIMD vector `LANES`.
   * Lanewise approximate equality test wrt to epsilon and [ULP] SIMD vectors.
   * [`no_std`] without loss of functionality by enabling the [`libm`] feature.
 
 This [`example`] uses SIMD generically over floating-point types while hiding it from the user.
 
-[Portable SIMD]: https://doc.rust-lang.org/nightly/core/simd/index.html
-[`example`]: src/example/mod.rs
-[`libm`]: https://docs.rs/libm
-[`no_std`]: https://docs.rust-embedded.org/book/intro/no-std.html
-[ULP]: https://en.wikipedia.org/wiki/Unit_in_the_last_place
-
 See the [release history] to keep track of the development.
 
+[Portable SIMD]: https://doc.rust-lang.org/nightly/core/simd/index.html
+[`f32`]: https://doc.rust-lang.org/nightly/std/primitive.f32.html
+[`f64`]: https://doc.rust-lang.org/nightly/std/primitive.f64.html
+[`Real`]: https://docs.rs/lav/latest/lav/trait.Real.html
+[`SimdReal<Real, LANES>`]: https://docs.rs/lav/latest/lav/trait.SimdReal.html
+[`SimdReal<Self, LANES>`]: https://docs.rs/lav/latest/lav/trait.SimdReal.html
+[`Simd<f32, LANES>`]: https://doc.rust-lang.org/nightly/core/simd/struct.Simd.html#impl-10
+[`Simd<f64, LANES>`]: https://doc.rust-lang.org/nightly/core/simd/struct.Simd.html#impl-11
+[`Real::Simd<LANES>`]: https://docs.rs/lav/latest/lav/trait.Real.html#associatedtype.Simd
+[ULP]: https://en.wikipedia.org/wiki/Unit_in_the_last_place
+[`no_std`]: https://docs.rust-embedded.org/book/intro/no-std.html
+[`libm`]: https://docs.rs/libm
+[`example`]: https://docs.rs/lav/latest/lav/example/index.html
 [release history]: RELEASES.md
 
 # Documentation Builds
