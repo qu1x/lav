@@ -415,7 +415,7 @@
 //! let r330x = Rotor3::new(330f64.to_radians(), 1.0, 0.0, 0.0);
 //! assert!((r030x * r030x).approx_eq(r060x, 0.0, 0));
 //! assert!((r030x * 42.0).unit().approx_eq(r030x, 0.0, 0));
-//! assert!(((r030x * 42.0) * (r030x * 42.0).inv()).approx_eq(Rotor3::default(), 1.0, 0));
+//! assert!(((r030x * 42.0) * (r030x * 42.0).inv()).approx_eq(Rotor3::default(), f64::EPSILON, 0));
 //! assert!((r030x * r030x.rev()).approx_eq(Rotor3::default(), 0.0, 0));
 //! assert!(r330x.constrain().approx_eq(r030x.rev(), 0.0, 5));
 //!
@@ -424,5 +424,5 @@
 //! let y5 = Point3::new(1.0, 0.0, 5.0, 0.0);
 //! let z5 = Point3::new(1.0, 0.0, 0.0, 5.0);
 //! assert!((x5 << r090x).approx_eq(x5, 0.0, 0));
-//! assert!((y5 << r090x).approx_eq(z5, 1.0, 0));
+//! assert!((y5 << r090x).approx_eq(z5, 5.0 * f64::EPSILON, 0));
 //! ```
