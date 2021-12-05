@@ -44,34 +44,47 @@ where
 	const LANES: usize = LANES;
 
 	/// Get the number of lanes in this vector.
+	#[must_use]
+	#[inline]
 	fn lanes(&self) -> usize {
 		LANES
 	}
 
 	/// Constructs a SIMD vector by setting all lanes to the given value.
+	#[must_use]
 	fn splat(value: B) -> Self;
 
 	/// Test if each lane is equal to the corresponding lane in `other`.
+	#[must_use]
 	fn lanes_eq(self, other: Self) -> Self::Mask;
 	/// Test if each lane is not equal to the corresponding lane in `other`.
+	#[must_use]
 	fn lanes_ne(self, other: Self) -> Self::Mask;
 	/// Test if each lane is less than the corresponding lane in `other`.
+	#[must_use]
 	fn lanes_lt(self, other: Self) -> Self::Mask;
 	/// Test if each lane is greater than the corresponding lane in `other`.
+	#[must_use]
 	fn lanes_gt(self, other: Self) -> Self::Mask;
 	/// Test if each lane is less than or equal to the corresponding lane in `other`.
+	#[must_use]
 	fn lanes_le(self, other: Self) -> Self::Mask;
 	/// Test if each lane is greater than or equal to the corresponding lane in `other`.
+	#[must_use]
 	fn lanes_ge(self, other: Self) -> Self::Mask;
 
 	/// Lanewise saturating add.
+	#[must_use]
 	fn saturating_add(self, other: Self) -> Self;
 	/// Lanewise saturating subtract.
+	#[must_use]
 	fn saturating_sub(self, other: Self) -> Self;
 
 	/// Lanewise absolute subtract.
 	///
 	/// Equals `self.saturating_sub(other) | other.saturating_sub(self)`.
+	#[must_use]
+	#[inline]
 	fn abs_sub(self, other: Self) -> Self {
 		self.saturating_sub(other) | other.saturating_sub(self)
 	}

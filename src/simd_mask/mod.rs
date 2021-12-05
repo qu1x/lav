@@ -33,19 +33,26 @@ where
 	const LANES: usize = LANES;
 
 	/// Get the number of lanes in this vector.
+	#[must_use]
+	#[inline]
 	fn lanes(&self) -> usize {
 		LANES
 	}
 
 	/// Constructs a mask by setting all lanes to the given value.
+	#[must_use]
 	fn splat(value: bool) -> Self;
 
 	/// Converts an array to a SIMD vector mask.
+	#[must_use]
 	fn from_array(array: [bool; LANES]) -> Self;
 	/// Converts a SIMD vector mask to an array.
+	#[must_use]
 	fn to_array(self) -> [bool; LANES];
 
 	/// Constructs a mask with `lane` set to `value` and all the other lanes set to `!value`.
+	#[must_use]
+	#[inline]
 	fn flag(lane: usize, value: bool) -> Self {
 		let mut array = [!value; LANES];
 		array[lane] = value;
@@ -53,8 +60,10 @@ where
 	}
 
 	/// Returns true if all lanes are set, or false otherwise.
+	#[must_use]
 	fn all(self) -> bool;
 	/// Returns true if any lane is set, or false otherwise.
+	#[must_use]
 	fn any(self) -> bool;
 
 	/// Sets the value of the specified lane.
@@ -68,14 +77,18 @@ where
 	/// # Panics
 	///
 	/// Panics if `lane` is greater than or equal to the number of lanes in the vector.
+	#[must_use]
 	fn test(&self, lane: usize) -> bool;
 
 	/// Chooses lanes from two vectors.
 	///
 	/// For each lane in the mask, choose the corresponding lane from `true_values` if
 	/// that lane mask is true, and `false_values` if that lane mask is false.
+	#[must_use]
 	fn select<S: Select<Self>>(self, true_values: S, false_values: S) -> S;
 	/// Negates lanes if their lane mask is true.
+	#[must_use]
+	#[inline]
 	fn negate<S: Select<Self> + Neg<Output = S> + Copy>(self, values: S) -> S {
 		self.select(-values, values)
 	}

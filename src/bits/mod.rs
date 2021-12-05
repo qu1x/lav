@@ -48,18 +48,24 @@ where
 	const ONE: Self;
 
 	/// Saturating add.
+	#[must_use]
 	fn saturating_add(self, other: Self) -> Self;
 	/// Saturating subtract.
+	#[must_use]
 	fn saturating_sub(self, other: Self) -> Self;
 
 	/// Absolute subtract.
 	///
 	/// Equals `self.saturating_sub(other) | other.saturating_sub(self)`.
+	#[must_use]
+	#[inline]
 	fn abs_sub(self, other: Self) -> Self {
 		self.saturating_sub(other) | other.saturating_sub(self)
 	}
 
 	/// Constructs a SIMD vector by setting all lanes to the given value.
+	#[must_use]
+	#[inline]
 	fn splat<const LANES: usize>(self) -> Self::Simd<LANES>
 	where
 		LaneCount<LANES>: SupportedLaneCount,

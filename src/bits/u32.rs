@@ -18,9 +18,11 @@ impl Bits for u32 {
 
 	const ONE: Self = 1;
 
+	#[inline]
 	fn saturating_add(self, other: Self) -> Self {
 		self.saturating_add(other)
 	}
+	#[inline]
 	fn saturating_sub(self, other: Self) -> Self {
 		self.saturating_sub(other)
 	}
