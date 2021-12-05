@@ -1,3 +1,8 @@
+# Version 0.2.1 (2021-12-05)
+
+  * Use `must_use` and `inline` attributes.
+  * Fix docs.
+
 # Version 0.2.0 (2021-11-21)
 
   * Add [`SimdReal::mask_flag()`] and [`SimdMask::flag()`].
