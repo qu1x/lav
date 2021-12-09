@@ -35,6 +35,7 @@
 #![feature(generic_associated_types)]
 #![feature(portable_simd)]
 #![feature(total_cmp)]
+#![feature(convert_float_to_int)]
 #![cfg_attr(feature = "libm", no_std)]
 
 mod bits;

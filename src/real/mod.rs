@@ -9,10 +9,13 @@
 use super::{Bits, SimdReal};
 use core::{
 	cmp::Ordering,
+	convert::FloatToInt,
 	fmt::{Debug, Display, LowerExp, UpperExp},
+	iter::{Product, Sum},
 	num::FpCategory,
 	ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssign, Sub, SubAssign},
 	simd::{LaneCount, SimdElement, SupportedLaneCount},
+	str::FromStr,
 };
 
 mod f32;
@@ -24,12 +27,28 @@ pub trait Real
 where
 	Self: Clone + Copy + Default,
 	Self: PartialEq + PartialOrd,
+	Self: From<u8> + From<i8>,
+	Self: From<u16> + From<i16>,
+	Self: FromStr,
+	Self: Product<Self> + Sum<Self>,
+	for<'a> Self: Product<&'a Self> + Sum<&'a Self>,
+	Self: FloatToInt<usize> + FloatToInt<isize>,
+	Self: FloatToInt<u128> + FloatToInt<i128>,
+	Self: FloatToInt<u64> + FloatToInt<i64>,
+	Self: FloatToInt<u32> + FloatToInt<i32>,
+	Self: FloatToInt<u16> + FloatToInt<i16>,
+	Self: FloatToInt<u8> + FloatToInt<i8>,
 	Self: Debug + LowerExp + UpperExp + Display,
 	Self: Add<Output = Self> + AddAssign,
 	Self: Sub<Output = Self> + SubAssign,
 	Self: Mul<Output = Self> + MulAssign,
 	Self: Div<Output = Self> + DivAssign,
 	Self: Rem<Output = Self> + RemAssign,
+	for<'a> Self: Add<&'a Self, Output = Self> + AddAssign<&'a Self>,
+	for<'a> Self: Sub<&'a Self, Output = Self> + SubAssign<&'a Self>,
+	for<'a> Self: Mul<&'a Self, Output = Self> + MulAssign<&'a Self>,
+	for<'a> Self: Div<&'a Self, Output = Self> + DivAssign<&'a Self>,
+	for<'a> Self: Rem<&'a Self, Output = Self> + RemAssign<&'a Self>,
 	Self: Neg<Output = Self>,
 	Self: SimdElement,
 {

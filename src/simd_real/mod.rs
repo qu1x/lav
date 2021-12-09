@@ -9,6 +9,7 @@
 use super::{Real, SimdBits, SimdMask};
 use core::{
 	fmt::{Debug, LowerExp, UpperExp},
+	iter::{Product, Sum},
 	ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssign, Sub, SubAssign},
 	ops::{Index, IndexMut},
 	simd::{LaneCount, Mask, Select, Simd, SupportedLaneCount, Swizzle, Swizzle2},
@@ -64,6 +65,8 @@ where
 	Self: PartialEq + PartialOrd,
 	Self: Debug + LowerExp + UpperExp,
 	Self: From<[R; LANES]> + AsRef<[R; LANES]> + AsMut<[R; LANES]>,
+	Self: Product<Self> + Sum<Self>,
+	for<'a> Self: Product<&'a Self> + Sum<&'a Self>,
 	Self: Index<usize, Output = R> + IndexMut<usize, Output = R>,
 	Self: Select<Self::Mask>,
 	Self: Add<Output = Self> + AddAssign,
@@ -71,6 +74,11 @@ where
 	Self: Mul<Output = Self> + MulAssign,
 	Self: Div<Output = Self> + DivAssign,
 	Self: Rem<Output = Self> + RemAssign,
+	for<'a> Self: Add<&'a Self, Output = Self> + AddAssign<&'a Self>,
+	for<'a> Self: Sub<&'a Self, Output = Self> + SubAssign<&'a Self>,
+	for<'a> Self: Mul<&'a Self, Output = Self> + MulAssign<&'a Self>,
+	for<'a> Self: Div<&'a Self, Output = Self> + DivAssign<&'a Self>,
+	for<'a> Self: Rem<&'a Self, Output = Self> + RemAssign<&'a Self>,
 	Self: Neg<Output = Self>,
 {
 	/// Associated bits representation vector.
