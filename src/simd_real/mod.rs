@@ -66,11 +66,11 @@ where
 	Self: From<[R; LANES]> + AsRef<[R; LANES]> + AsMut<[R; LANES]>,
 	Self: Index<usize, Output = R> + IndexMut<usize, Output = R>,
 	Self: Select<Self::Mask>,
-	Self: Add<Output = Self> + AddAssign + Add<R, Output = Self> + AddAssign<R>,
-	Self: Sub<Output = Self> + SubAssign + Sub<R, Output = Self> + SubAssign<R>,
-	Self: Mul<Output = Self> + MulAssign + Mul<R, Output = Self> + MulAssign<R>,
-	Self: Div<Output = Self> + DivAssign + Div<R, Output = Self> + DivAssign<R>,
-	Self: Rem<Output = Self> + RemAssign + Rem<R, Output = Self> + RemAssign<R>,
+	Self: Add<Output = Self> + AddAssign,
+	Self: Sub<Output = Self> + SubAssign,
+	Self: Mul<Output = Self> + MulAssign,
+	Self: Div<Output = Self> + DivAssign,
+	Self: Rem<Output = Self> + RemAssign,
 	Self: Neg<Output = Self>,
 {
 	/// Associated bits representation vector.
