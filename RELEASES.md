@@ -1,3 +1,8 @@
+# Version 0.3.0 (2021-12-09)
+
+  * Add trait bounds and their reference versions.
+  * Remove SIMD trait bounds with scalar RHS.
+
 # Version 0.2.1 (2021-12-05)
 
   * Use `must_use` and `inline` attributes.
