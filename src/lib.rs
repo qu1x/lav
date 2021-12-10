@@ -51,3 +51,19 @@ pub use simd_mask::*;
 pub use simd_real::*;
 
 pub mod example;
+
+/// Tests for approximate equality.
+pub trait ApproxEq<R: Real, Rhs = Self>
+where
+	Rhs: ?Sized,
+{
+	/// Tests for approximate equality wrt `epsilon` or `ulp`, "or" in the sense of `||`.
+	#[must_use]
+	fn approx_eq(&self, other: &Rhs, epsilon: R, ulp: R::Bits) -> bool;
+	/// Tests for approximate inequality wrt `epsilon` and `ulp`, "and" in the sense of `&&`.
+	#[must_use]
+	#[inline]
+	fn approx_ne(&self, other: &Rhs, epsilon: R, ulp: R::Bits) -> bool {
+		!self.approx_eq(other, epsilon, ulp)
+	}
+}

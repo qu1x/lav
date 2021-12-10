@@ -6,7 +6,7 @@
 
 // Derivative work of `core::{f32, f64}` licensed under `MIT OR Apache-2.0`.
 
-use super::{Bits, SimdReal};
+use super::{ApproxEq, Bits, SimdReal};
 use core::{
 	cmp::Ordering,
 	convert::FloatToInt,
@@ -26,7 +26,7 @@ mod f64;
 pub trait Real
 where
 	Self: Clone + Copy + Default,
-	Self: PartialEq + PartialOrd,
+	Self: ApproxEq<Self, Self> + PartialEq + PartialOrd,
 	Self: From<u8> + From<i8>,
 	Self: From<u16> + From<i16>,
 	Self: FromStr,
@@ -464,22 +464,6 @@ where
 	#[must_use]
 	fn total_cmp(&self, other: &Self) -> Ordering;
 
-	/// Tests for approximate equality wrt `epsilon` or `ulp`, "or" in the sense of `||`.
-	#[must_use]
-	fn approx_eq(self, other: Self, epsilon: Self, ulp: Self::Bits) -> bool {
-		Real::abs(self - other) <= epsilon
-			|| !self.is_nan()
-				&& !other.is_nan()
-				&& self.is_sign_negative() == self.is_sign_negative()
-				&& self.to_bits().abs_sub(other.to_bits()) <= ulp
-	}
-	/// Tests for approximate inequality wrt `epsilon` and `ulp`, "and" in the sense of `&&`.
-	#[must_use]
-	#[inline]
-	fn approx_ne(self, other: Self, epsilon: Self, ulp: Self::Bits) -> bool {
-		!self.approx_eq(other, epsilon, ulp)
-	}
-
 	/// Constructs a SIMD vector by setting all lanes to the given value.
 	#[must_use]
 	#[inline]
@@ -488,5 +472,15 @@ where
 		LaneCount<LANES>: SupportedLaneCount,
 	{
 		Self::Simd::splat(self)
+	}
+}
+
+impl<R: Real> ApproxEq<R> for R {
+	fn approx_eq(&self, other: &R, epsilon: R, ulp: R::Bits) -> bool {
+		Real::abs(*self - other) <= epsilon
+			|| !self.is_nan()
+				&& !other.is_nan()
+				&& self.is_sign_negative() == self.is_sign_negative()
+				&& self.to_bits().abs_sub(other.to_bits()) <= ulp
 	}
 }

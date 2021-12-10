@@ -6,7 +6,7 @@
 
 // Derivative work of `core::simd` licensed under `MIT OR Apache-2.0`.
 
-use super::{Real, SimdBits, SimdMask};
+use super::{ApproxEq, Real, SimdBits, SimdMask};
 use core::{
 	fmt::{Debug, LowerExp, UpperExp},
 	iter::{Product, Sum},
@@ -62,7 +62,7 @@ macro_rules! swizzle {
 pub trait SimdReal<R: Real, const LANES: usize>
 where
 	Self: Clone + Copy + Default,
-	Self: PartialEq + PartialOrd,
+	Self: ApproxEq<R, Self> + PartialEq + PartialOrd,
 	Self: Debug + LowerExp + UpperExp,
 	Self: From<[R; LANES]> + AsRef<[R; LANES]> + AsMut<[R; LANES]>,
 	Self: Product<Self> + Sum<Self>,
@@ -241,21 +241,6 @@ where
 	/// Creates a new vector by selecting values from the lanes of `self` and `other`.
 	#[must_use]
 	fn swizzle2<T: Swizzle2<LANES, LANES>>(self, other: Self) -> Self;
-
-	/// Tests for approximate equality wrt `epsilon` or `ulp`, "or" in the sense of `||`.
-	#[must_use]
-	#[inline]
-	fn approx_eq(self, other: Self, epsilon: R, ulp: R::Bits) -> bool {
-		self.lanes_approx_eq(other, Self::splat(epsilon), Self::Bits::splat(ulp))
-			.all()
-	}
-	/// Tests for approximate inequality wrt `epsilon` or `ulp`, "and" in the sense of `&&`.
-	#[must_use]
-	#[inline]
-	fn approx_ne(self, other: Self, epsilon: R, ulp: R::Bits) -> bool {
-		self.lanes_approx_ne(other, Self::splat(epsilon), Self::Bits::splat(ulp))
-			.any()
-	}
 
 	/// Tests lanes for approximate equality wrt `epsilon` or `ulp`, "or" in the sense of `||`.
 	#[must_use]
