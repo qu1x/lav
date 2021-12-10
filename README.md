@@ -27,6 +27,10 @@ Lane-Associated Vector (LAV): [Portable SIMD] vector trait as GAT of SIMD lane t
     implementing SIMD vector trait [`SimdReal<Self, LANES>`] for itself as lane type where the
     GAT is generic over the number of SIMD vector `LANES`.
   * Lanewise approximate equality test wrt to epsilon and [ULP] SIMD vectors.
+  * [`ApproxEq`] trait complementing [`PartialEq`].
+  * Non-reflexive [`WrapFrom`] and [`WrapInto`] traits complementing [`From`] and [`Into`] without
+    conflicting implementations.
+  * [`Assert`] structure asserting constant generic expression when bound by trait [`True`].
   * [`no_std`] without loss of functionality by enabling the [`libm`] feature.
 
 This [`example`] uses SIMD generically over floating-point types while hiding it from the user.
@@ -34,8 +38,8 @@ This [`example`] uses SIMD generically over floating-point types while hiding it
 See the [release history] to keep track of the development.
 
 [Portable SIMD]: https://doc.rust-lang.org/nightly/core/simd/index.html
-[`f32`]: https://doc.rust-lang.org/nightly/std/primitive.f32.html
-[`f64`]: https://doc.rust-lang.org/nightly/std/primitive.f64.html
+[`f32`]: https://doc.rust-lang.org/nightly/core/primitive.f32.html
+[`f64`]: https://doc.rust-lang.org/nightly/core/primitive.f64.html
 [`Real`]: https://docs.rs/lav/latest/lav/trait.Real.html
 [`SimdReal<Real, LANES>`]: https://docs.rs/lav/latest/lav/trait.SimdReal.html
 [`SimdReal<Self, LANES>`]: https://docs.rs/lav/latest/lav/trait.SimdReal.html
@@ -43,6 +47,14 @@ See the [release history] to keep track of the development.
 [`Simd<f64, LANES>`]: https://doc.rust-lang.org/nightly/core/simd/struct.Simd.html#impl-11
 [`Real::Simd<LANES>`]: https://docs.rs/lav/latest/lav/trait.Real.html#associatedtype.Simd
 [ULP]: https://en.wikipedia.org/wiki/Unit_in_the_last_place
+[`ApproxEq`]: https://docs.rs/lav/latest/lav/trait.AapproxEq.html
+[`PartialEq`]: https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html
+[`WrapFrom`]: https://docs.rs/lav/latest/lav/trait.WrapFrom.html
+[`WrapInto`]: https://docs.rs/lav/latest/lav/trait.WrapInto.html
+[`From`]: https://doc.rust-lang.org/nightly/core/convert/trait.From.html
+[`Into`]: https://doc.rust-lang.org/nightly/core/convert/trait.Into.html
+[`Assert`]: https://docs.rs/lav/latest/lav/struct.Assert.html
+[`True`]: https://docs.rs/lav/latest/lav/trait.True.html
 [`no_std`]: https://docs.rust-embedded.org/book/intro/no-std.html
 [`libm`]: https://docs.rs/libm
 [`example`]: https://docs.rs/lav/latest/lav/example/index.html

@@ -17,6 +17,10 @@
 //!     implementing SIMD vector trait [`SimdReal<Self, LANES>`] for itself as lane type where the
 //!     GAT is generic over the number of SIMD vector `LANES`.
 //!   * Lanewise approximate equality test wrt to epsilon and [ULP] SIMD vectors.
+//!   * [`ApproxEq`] trait complementing [`PartialEq`].
+//!   * Non-reflexive [`WrapFrom`] and [`WrapInto`] traits complementing [`From`] and [`Into`]
+//!     without conflicting implementations.
+//!   * [`Assert`] structure asserting constant generic expression when bound by trait [`True`].
 //!   * [`no_std`] without loss of functionality by enabling the [`libm`] feature.
 //!
 //! This [`example`] uses SIMD generically over floating-point types while hiding it from the user.
@@ -98,7 +102,7 @@ where
 	}
 }
 
-/// Asserts constant generic expression `E` when requiring it to implement [`True`].
+/// Asserts constant generic expression `E` when bound by [`True`].
 pub struct Assert<const E: bool> {}
 
 /// Implemented for [`Assert`] with true expression.
