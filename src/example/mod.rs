@@ -13,7 +13,7 @@
 //! use core::ops::{
 //! 	Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Shl, ShlAssign, Sub, SubAssign,
 //! };
-//! use lav::{swizzle, Real, SimdMask, SimdReal};
+//! use lav::{swizzle, ApproxEq, Real, SimdMask, SimdReal};
 //!
 //! #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 //! pub struct Rotor3<R: Real> {
@@ -92,12 +92,6 @@
 //! 		self.wxyz[3] = z;
 //! 		self
 //! 	}
-//! 	pub fn approx_eq(self, other: Self, epsilon: R, ulp: R::Bits) -> bool {
-//! 		self.wxyz.approx_eq(other.wxyz, epsilon, ulp)
-//! 	}
-//! 	pub fn approx_ne(self, other: Self, epsilon: R, ulp: R::Bits) -> bool {
-//! 		self.wxyz.approx_ne(other.wxyz, epsilon, ulp)
-//! 	}
 //! 	pub fn point_fn(self) -> impl Fn(Point3<R>) -> Point3<R> {
 //! 		// +(+[+1ww+1zz+(+1xx+1yy)]~w+[+0zy+0wx]~w+[+0yw-0zx]~w)e123
 //! 		// +(+[+1xx+1ww-(+1yy+1zz)]~X+[+2wz+2xy]~Y+[+2zx-2wy]~Z)e032
@@ -137,6 +131,12 @@
 //! impl<R: Real> Into<[R; 4]> for Rotor3<R> {
 //! 	fn into(self) -> [R; 4] {
 //! 		self.to_wxyz()
+//! 	}
+//! }
+//!
+//! impl<R: Real> ApproxEq<R> for Rotor3<R> {
+//! 	fn approx_eq(&self, other: &Self, epsilon: R, ulp: R::Bits) -> bool {
+//! 		self.wxyz.approx_eq(&other.wxyz, epsilon, ulp)
 //! 	}
 //! }
 //!
@@ -298,12 +298,6 @@
 //! 		self.wXYZ[3] = Z;
 //! 		self
 //! 	}
-//! 	pub fn approx_eq(self, other: Self, epsilon: R, ulp: R::Bits) -> bool {
-//! 		self.wXYZ.approx_eq(other.wXYZ, epsilon, ulp)
-//! 	}
-//! 	pub fn approx_ne(self, other: Self, epsilon: R, ulp: R::Bits) -> bool {
-//! 		self.wXYZ.approx_ne(other.wXYZ, epsilon, ulp)
-//! 	}
 //! }
 //!
 //! impl<R: Real> Default for Point3<R> {
@@ -321,6 +315,12 @@
 //! impl<R: Real> Into<[R; 4]> for Point3<R> {
 //! 	fn into(self) -> [R; 4] {
 //! 		self.to_wXYZ()
+//! 	}
+//! }
+//!
+//! impl<R: Real> ApproxEq<R> for Point3<R> {
+//! 	fn approx_eq(&self, other: &Self, epsilon: R, ulp: R::Bits) -> bool {
+//! 		self.wXYZ.approx_eq(&other.wXYZ, epsilon, ulp)
 //! 	}
 //! }
 //!
@@ -413,16 +413,16 @@
 //! let r030x = Rotor3::new(030f64.to_radians(), 1.0, 0.0, 0.0);
 //! let r060x = Rotor3::new(060f64.to_radians(), 1.0, 0.0, 0.0);
 //! let r330x = Rotor3::new(330f64.to_radians(), 1.0, 0.0, 0.0);
-//! assert!((r030x * r030x).approx_eq(r060x, 0.0, 0));
-//! assert!((r030x * 42.0).unit().approx_eq(r030x, 0.0, 0));
-//! assert!(((r030x * 42.0) * (r030x * 42.0).inv()).approx_eq(Rotor3::default(), f64::EPSILON, 0));
-//! assert!((r030x * r030x.rev()).approx_eq(Rotor3::default(), 0.0, 0));
-//! assert!(r330x.constrain().approx_eq(r030x.rev(), 0.0, 5));
+//! assert!((r030x * r030x).approx_eq(&r060x, 0.0, 0));
+//! assert!((r030x * 42.0).unit().approx_eq(&r030x, 0.0, 0));
+//! assert!(((r030x * 42.0) * (r030x * 42.0).inv()).approx_eq(&Rotor3::default(), f64::EPSILON, 0));
+//! assert!((r030x * r030x.rev()).approx_eq(&Rotor3::default(), 0.0, 0));
+//! assert!(r330x.constrain().approx_eq(&r030x.rev(), 0.0, 5));
 //!
 //! let r090x = Rotor3::new(090f64.to_radians(), 1.0, 0.0, 0.0);
 //! let x5 = Point3::new(1.0, 5.0, 0.0, 0.0);
 //! let y5 = Point3::new(1.0, 0.0, 5.0, 0.0);
 //! let z5 = Point3::new(1.0, 0.0, 0.0, 5.0);
-//! assert!((x5 << r090x).approx_eq(x5, 0.0, 0));
-//! assert!((y5 << r090x).approx_eq(z5, 5.0 * f64::EPSILON, 0));
+//! assert!((x5 << r090x).approx_eq(&x5, 0.0, 0));
+//! assert!((y5 << r090x).approx_eq(&z5, 5.0 * f64::EPSILON, 0));
 //! ```
