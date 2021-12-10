@@ -33,6 +33,8 @@
 #![forbid(unsafe_code)]
 #![allow(clippy::tabs_in_doc_comments)]
 #![feature(generic_associated_types)]
+#![feature(const_trait_impl)]
+#![feature(const_fn_trait_bound)]
 #![feature(portable_simd)]
 #![feature(total_cmp)]
 #![feature(convert_float_to_int)]
@@ -67,3 +69,39 @@ where
 		!self.approx_eq(other, epsilon, ulp)
 	}
 }
+
+/// [`From`] without reflexive `impl<T> `[`From`]`<T> for T`.
+///
+/// [`WrapFrom`]`<T> for U` implies (auto-implements) [`WrapInto`]`<U> for T`.
+pub trait WrapFrom<T> {
+	/// Performs the conversation.
+	#[must_use]
+	fn wrap_from(from: T) -> Self;
+}
+
+/// [`Into`] without reflexive `impl<U> `[`Into`]`<U> for U`.
+///
+/// Implied (auto-implemented) by [`WrapFrom`]`<T> for U`.
+pub trait WrapInto<U> {
+	/// Performs the conversation.
+	#[must_use]
+	fn wrap_into(self) -> U;
+}
+
+impl<T, U> const WrapInto<U> for T
+where
+	U: ~const WrapFrom<T>,
+{
+	#[inline]
+	fn wrap_into(self) -> U {
+		WrapFrom::wrap_from(self)
+	}
+}
+
+/// Asserts constant generic expression `E` when requiring it to implement [`True`].
+pub struct Assert<const E: bool> {}
+
+/// Implemented for [`Assert`] with true expression.
+pub trait True {}
+
+impl True for Assert<true> {}
