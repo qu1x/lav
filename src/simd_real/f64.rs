@@ -72,14 +72,14 @@ where
 	where
 		LaneCount<LANES>: SupportedLaneCount,
 	{
-		self.scatter(slice, idxs)
+		self.scatter(slice, idxs);
 	}
 	#[inline]
 	fn scatter_select(self, slice: &mut [f64], enable: Mask<isize, LANES>, idxs: Simd<usize, LANES>)
 	where
 		LaneCount<LANES>: SupportedLaneCount,
 	{
-		self.scatter_select(slice, enable, idxs)
+		self.scatter_select(slice, enable, idxs);
 	}
 
 	#[inline]

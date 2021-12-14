@@ -45,8 +45,8 @@ impl Real for f64 {
 	const FRAC_2_SQRT_PI: Self = core::f64::consts::FRAC_2_SQRT_PI;
 
 	const EPSILON: Self = Self::EPSILON;
-	const SQRT_EPSILON: Self = 0.000000014901161193847656;
-	const CBRT_EPSILON: Self = 0.0000060554544523933395;
+	const SQRT_EPSILON: Self = 0.000_000_014_901_161_193_847_656;
+	const CBRT_EPSILON: Self = 0.000_006_055_454_452_393_339_5;
 
 	const RADIX: u32 = Self::RADIX;
 	const MANTISSA_DIGITS: u32 = Self::MANTISSA_DIGITS;
@@ -513,6 +513,7 @@ impl Real for f64 {
 	}
 
 	#[inline]
+	#[allow(clippy::float_cmp)]
 	fn lerp(self, start: Self, end: Self) -> Self {
 		if start == end {
 			start

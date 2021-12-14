@@ -45,8 +45,8 @@ impl Real for f32 {
 	const FRAC_2_SQRT_PI: Self = core::f32::consts::FRAC_2_SQRT_PI;
 
 	const EPSILON: Self = Self::EPSILON;
-	const SQRT_EPSILON: Self = 0.00034526698;
-	const CBRT_EPSILON: Self = 0.0049215667;
+	const SQRT_EPSILON: Self = 0.000_345_266_98;
+	const CBRT_EPSILON: Self = 0.004_921_566_7;
 
 	const RADIX: u32 = Self::RADIX;
 	const MANTISSA_DIGITS: u32 = Self::MANTISSA_DIGITS;
@@ -513,6 +513,7 @@ impl Real for f32 {
 	}
 
 	#[inline]
+	#[allow(clippy::float_cmp)]
 	fn lerp(self, start: Self, end: Self) -> Self {
 		if start == end {
 			start
