@@ -59,6 +59,16 @@ pub use simd_real::*;
 
 pub mod example;
 
+/// Selects lanes from two vectors by mask vector.
+pub trait Select<M> {
+	/// Selects lanes from two vectors by mask vector.
+	///
+	/// For each lane in the mask, choose the corresponding lane from `true_values` if that lane
+	/// mask is true, and `false_values` if that lane mask is false.
+	#[must_use]
+	fn select(mask: M, true_values: Self, false_values: Self) -> Self;
+}
+
 /// Tests for approximate equality.
 pub trait ApproxEq<R: Real, Rhs = Self>
 where

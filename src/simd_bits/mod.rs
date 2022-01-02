@@ -4,7 +4,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-use super::{Bits, SimdMask};
+use super::{Bits, Select, SimdMask};
 use core::{
 	fmt::{Debug, Octal},
 	hash::Hash,
@@ -13,7 +13,6 @@ use core::{
 	ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXor, BitXorAssign, Not},
 	ops::{Index, IndexMut},
 	ops::{Shl, ShlAssign, Shr, ShrAssign},
-	simd::Select,
 };
 
 mod u32;

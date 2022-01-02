@@ -4,10 +4,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+use super::Select;
 use core::{
 	fmt::Debug,
 	ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXor, BitXorAssign, Neg, Not},
-	simd::Select,
 };
 
 mod i32;
@@ -85,7 +85,10 @@ where
 	/// For each lane in the mask, choose the corresponding lane from `true_values` if
 	/// that lane mask is true, and `false_values` if that lane mask is false.
 	#[must_use]
-	fn select<S: Select<Self>>(self, true_values: S, false_values: S) -> S;
+	#[inline]
+	fn select<S: Select<Self>>(self, true_values: S, false_values: S) -> S {
+		Select::select(self, true_values, false_values)
+	}
 	/// Negates lanes if their lane mask is true.
 	#[must_use]
 	#[inline]

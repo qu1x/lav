@@ -4,7 +4,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-use super::{ApproxEq, SimdReal};
+use super::{ApproxEq, Select, SimdReal};
 use core::simd::{LaneCount, Mask, Simd, SupportedLaneCount, Swizzle, Swizzle2};
 
 impl<const LANES: usize> SimdReal<f32, LANES> for Simd<f32, LANES>
@@ -232,10 +232,21 @@ where
 	}
 }
 
+impl<const LANES: usize> Select<Mask<i32, LANES>> for Simd<f32, LANES>
+where
+	LaneCount<LANES>: SupportedLaneCount,
+{
+	#[inline]
+	fn select(mask: Mask<i32, LANES>, true_values: Self, false_values: Self) -> Self {
+		mask.select(true_values, false_values)
+	}
+}
+
 impl<const LANES: usize> ApproxEq<f32> for Simd<f32, LANES>
 where
 	LaneCount<LANES>: SupportedLaneCount,
 {
+	#[inline]
 	fn approx_eq(&self, other: &Self, epsilon: f32, ulp: u32) -> bool {
 		self.lanes_approx_eq(*other, Simd::splat(epsilon), Simd::splat(ulp))
 			.all()

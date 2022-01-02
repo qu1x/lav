@@ -4,7 +4,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-use super::SimdBits;
+use super::{Select, SimdBits};
 use core::simd::{LaneCount, Mask, Simd, SupportedLaneCount};
 
 impl<const LANES: usize> SimdBits<u64, LANES> for Simd<u64, LANES>
@@ -50,5 +50,15 @@ where
 	#[inline]
 	fn saturating_sub(self, other: Self) -> Self {
 		self.saturating_sub(other)
+	}
+}
+
+impl<const LANES: usize> Select<Mask<i64, LANES>> for Simd<u64, LANES>
+where
+	LaneCount<LANES>: SupportedLaneCount,
+{
+	#[inline]
+	fn select(mask: Mask<i64, LANES>, true_values: Self, false_values: Self) -> Self {
+		mask.select(true_values, false_values)
 	}
 }

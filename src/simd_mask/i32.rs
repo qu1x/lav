@@ -4,8 +4,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-use super::SimdMask;
-use core::simd::{LaneCount, Mask, Select, SupportedLaneCount};
+use super::{Select, SimdMask};
+use core::simd::{LaneCount, Mask, SupportedLaneCount};
 
 impl<const LANES: usize> SimdMask<LANES> for Mask<i32, LANES>
 where
@@ -42,9 +42,14 @@ where
 	fn test(&self, lane: usize) -> bool {
 		self.test(lane)
 	}
+}
 
+impl<const LANES: usize> Select<Mask<i32, LANES>> for Mask<i32, LANES>
+where
+	LaneCount<LANES>: SupportedLaneCount,
+{
 	#[inline]
-	fn select<S: Select<Self>>(self, true_values: S, false_values: S) -> S {
-		self.select(true_values, false_values)
+	fn select(mask: Mask<i32, LANES>, true_values: Self, false_values: Self) -> Self {
+		mask.select_mask(true_values, false_values)
 	}
 }

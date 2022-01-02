@@ -6,19 +6,17 @@
 
 // Derivative work of `core::simd` licensed under `MIT OR Apache-2.0`.
 
-use super::{ApproxEq, Real, SimdBits, SimdMask};
+use super::{ApproxEq, Real, Select, SimdBits, SimdMask};
 use core::{
 	fmt::{Debug, LowerExp, UpperExp},
 	iter::{Product, Sum},
 	ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssign, Sub, SubAssign},
 	ops::{Index, IndexMut},
-	simd::{LaneCount, Mask, Select, Simd, SupportedLaneCount, Swizzle, Swizzle2},
+	simd::{LaneCount, Mask, Simd, SupportedLaneCount, Swizzle, Swizzle2},
 };
 
 mod f32;
 mod f64;
-
-pub use core::simd::Which;
 
 /// Constructs vector by selecting values from the lanes of one or two source vectors.
 ///
