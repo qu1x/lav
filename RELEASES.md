@@ -1,3 +1,10 @@
+# Version 0.4.0 (2022-01-03)
+
+  * Add `WrapFrom` and `WrapInto` traits.
+  * Add `ApproxEq` trait.
+  * Add `Select` trait.
+  * Adhere to pedantic lints.
+
 # Version 0.3.0 (2021-12-09)
 
   * Add trait bounds and their reference versions.
