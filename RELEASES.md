@@ -1,8 +1,9 @@
 # Version 0.4.0 (2022-01-03)
 
-  * Add `WrapFrom` and `WrapInto` traits.
-  * Add `ApproxEq` trait.
-  * Add `Select` trait.
+  * Add [`ApproxEq`] trait.
+  * Add [`WrapFrom`] and [`WrapInto`] traits.
+  * Add [`Assert`] structure and [`True`] trait.
+  * Add [`Select`] trait.
   * Adhere to pedantic lints.
 
 # Version 0.3.0 (2021-12-09)
@@ -35,6 +36,18 @@
 
   * Initial release.
 
+[`ApproxEq`]:
+https://docs.rs/lav/latest/lav/trait.ApproxEq.html
+[`WrapFrom`]:
+https://docs.rs/lav/latest/lav/trait.WrapFrom.html
+[`WrapInto`]:
+https://docs.rs/lav/latest/lav/trait.WrapInto.html
+[`Assert`]:
+https://docs.rs/lav/latest/lav/struct.Assert.html
+[`True`]:
+https://docs.rs/lav/latest/lav/trait.True.html
+[`Select`]:
+https://docs.rs/lav/latest/lav/trait.Select.html
 [`SimdMask::flag()`]:
 https://docs.rs/lav/latest/lav/trait.SimdMask.html#method.flag
 [`SimdReal::mask_flag()`]:
