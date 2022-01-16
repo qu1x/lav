@@ -8,6 +8,7 @@ use super::Select;
 use core::{
 	fmt::Debug,
 	ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXor, BitXorAssign, Neg, Not},
+	simd::{LaneCount, SupportedLaneCount},
 };
 
 mod i32;
@@ -19,10 +20,11 @@ mod i64;
 /// [`Mask<i64, LANES>`]: `core::simd::Mask`
 pub trait SimdMask<const LANES: usize>
 where
+	LaneCount<LANES>: SupportedLaneCount,
 	Self: Clone + Copy + Default,
 	Self: PartialEq + PartialOrd,
 	Self: Debug,
-	Self: From<[bool; LANES]>,
+	Self: From<[bool; LANES]> + Into<[bool; LANES]>,
 	Self: Select<Self>,
 	Self: BitAnd<Output = Self> + BitAndAssign + BitAnd<bool, Output = Self> + BitAndAssign<bool>,
 	Self: BitOr<Output = Self> + BitOrAssign + BitOr<bool, Output = Self> + BitOrAssign<bool>,

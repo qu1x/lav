@@ -13,6 +13,7 @@ use core::{
 	ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXor, BitXorAssign, Not},
 	ops::{Index, IndexMut},
 	ops::{Shl, ShlAssign, Shr, ShrAssign},
+	simd::{LaneCount, Simd, SupportedLaneCount},
 };
 
 mod u32;
@@ -23,9 +24,12 @@ mod u64;
 /// [`SimdReal`]: `super::SimdReal`
 pub trait SimdBits<B: Bits, const LANES: usize>
 where
+	LaneCount<LANES>: SupportedLaneCount,
 	Self: Clone + Copy + Default,
 	Self: PartialEq + Eq + PartialOrd + Ord,
-	Self: From<[B; LANES]> + AsRef<[B; LANES]> + AsMut<[B; LANES]>,
+	Self: From<Simd<B, LANES>> + Into<Simd<B, LANES>>,
+	Self: From<[B; LANES]> + Into<[B; LANES]>,
+	Self: AsRef<[B; LANES]> + AsMut<[B; LANES]>,
 	Self: Product<Self> + Sum<Self>,
 	for<'a> Self: Product<&'a Self> + Sum<&'a Self>,
 	Self: Hash,

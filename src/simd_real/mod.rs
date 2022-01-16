@@ -59,10 +59,13 @@ macro_rules! swizzle {
 /// [`Simd<f64, LANES>`]: `core::simd::Simd`
 pub trait SimdReal<R: Real, const LANES: usize>
 where
+	LaneCount<LANES>: SupportedLaneCount,
 	Self: Clone + Copy + Default,
 	Self: ApproxEq<R, Self> + PartialEq + PartialOrd,
 	Self: Debug + LowerExp + UpperExp,
-	Self: From<[R; LANES]> + AsRef<[R; LANES]> + AsMut<[R; LANES]>,
+	Self: From<Simd<R, LANES>> + Into<Simd<R, LANES>>,
+	Self: From<[R; LANES]> + Into<[R; LANES]>,
+	Self: AsRef<[R; LANES]> + AsMut<[R; LANES]>,
 	Self: Product<Self> + Sum<Self>,
 	for<'a> Self: Product<&'a Self> + Sum<&'a Self>,
 	Self: Index<usize, Output = R> + IndexMut<usize, Output = R>,
