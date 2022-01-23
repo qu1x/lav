@@ -1,3 +1,8 @@
+# Version 0.5.0 (2022-01-24)
+
+  * Add SIMD trait/type conversations.
+  * Add [`WrapFromUnchecked`] and [`WrapIntoUnchecked`] traits.
+
 # Version 0.4.0 (2022-01-03)
 
   * Add [`ApproxEq`] trait.
@@ -42,6 +47,10 @@ https://docs.rs/lav/latest/lav/trait.ApproxEq.html
 https://docs.rs/lav/latest/lav/trait.WrapFrom.html
 [`WrapInto`]:
 https://docs.rs/lav/latest/lav/trait.WrapInto.html
+[`WrapFromUnchecked`]:
+https://docs.rs/lav/latest/lav/trait.WrapFromUnchecked.html
+[`WrapIntoUnchecked`]:
+https://docs.rs/lav/latest/lav/trait.WrapIntoUnchecked.html
 [`Assert`]:
 https://docs.rs/lav/latest/lav/struct.Assert.html
 [`True`]:

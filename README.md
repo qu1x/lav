@@ -30,6 +30,8 @@ Lane-Associated Vector (LAV): [Portable SIMD] vector trait as GAT of SIMD lane t
   * [`ApproxEq`] trait complementing [`PartialEq`].
   * Non-reflexive [`WrapFrom`] and [`WrapInto`] traits complementing [`From`] and [`Into`] without
     conflicting implementations.
+  * Safe [`WrapFromUnchecked`] and [`WrapIntoUnchecked`] where the behavior may be [unspecified]
+    but will not result in undefined behavior if the caller breaks any logical constraint.
   * [`Assert`] structure asserting constant generic expression when bound by trait [`True`].
   * [`no_std`] without loss of functionality by enabling the [`libm`] feature.
 
@@ -51,6 +53,9 @@ See the [release history] to keep track of the development.
 [`PartialEq`]: https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html
 [`WrapFrom`]: https://docs.rs/lav/latest/lav/trait.WrapFrom.html
 [`WrapInto`]: https://docs.rs/lav/latest/lav/trait.WrapInto.html
+[`WrapFromUnchecked`]: https://docs.rs/lav/latest/lav/trait.WrapFromUnchecked.html
+[`WrapIntoUnchecked`]: https://docs.rs/lav/latest/lav/trait.WrapIntoUnchecked.html
+[unspecified]: https://doc.rust-lang.org/reference/behavior-not-considered-unsafe.html
 [`From`]: https://doc.rust-lang.org/nightly/core/convert/trait.From.html
 [`Into`]: https://doc.rust-lang.org/nightly/core/convert/trait.Into.html
 [`Assert`]: https://docs.rs/lav/latest/lav/struct.Assert.html
