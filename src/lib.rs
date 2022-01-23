@@ -113,6 +113,48 @@ where
 	}
 }
 
+/// Compile-time unchecked but safe [`WrapFrom`].
+///
+/// [`WrapFromUnchecked`]`<T> for U` implies (auto-implements) [`WrapIntoUnchecked`]`<U> for T`.
+pub trait WrapFromUnchecked<T> {
+	/// Performs the conversation.
+	///
+	/// # Unchecked
+	///
+	/// If the caller breaks any logical constraint, the behavior may be [unspecified] but will not
+	/// result in undefined behavior.
+	///
+	/// [unspecified]: https://doc.rust-lang.org/reference/behavior-not-considered-unsafe.html
+	#[must_use]
+	fn wrap_from_unchecked(from: T) -> Self;
+}
+
+/// Compile-time unchecked but safe [`WrapInto`].
+///
+/// Implied (auto-implemented) by [`WrapFromUnchecked`]`<T> for U`.
+pub trait WrapIntoUnchecked<U> {
+	/// Performs the conversation.
+	///
+	/// # Unchecked
+	///
+	/// If the caller breaks any logical constraint, the behavior may be [unspecified] but will not
+	/// result in undefined behavior.
+	///
+	/// [unspecified]: https://doc.rust-lang.org/reference/behavior-not-considered-unsafe.html
+	#[must_use]
+	fn wrap_into_unchecked(self) -> U;
+}
+
+impl<T, U> const WrapIntoUnchecked<U> for T
+where
+	U: ~const WrapFromUnchecked<T>,
+{
+	#[inline]
+	fn wrap_into_unchecked(self) -> U {
+		WrapFromUnchecked::wrap_from_unchecked(self)
+	}
+}
+
 /// Asserts constant generic expression `E` when bound by [`True`].
 pub struct Assert<const E: bool> {}
 
