@@ -28,10 +28,14 @@ Lane-Associated Vector (LAV): [Portable SIMD] vector trait as GAT of SIMD lane t
     GAT is generic over the number of SIMD vector `LANES`.
   * Lanewise approximate equality test wrt to epsilon and [ULP] SIMD vectors.
   * [`ApproxEq`] trait complementing [`PartialEq`].
-  * Non-reflexive [`WrapFrom`] and [`WrapInto`] traits complementing [`From`] and [`Into`] without
-    conflicting implementations.
-  * Safe [`WrapFromUnchecked`] and [`WrapIntoUnchecked`] where the behavior may be [unspecified]
-    but will not result in undefined behavior if the caller breaks any logical constraint.
+  * Safe [`FromUnchecked`] and [`IntoUnchecked`] complementing [`From`] and [`Into`] where the
+    behavior may be [unspecified] but will not result in undefined behavior if the caller breaks
+    any logical constraint.
+  * Non-reflexive [`PeelFrom`] and [`PeelInto`] traits complementing [`From`] and [`Into`]
+    without conflicting implementations.
+  * Safe [`WrapFromUnchecked`] and [`WrapIntoUnchecked`] complementing [`PeelFrom`] and
+    [`PeelInto`] where the behavior may be [unspecified] but will not result in undefined
+    behavior if the caller breaks any logical constraint.
   * [`Assert`] structure asserting constant generic expression when bound by trait [`True`].
   * [`no_std`] without loss of functionality by enabling the [`libm`] feature.
 
@@ -49,15 +53,17 @@ See the [release history] to keep track of the development.
 [`Simd<f64, LANES>`]: https://doc.rust-lang.org/nightly/core/simd/struct.Simd.html#impl-11
 [`Real::Simd<LANES>`]: https://docs.rs/lav/latest/lav/trait.Real.html#associatedtype.Simd
 [ULP]: https://en.wikipedia.org/wiki/Unit_in_the_last_place
+[unspecified]: https://doc.rust-lang.org/reference/behavior-not-considered-unsafe.html
 [`ApproxEq`]: https://docs.rs/lav/latest/lav/trait.AapproxEq.html
 [`PartialEq`]: https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html
-[`WrapFrom`]: https://docs.rs/lav/latest/lav/trait.WrapFrom.html
-[`WrapInto`]: https://docs.rs/lav/latest/lav/trait.WrapInto.html
-[`WrapFromUnchecked`]: https://docs.rs/lav/latest/lav/trait.WrapFromUnchecked.html
-[`WrapIntoUnchecked`]: https://docs.rs/lav/latest/lav/trait.WrapIntoUnchecked.html
-[unspecified]: https://doc.rust-lang.org/reference/behavior-not-considered-unsafe.html
+[`FromUnchecked`]: https://docs.rs/lav/latest/lav/trait.FromUnchecked.html
+[`IntoUnchecked`]: https://docs.rs/lav/latest/lav/trait.IntoUnchecked.html
 [`From`]: https://doc.rust-lang.org/nightly/core/convert/trait.From.html
 [`Into`]: https://doc.rust-lang.org/nightly/core/convert/trait.Into.html
+[`PeelFrom`]: https://docs.rs/lav/latest/lav/trait.PeelFrom.html
+[`PeelInto`]: https://docs.rs/lav/latest/lav/trait.PeelInto.html
+[`WrapFromUnchecked`]: https://docs.rs/lav/latest/lav/trait.WrapFromUnchecked.html
+[`WrapIntoUnchecked`]: https://docs.rs/lav/latest/lav/trait.WrapIntoUnchecked.html
 [`Assert`]: https://docs.rs/lav/latest/lav/struct.Assert.html
 [`True`]: https://docs.rs/lav/latest/lav/trait.True.html
 [`no_std`]: https://docs.rust-embedded.org/book/intro/no-std.html

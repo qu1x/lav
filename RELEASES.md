@@ -1,6 +1,8 @@
 # Version 0.5.0 (2022-01-24)
 
   * Add SIMD trait/type conversations.
+  * Add [`FromUnchecked`] and [`IntoUnchecked`] traits.
+  * Rename [`WrapFrom`] and [`WrapInto`] traits to [`PeelFrom`] and [`PeelInto`] traits.
   * Add [`WrapFromUnchecked`] and [`WrapIntoUnchecked`] traits.
 
 # Version 0.4.0 (2022-01-03)
@@ -43,14 +45,22 @@
 
 [`ApproxEq`]:
 https://docs.rs/lav/latest/lav/trait.ApproxEq.html
-[`WrapFrom`]:
-https://docs.rs/lav/latest/lav/trait.WrapFrom.html
-[`WrapInto`]:
-https://docs.rs/lav/latest/lav/trait.WrapInto.html
+[`FromUnchecked`]:
+https://docs.rs/lav/latest/lav/trait.FromUnchecked.html
+[`IntoUnchecked`]:
+https://docs.rs/lav/latest/lav/trait.IntoUnchecked.html
+[`PeelFrom`]:
+https://docs.rs/lav/latest/lav/trait.PeelFrom.html
+[`PeelInto`]:
+https://docs.rs/lav/latest/lav/trait.PeelInto.html
 [`WrapFromUnchecked`]:
 https://docs.rs/lav/latest/lav/trait.WrapFromUnchecked.html
 [`WrapIntoUnchecked`]:
 https://docs.rs/lav/latest/lav/trait.WrapIntoUnchecked.html
+[`WrapFrom`]:
+https://docs.rs/lav/0.4.0/lav/trait.WrapFrom.html
+[`WrapInto`]:
+https://docs.rs/lav/0.4.0/lav/trait.WrapInto.html
 [`Assert`]:
 https://docs.rs/lav/latest/lav/struct.Assert.html
 [`True`]:

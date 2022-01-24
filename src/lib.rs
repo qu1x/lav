@@ -18,8 +18,14 @@
 //!     GAT is generic over the number of SIMD vector `LANES`.
 //!   * Lanewise approximate equality test wrt to epsilon and [ULP] SIMD vectors.
 //!   * [`ApproxEq`] trait complementing [`PartialEq`].
-//!   * Non-reflexive [`WrapFrom`] and [`WrapInto`] traits complementing [`From`] and [`Into`]
+//!   * Safe [`FromUnchecked`] and [`IntoUnchecked`] complementing [`From`] and [`Into`] where the
+//!     behavior may be [unspecified] but will not result in undefined behavior if the caller breaks
+//!     any logical constraint.
+//!   * Non-reflexive [`PeelFrom`] and [`PeelInto`] traits complementing [`From`] and [`Into`]
 //!     without conflicting implementations.
+//!   * Safe [`WrapFromUnchecked`] and [`WrapIntoUnchecked`] complementing [`PeelFrom`] and
+//!     [`PeelInto`] where the behavior may be [unspecified] but will not result in undefined
+//!     behavior if the caller breaks any logical constraint.
 //!   * [`Assert`] structure asserting constant generic expression when bound by trait [`True`].
 //!   * [`no_std`] without loss of functionality by enabling the [`libm`] feature.
 //!
@@ -32,6 +38,7 @@
 //! [`libm`]: https://docs.rs/libm
 //! [`no_std`]: https://docs.rust-embedded.org/book/intro/no-std.html
 //! [ULP]: https://en.wikipedia.org/wiki/Unit_in_the_last_place
+//! [unspecified]: https://doc.rust-lang.org/reference/behavior-not-considered-unsafe.html
 
 #![forbid(missing_docs)]
 #![forbid(unsafe_code)]
@@ -85,62 +92,136 @@ where
 	}
 }
 
-/// [`From`] without reflexive `impl<T> `[`From`]`<T> for T`.
+/// Compile-time unchecked but safe [`From`].
 ///
-/// [`WrapFrom`]`<T> for U` implies (auto-implements) [`WrapInto`]`<U> for T`.
-pub trait WrapFrom<T> {
+/// **Note:** This trait must not fail.
+///
+/// # Unchecked
+///
+/// If the caller breaks any logical constraint, the behavior may be [unspecified] but will not
+/// result in undefined behavior.
+///
+/// [unspecified]: https://doc.rust-lang.org/reference/behavior-not-considered-unsafe.html
+///
+/// # Generic Implementations
+///
+///   * [`FromUnchecked`]`<T> for U` implies (auto-implements) [`IntoUnchecked`]`<U> for T`.
+///   * [`FromUnchecked`]`<T>` implies (auto-implements) [`FromUnchecked`]`<T> for T` (reflexive).
+pub trait FromUnchecked<T> {
 	/// Performs the conversation.
 	#[must_use]
-	fn wrap_from(from: T) -> Self;
+	fn from_unchecked(from: T) -> Self;
+}
+
+impl<T> FromUnchecked<T> for T {
+	#[inline]
+	fn from_unchecked(from: T) -> T {
+		from
+	}
+}
+
+/// Compile-time unchecked but safe [`Into`].
+///
+/// **Note:** This trait must not fail.
+///
+/// # Unchecked
+///
+/// If the caller breaks any logical constraint, the behavior may be [unspecified] but will not
+/// result in undefined behavior.
+///
+/// [unspecified]: https://doc.rust-lang.org/reference/behavior-not-considered-unsafe.html
+///
+/// # Generic Implementations
+///
+///   * Implied (auto-implemented) by [`FromUnchecked`]`<T> for U`.
+pub trait IntoUnchecked<U> {
+	/// Performs the conversation.
+	#[must_use]
+	fn into_unchecked(self) -> U;
+}
+
+impl<T, U> const IntoUnchecked<U> for T
+where
+	U: ~const FromUnchecked<T>,
+{
+	#[inline]
+	fn into_unchecked(self) -> U {
+		FromUnchecked::from_unchecked(self)
+	}
+}
+
+/// [`From`] without reflexive `impl<T> `[`From`]`<T> for T`.
+///
+/// **Note:** This trait must not fail.
+///
+/// # Generic Implementations
+///
+///   * [`PeelFrom`]`<T> for U` implies (auto-implements) [`PeelInto`]`<U> for T`.
+pub trait PeelFrom<T> {
+	/// Performs the conversation.
+	#[must_use]
+	fn peel_from(from: T) -> Self;
 }
 
 /// [`Into`] without reflexive `impl<U> `[`Into`]`<U> for U`.
 ///
-/// Implied (auto-implemented) by [`WrapFrom`]`<T> for U`.
-pub trait WrapInto<U> {
+/// **Note:** This trait must not fail.
+///
+/// # Generic Implementations
+///
+///   * Implied (auto-implemented) by [`PeelFrom`]`<T> for U`.
+pub trait PeelInto<U> {
 	/// Performs the conversation.
 	#[must_use]
-	fn wrap_into(self) -> U;
+	fn peel_into(self) -> U;
 }
 
-impl<T, U> const WrapInto<U> for T
+impl<T, U> const PeelInto<U> for T
 where
-	U: ~const WrapFrom<T>,
+	U: ~const PeelFrom<T>,
 {
 	#[inline]
-	fn wrap_into(self) -> U {
-		WrapFrom::wrap_from(self)
+	fn peel_into(self) -> U {
+		PeelFrom::peel_from(self)
 	}
 }
 
-/// Compile-time unchecked but safe [`WrapFrom`].
+/// Compile-time unchecked but safe inverse of [`PeelFrom`].
 ///
-/// [`WrapFromUnchecked`]`<T> for U` implies (auto-implements) [`WrapIntoUnchecked`]`<U> for T`.
+/// **Note:** This trait must not fail.
+///
+/// # Unchecked
+///
+/// If the caller breaks any logical constraint, the behavior may be [unspecified] but will not
+/// result in undefined behavior.
+///
+/// [unspecified]: https://doc.rust-lang.org/reference/behavior-not-considered-unsafe.html
+///
+/// # Generic Implementations
+///
+///   * [`WrapFromUnchecked`]`<T> for U` implies (auto-implements) [`WrapIntoUnchecked`]`<U> for T`.
 pub trait WrapFromUnchecked<T> {
 	/// Performs the conversation.
-	///
-	/// # Unchecked
-	///
-	/// If the caller breaks any logical constraint, the behavior may be [unspecified] but will not
-	/// result in undefined behavior.
-	///
-	/// [unspecified]: https://doc.rust-lang.org/reference/behavior-not-considered-unsafe.html
 	#[must_use]
 	fn wrap_from_unchecked(from: T) -> Self;
 }
 
-/// Compile-time unchecked but safe [`WrapInto`].
+/// Compile-time unchecked but safe inverse of [`PeelInto`].
 ///
-/// Implied (auto-implemented) by [`WrapFromUnchecked`]`<T> for U`.
+/// **Note:** This trait must not fail.
+///
+/// # Unchecked
+///
+/// If the caller breaks any logical constraint, the behavior may be [unspecified] but will not
+/// result in undefined behavior.
+///
+/// [unspecified]: https://doc.rust-lang.org/reference/behavior-not-considered-unsafe.html
+///
+/// # Generic Implementations
+///
+///   * Implied (auto-implemented) by [`WrapFromUnchecked`]`<T> for U`.
 pub trait WrapIntoUnchecked<U> {
 	/// Performs the conversation.
-	///
-	/// # Unchecked
-	///
-	/// If the caller breaks any logical constraint, the behavior may be [unspecified] but will not
-	/// result in undefined behavior.
-	///
-	/// [unspecified]: https://doc.rust-lang.org/reference/behavior-not-considered-unsafe.html
 	#[must_use]
 	fn wrap_into_unchecked(self) -> U;
 }
