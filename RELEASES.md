@@ -1,5 +1,6 @@
-# Version 0.5.0 (2022-01-24)
+# Version 0.5.0 (2022-02-07)
 
+  * Add [`SimdReal::mul_add()`] (incomplete).
   * Add SIMD trait/type conversations.
   * Add [`FromUnchecked`] and [`IntoUnchecked`] traits.
   * Rename [`WrapFrom`] and [`WrapInto`] traits to [`PeelFrom`] and [`PeelInto`] traits.
@@ -75,3 +76,5 @@ https://docs.rs/lav/latest/lav/trait.SimdReal.html#method.mask_flag
 https://docs.rs/lav/latest/lav/trait.SimdReal.html#method.lanes_approx_ne
 [`SimdReal::insert()`]:
 https://docs.rs/lav/latest/lav/trait.SimdReal.html#method.insert
+[`SimdReal::mul_add()`]:
+https://docs.rs/lav/latest/lav/trait.SimdReal.html#method.mul_add

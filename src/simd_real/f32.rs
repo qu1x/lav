@@ -230,6 +230,12 @@ where
 	fn to_radians(self) -> Self {
 		self.to_radians()
 	}
+
+	#[inline]
+	fn mul_add(self, a: Self, b: Self) -> Self {
+		// TODO self.mul_add(a, b)
+		self * a + b
+	}
 }
 
 impl<const LANES: usize> Select<Mask<i32, LANES>> for Simd<f32, LANES>
