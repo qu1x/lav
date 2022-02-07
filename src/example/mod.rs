@@ -46,7 +46,7 @@
 //! 		self.rev() / self.norm_squared()
 //! 	}
 //! 	pub fn rev(self) -> Self {
-//! 		let tfff = R::Simd::mask_from_array([true, false, false, false]);
+//! 		let tfff = R::Simd::mask_flag(0, true);
 //! 		Self {
 //! 			wxyz: tfff.select(self.wxyz, -self.wxyz),
 //! 		}
@@ -102,15 +102,17 @@
 //! 		let xyzx = swizzle!(wxyz, [1, 2, 3, 1]);
 //! 		let yzxy = swizzle!(wxyz, [2, 3, 1, 2]);
 //! 		let zttt = R::Simd::from_array([R::ZERO, R::TWO, R::TWO, R::TWO]);
-//! 		let tfff = R::Simd::mask_from_array([true, false, false, false]);
-//! 		let pin0 = wxyz * wxyz + zwww * zwww - tfff.negate(xyzx * xyzx + yzxy * yzxy);
-//! 		let pin1 = (zwww * yzxy + wxyz * xyzx) * zttt;
-//! 		let pin2 = (yzxy * wxyz - zwww * xyzx) * zttt;
+//! 		let fttt = R::Simd::mask_flag(0, false);
+//! 		let pin0 = xyzx.mul_add(xyzx, yzxy * yzxy);
+//! 		let pin0 = zwww.mul_add(zwww, fttt.negate(pin0));
+//! 		let pin0 = wxyz.mul_add(wxyz, pin0);
+//! 		let pin1 = zwww.mul_add(yzxy, wxyz * xyzx) * zttt;
+//! 		let pin2 = yzxy.mul_add(wxyz, -(zwww * xyzx)) * zttt;
 //! 		move |point3| {
 //! 			let wXYZ = point3.wXYZ;
 //! 			let wYZX = swizzle!(wXYZ, [0, 2, 3, 1]);
 //! 			let wZXY = swizzle!(wXYZ, [0, 3, 1, 2]);
-//! 			let wXYZ = pin0 * wXYZ + pin1 * wYZX + pin2 * wZXY;
+//! 			let wXYZ = pin0.mul_add(wXYZ, pin1.mul_add(wYZX, pin2 * wZXY));
 //! 			Point3 { wXYZ }
 //! 		}
 //! 	}
@@ -180,13 +182,17 @@
 //! 		// +(+1LwRx-1LyRz+(+1LxRw+1LzRy))e23
 //! 		// +(+1LwRy-1LzRx+(+1LxRz+1LyRw))e31
 //! 		// +(+1LwRz-1LxRy+(+1LyRx+1LzRw))e12
-//! 		let tfff = R::Simd::mask_from_array([true, false, false, false]);
-//! 		let wxyz = swizzle!(self.wxyz, [0, 0, 0, 0]) * other.wxyz
-//! 			- swizzle!(self.wxyz, [1, 2, 3, 1]) * swizzle!(other.wxyz, [1, 3, 1, 2])
-//! 			+ tfff.negate(
-//! 				swizzle!(self.wxyz, [2, 1, 1, 2]) * swizzle!(other.wxyz, [2, 0, 3, 1])
-//! 					+ swizzle!(self.wxyz, [3, 3, 2, 3]) * swizzle!(other.wxyz, [3, 2, 0, 0]),
-//! 			);
+//! 		let tfff = R::Simd::mask_flag(0, true);
+//! 		let wxyz = swizzle!(self.wxyz, [0, 0, 0, 0]).mul_add(
+//! 			other.wxyz,
+//! 			swizzle!(self.wxyz, [1, 2, 3, 1]).mul_add(
+//! 				-swizzle!(other.wxyz, [1, 3, 1, 2]),
+//! 				tfff.negate(swizzle!(self.wxyz, [2, 1, 1, 2]).mul_add(
+//! 					swizzle!(other.wxyz, [2, 0, 3, 1]),
+//! 					swizzle!(self.wxyz, [3, 3, 2, 3]) * swizzle!(other.wxyz, [3, 2, 0, 0]),
+//! 				)),
+//! 			),
+//! 		);
 //! 		Self { wxyz }
 //! 	}
 //! }
