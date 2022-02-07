@@ -4,7 +4,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-//! Portably SIMD-optimized 3D rotor implementation generic over lane type [`f32`] and [`f64`].
+//! Portably SIMD-optimized 3D rotator implementation generic over lane type [`f32`] and [`f64`].
 //!
 //! ```
 //! #![allow(non_snake_case)]
@@ -16,11 +16,11 @@
 //! use lav::{swizzle, ApproxEq, Real, SimdMask, SimdReal};
 //!
 //! #[derive(Debug, Copy, Clone, PartialEq, Eq)]
-//! pub struct Rotor3<R: Real> {
+//! pub struct Rotator3<R: Real> {
 //! 	wxyz: R::Simd<4>,
 //! }
 //!
-//! impl<R: Real> Rotor3<R> {
+//! impl<R: Real> Rotator3<R> {
 //! 	pub fn new(alpha: R, x: R, y: R, z: R) -> Self {
 //! 		let (sin, cos) = (alpha * -R::FRAC_1_2).sin_cos();
 //! 		(Self::from([R::ZERO, x, y, z]).unit() * sin).set_w(cos)
@@ -116,31 +116,31 @@
 //! 	}
 //! }
 //!
-//! impl<R: Real> Default for Rotor3<R> {
+//! impl<R: Real> Default for Rotator3<R> {
 //! 	fn default() -> Self {
 //! 		Self::from([R::ONE, R::ZERO, R::ZERO, R::ZERO])
 //! 	}
 //! }
 //!
-//! impl<R: Real> From<[R; 4]> for Rotor3<R> {
+//! impl<R: Real> From<[R; 4]> for Rotator3<R> {
 //! 	fn from(wxyz: [R; 4]) -> Self {
 //! 		Self::from_wxyz(wxyz)
 //! 	}
 //! }
 //!
-//! impl<R: Real> Into<[R; 4]> for Rotor3<R> {
+//! impl<R: Real> Into<[R; 4]> for Rotator3<R> {
 //! 	fn into(self) -> [R; 4] {
 //! 		self.to_wxyz()
 //! 	}
 //! }
 //!
-//! impl<R: Real> ApproxEq<R> for Rotor3<R> {
+//! impl<R: Real> ApproxEq<R> for Rotator3<R> {
 //! 	fn approx_eq(&self, other: &Self, epsilon: R, ulp: R::Bits) -> bool {
 //! 		self.wxyz.approx_eq(&other.wxyz, epsilon, ulp)
 //! 	}
 //! }
 //!
-//! impl<R: Real> Add for Rotor3<R> {
+//! impl<R: Real> Add for Rotator3<R> {
 //! 	type Output = Self;
 //!
 //! 	fn add(self, other: Self) -> Self::Output {
@@ -150,13 +150,13 @@
 //! 	}
 //! }
 //!
-//! impl<R: Real> AddAssign for Rotor3<R> {
+//! impl<R: Real> AddAssign for Rotator3<R> {
 //! 	fn add_assign(&mut self, other: Self) {
 //! 		*self = *self + other;
 //! 	}
 //! }
 //!
-//! impl<R: Real> Div<R> for Rotor3<R> {
+//! impl<R: Real> Div<R> for Rotator3<R> {
 //! 	type Output = Self;
 //!
 //! 	fn div(self, other: R) -> Self::Output {
@@ -166,13 +166,13 @@
 //! 	}
 //! }
 //!
-//! impl<R: Real> DivAssign<R> for Rotor3<R> {
+//! impl<R: Real> DivAssign<R> for Rotator3<R> {
 //! 	fn div_assign(&mut self, other: R) {
 //! 		*self = *self / other;
 //! 	}
 //! }
 //!
-//! impl<R: Real> Mul for Rotor3<R> {
+//! impl<R: Real> Mul for Rotator3<R> {
 //! 	type Output = Self;
 //!
 //! 	fn mul(self, other: Self) -> Self::Output {
@@ -191,7 +191,7 @@
 //! 	}
 //! }
 //!
-//! impl<R: Real> Mul<R> for Rotor3<R> {
+//! impl<R: Real> Mul<R> for Rotator3<R> {
 //! 	type Output = Self;
 //!
 //! 	fn mul(self, other: R) -> Self::Output {
@@ -201,13 +201,13 @@
 //! 	}
 //! }
 //!
-//! impl<R: Real> MulAssign<R> for Rotor3<R> {
+//! impl<R: Real> MulAssign<R> for Rotator3<R> {
 //! 	fn mul_assign(&mut self, other: R) {
 //! 		*self = *self * other;
 //! 	}
 //! }
 //!
-//! impl<R: Real> Neg for Rotor3<R> {
+//! impl<R: Real> Neg for Rotator3<R> {
 //! 	type Output = Self;
 //!
 //! 	fn neg(self) -> Self::Output {
@@ -215,7 +215,7 @@
 //! 	}
 //! }
 //!
-//! impl<R: Real> Sub for Rotor3<R> {
+//! impl<R: Real> Sub for Rotator3<R> {
 //! 	type Output = Self;
 //!
 //! 	fn sub(self, other: Self) -> Self::Output {
@@ -225,7 +225,7 @@
 //! 	}
 //! }
 //!
-//! impl<R: Real> SubAssign for Rotor3<R> {
+//! impl<R: Real> SubAssign for Rotator3<R> {
 //! 	fn sub_assign(&mut self, other: Self) {
 //! 		*self = *self - other;
 //! 	}
@@ -380,16 +380,16 @@
 //! 	}
 //! }
 //!
-//! impl<R: Real> Shl<Rotor3<R>> for Point3<R> {
+//! impl<R: Real> Shl<Rotator3<R>> for Point3<R> {
 //! 	type Output = Self;
 //!
-//! 	fn shl(self, other: Rotor3<R>) -> Self::Output {
+//! 	fn shl(self, other: Rotator3<R>) -> Self::Output {
 //! 		other.point_fn()(self)
 //! 	}
 //! }
 //!
-//! impl<R: Real> ShlAssign<Rotor3<R>> for Point3<R> {
-//! 	fn shl_assign(&mut self, other: Rotor3<R>) {
+//! impl<R: Real> ShlAssign<Rotator3<R>> for Point3<R> {
+//! 	fn shl_assign(&mut self, other: Rotator3<R>) {
 //! 		*self = *self << other
 //! 	}
 //! }
@@ -410,16 +410,17 @@
 //! 	}
 //! }
 //!
-//! let r030x = Rotor3::new(030f64.to_radians(), 1.0, 0.0, 0.0);
-//! let r060x = Rotor3::new(060f64.to_radians(), 1.0, 0.0, 0.0);
-//! let r330x = Rotor3::new(330f64.to_radians(), 1.0, 0.0, 0.0);
+//! let r000_ = Rotator3::default();
+//! let r030x = Rotator3::new(030f64.to_radians(), 1.0, 0.0, 0.0);
+//! let r060x = Rotator3::new(060f64.to_radians(), 1.0, 0.0, 0.0);
+//! let r330x = Rotator3::new(330f64.to_radians(), 1.0, 0.0, 0.0);
 //! assert!((r030x * r030x).approx_eq(&r060x, 0.0, 0));
 //! assert!((r030x * 42.0).unit().approx_eq(&r030x, 0.0, 0));
-//! assert!(((r030x * 42.0) * (r030x * 42.0).inv()).approx_eq(&Rotor3::default(), f64::EPSILON, 0));
-//! assert!((r030x * r030x.rev()).approx_eq(&Rotor3::default(), 0.0, 0));
+//! assert!(((r030x * 42.0) * (r030x * 42.0).inv()).approx_eq(&r000_, f64::EPSILON, 0));
+//! assert!((r030x * r030x.rev()).approx_eq(&Rotator3::default(), 0.0, 0));
 //! assert!(r330x.constrain().approx_eq(&r030x.rev(), 0.0, 5));
 //!
-//! let r090x = Rotor3::new(090f64.to_radians(), 1.0, 0.0, 0.0);
+//! let r090x = Rotator3::new(090f64.to_radians(), 1.0, 0.0, 0.0);
 //! let x5 = Point3::new(1.0, 5.0, 0.0, 0.0);
 //! let y5 = Point3::new(1.0, 0.0, 5.0, 0.0);
 //! let z5 = Point3::new(1.0, 0.0, 0.0, 5.0);
