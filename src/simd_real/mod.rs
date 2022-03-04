@@ -356,6 +356,25 @@ where
 	/// will be heavily dependant on designing algorithms with specific target hardware in mind.
 	#[must_use]
 	fn mul_add(self, a: Self, b: Self) -> Self;
+	/// Produces a vector where every lane has the square root value of the equivalently-indexed
+	/// lane in `self`
+	#[must_use]
+	fn sqrt(self) -> Self;
+	/// Returns the largest integer value less than or equal to each lane.
+	#[must_use]
+	fn floor(self) -> Self;
+	/// Returns the smallest integer greater than or equal to each lane.
+	#[must_use]
+	fn ceil(self) -> Self;
+	/// Rounds to the nearest integer value. Ties round toward zero.
+	#[must_use]
+	fn round(self) -> Self;
+	/// Returns the floating point's integer value, with its fractional part removed.
+	#[must_use]
+	fn trunc(self) -> Self;
+	/// Returns the floating point's fractional value, with its integer part removed.
+	#[must_use]
+	fn fract(self) -> Self;
 
 	/// Converts an array to a SIMD vector mask.
 	#[must_use]

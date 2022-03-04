@@ -7,6 +7,11 @@
 use super::{ApproxEq, Select, SimdReal};
 use core::simd::{LaneCount, Mask, Simd, SupportedLaneCount, Swizzle, Swizzle2};
 
+#[cfg(feature = "libm")]
+use super::Real;
+#[cfg(not(feature = "libm"))]
+use std::simd::StdFloat;
+
 impl<const LANES: usize> SimdReal<f64, LANES> for Simd<f64, LANES>
 where
 	LaneCount<LANES>: SupportedLaneCount,
@@ -231,10 +236,74 @@ where
 		self.to_radians()
 	}
 
+	#[cfg(feature = "libm")]
 	#[inline]
 	fn mul_add(self, a: Self, b: Self) -> Self {
-		// TODO self.mul_add(a, b)
 		self * a + b
+	}
+	#[cfg(not(feature = "libm"))]
+	#[inline]
+	fn mul_add(self, a: Self, b: Self) -> Self {
+		StdFloat::mul_add(self, a, b)
+	}
+	#[cfg(feature = "libm")]
+	fn sqrt(self) -> Self {
+		self.to_array().map(Real::sqrt).into()
+	}
+	#[cfg(not(feature = "libm"))]
+	#[inline]
+	fn sqrt(self) -> Self {
+		StdFloat::sqrt(self)
+	}
+	#[cfg(feature = "libm")]
+	#[inline]
+	fn floor(self) -> Self {
+		self.to_array().map(Real::floor).into()
+	}
+	#[cfg(not(feature = "libm"))]
+	#[inline]
+	fn floor(self) -> Self {
+		StdFloat::floor(self)
+	}
+	#[cfg(feature = "libm")]
+	#[inline]
+	fn ceil(self) -> Self {
+		self.to_array().map(Real::ceil).into()
+	}
+	#[cfg(not(feature = "libm"))]
+	#[inline]
+	fn ceil(self) -> Self {
+		StdFloat::ceil(self)
+	}
+	#[cfg(feature = "libm")]
+	#[inline]
+	fn round(self) -> Self {
+		self.to_array().map(Real::round).into()
+	}
+	#[cfg(not(feature = "libm"))]
+	#[inline]
+	fn round(self) -> Self {
+		StdFloat::round(self)
+	}
+	#[cfg(feature = "libm")]
+	#[inline]
+	fn trunc(self) -> Self {
+		self.to_array().map(Real::trunc).into()
+	}
+	#[cfg(not(feature = "libm"))]
+	#[inline]
+	fn trunc(self) -> Self {
+		StdFloat::trunc(self)
+	}
+	#[cfg(feature = "libm")]
+	#[inline]
+	fn fract(self) -> Self {
+		self.to_array().map(Real::fract).into()
+	}
+	#[cfg(not(feature = "libm"))]
+	#[inline]
+	fn fract(self) -> Self {
+		StdFloat::fract(self)
 	}
 }
 
