@@ -423,7 +423,7 @@
 //! assert!((r030x * r030x).approx_eq(&r060x, 0.0, 0));
 //! assert!((r030x * 42.0).unit().approx_eq(&r030x, 0.0, 0));
 //! assert!(((r030x * 42.0) * (r030x * 42.0).inv()).approx_eq(&r000_, f64::EPSILON, 0));
-//! assert!((r030x * r030x.rev()).approx_eq(&Rotator3::default(), 0.0, 0));
+//! assert!((r030x * r030x.rev()).approx_eq(&Rotator3::default(), f64::EPSILON, 0));
 //! assert!(r330x.constrain().approx_eq(&r030x.rev(), 0.0, 5));
 //!
 //! let r090x = Rotator3::new(090f64.to_radians(), 1.0, 0.0, 0.0);

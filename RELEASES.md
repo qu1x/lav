@@ -1,3 +1,7 @@
+# Version 0.5.1 (2022-03-04)
+
+  * Fix example.
+
 # Version 0.5.0 (2022-03-04)
 
   * Add [`std::simd::StdFloat`] methods.
