@@ -1,3 +1,9 @@
+# Version 0.6.0 (2022-03-14)
+
+  * Update KaTeX.
+  * Rename prefix `horizontal_` to `reduce_`.
+  * Synchronize with nightly Rust.
+
 # Version 0.5.1 (2022-03-04)
 
   * Fix example.
