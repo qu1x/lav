@@ -182,25 +182,25 @@ where
 		self
 	}
 
-	/// Horizontal wrapping add. Returns the sum of the lanes of the vector, with wrapping addition.
+	/// Reducing wrapping add. Returns the sum of the lanes of the vector, with wrapping addition.
 	#[must_use]
-	fn horizontal_sum(self) -> R;
-	/// Horizontal wrapping multiply. Returns the product of the lanes of the vector, with wrapping
+	fn reduce_sum(self) -> R;
+	/// Reducing wrapping multiply. Returns the product of the lanes of the vector, with wrapping
 	/// multiplication.
 	#[must_use]
-	fn horizontal_product(self) -> R;
-	/// Horizontal minimum.  Returns the minimum lane in the vector.
+	fn reduce_product(self) -> R;
+	/// Reducing minimum. Returns the minimum lane in the vector.
 	///
 	/// Returns values based on equality, so a vector containing both `0.0` and `-0.0` may return
 	/// either. This function will not return NaN unless all lanes are NaN.
 	#[must_use]
-	fn horizontal_min(self) -> R;
-	/// Horizontal maximum.  Returns the maximum lane in the vector.
+	fn reduce_min(self) -> R;
+	/// Reducing maximum. Returns the maximum lane in the vector.
 	///
 	/// Returns values based on equality, so a vector containing both `0.0` and `-0.0` may return
 	/// either. This function will not return NaN unless all lanes are NaN.
 	#[must_use]
-	fn horizontal_max(self) -> R;
+	fn reduce_max(self) -> R;
 
 	/// Reverse the order of the lanes in the vector.
 	#[must_use]

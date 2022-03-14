@@ -97,20 +97,20 @@ where
 	}
 
 	#[inline]
-	fn horizontal_sum(self) -> f32 {
-		self.horizontal_sum()
+	fn reduce_sum(self) -> f32 {
+		self.reduce_sum()
 	}
 	#[inline]
-	fn horizontal_product(self) -> f32 {
-		self.horizontal_product()
+	fn reduce_product(self) -> f32 {
+		self.reduce_product()
 	}
 	#[inline]
-	fn horizontal_min(self) -> f32 {
-		self.horizontal_min()
+	fn reduce_min(self) -> f32 {
+		self.reduce_min()
 	}
 	#[inline]
-	fn horizontal_max(self) -> f32 {
-		self.horizontal_max()
+	fn reduce_max(self) -> f32 {
+		self.reduce_max()
 	}
 
 	#[inline]

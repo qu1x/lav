@@ -37,7 +37,7 @@
 //! 		self.norm_squared().sqrt()
 //! 	}
 //! 	pub fn norm_squared(&self) -> R {
-//! 		(self.wxyz * self.wxyz).horizontal_sum()
+//! 		(self.wxyz * self.wxyz).reduce_sum()
 //! 	}
 //! 	pub fn unit(self) -> Self {
 //! 		self / self.norm()
