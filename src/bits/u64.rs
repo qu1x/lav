@@ -8,10 +8,9 @@ use super::Bits;
 use core::simd::{LaneCount, Simd, SupportedLaneCount};
 
 impl Bits for u64 {
-	type Simd<const LANES: usize>
+	type Simd<const LANES: usize> = Simd<Self, LANES>
 	where
-		LaneCount<LANES>: SupportedLaneCount,
-	= Simd<Self, LANES>;
+		LaneCount<LANES>: SupportedLaneCount;
 
 	const MIN: Self = u64::MIN;
 	const MAX: Self = u64::MAX;

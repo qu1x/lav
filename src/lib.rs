@@ -46,7 +46,6 @@
 #![allow(clippy::tabs_in_doc_comments)]
 #![feature(generic_associated_types)]
 #![feature(const_trait_impl)]
-#![feature(const_fn_trait_bound)]
 #![feature(portable_simd)]
 #![feature(total_cmp)]
 #![feature(convert_float_to_int)]

@@ -13,10 +13,9 @@ use core::{
 
 impl Real for f32 {
 	type Bits = u32;
-	type Simd<const LANES: usize>
+	type Simd<const LANES: usize> = Simd<Self, LANES>
 	where
-		LaneCount<LANES>: SupportedLaneCount,
-	= Simd<Self, LANES>;
+		LaneCount<LANES>: SupportedLaneCount;
 
 	const ZERO: Self = 0.0;
 	const ONE: Self = 1.0;
