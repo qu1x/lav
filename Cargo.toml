@@ -2,6 +2,7 @@
 name = "lav"
 version = "0.6.0"
 edition = "2021"
+authors = ["Rouven Spreckels <rs@qu1x.dev>"]
 description = "Lane-Associated Vector (LAV): Portable SIMD vector trait as GAT of SIMD lane trait."
 documentation = "https://docs.rs/lav"
 repository = "https://github.com/qu1x/lav"
