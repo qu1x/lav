@@ -47,7 +47,6 @@
 #![feature(generic_associated_types)]
 #![feature(const_trait_impl)]
 #![feature(portable_simd)]
-#![feature(total_cmp)]
 #![feature(convert_float_to_int)]
 #![cfg_attr(feature = "libm", no_std)]
 
