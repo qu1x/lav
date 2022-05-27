@@ -43,6 +43,7 @@
 #![forbid(missing_docs)]
 #![forbid(unsafe_code)]
 #![allow(clippy::type_repetition_in_bounds)]
+#![allow(clippy::trait_duplication_in_bounds)]
 #![allow(clippy::tabs_in_doc_comments)]
 #![feature(generic_associated_types)]
 #![feature(const_trait_impl)]
