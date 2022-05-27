@@ -512,16 +512,6 @@ impl Real for f32 {
 	}
 
 	#[inline]
-	#[allow(clippy::float_cmp)]
-	fn lerp(self, start: Self, end: Self) -> Self {
-		if start == end {
-			start
-		} else {
-			self.mul_add(end, (-self).mul_add(start, start))
-		}
-	}
-
-	#[inline]
 	fn total_cmp(&self, other: &Self) -> Ordering {
 		self.total_cmp(other)
 	}
