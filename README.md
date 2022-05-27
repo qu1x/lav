@@ -54,7 +54,7 @@ See the [release history] to keep track of the development.
 [`Real::Simd<LANES>`]: https://docs.rs/lav/latest/lav/trait.Real.html#associatedtype.Simd
 [ULP]: https://en.wikipedia.org/wiki/Unit_in_the_last_place
 [unspecified]: https://doc.rust-lang.org/reference/behavior-not-considered-unsafe.html
-[`ApproxEq`]: https://docs.rs/lav/latest/lav/trait.AapproxEq.html
+[`ApproxEq`]: https://docs.rs/lav/latest/lav/trait.ApproxEq.html
 [`PartialEq`]: https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html
 [`FromUnchecked`]: https://docs.rs/lav/latest/lav/trait.FromUnchecked.html
 [`IntoUnchecked`]: https://docs.rs/lav/latest/lav/trait.IntoUnchecked.html
