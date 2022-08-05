@@ -1,3 +1,10 @@
+# Version 0.7.0 (2022-08-05)
+
+  * Extend CI workflow.
+  * Update KaTeX.
+  * Rename prefix `lanes_` to `simd_`.
+  * Synchronize with nightly Rust.
+
 # Version 0.6.0 (2022-03-14)
 
   * Update KaTeX.
