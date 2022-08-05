@@ -40,8 +40,9 @@
 //! [ULP]: https://en.wikipedia.org/wiki/Unit_in_the_last_place
 //! [unspecified]: https://doc.rust-lang.org/reference/behavior-not-considered-unsafe.html
 
-#![forbid(missing_docs)]
 #![forbid(unsafe_code)]
+#![forbid(missing_docs)]
+#![deny(rustdoc::broken_intra_doc_links)]
 #![allow(clippy::type_repetition_in_bounds)]
 #![allow(clippy::trait_duplication_in_bounds)]
 #![allow(clippy::tabs_in_doc_comments)]

@@ -245,38 +245,38 @@ where
 
 	/// Tests lanes for approximate equality wrt `epsilon` or `ulp`, "or" in the sense of `||`.
 	#[must_use]
-	fn lanes_approx_eq(self, other: Self, epsilon: Self, ulp: Self::Bits) -> Self::Mask {
+	fn simd_approx_eq(self, other: Self, epsilon: Self, ulp: Self::Bits) -> Self::Mask {
 		let (self_bits, other_bits) = (self.to_bits(), other.to_bits());
-		(self - other).abs().lanes_le(epsilon)
+		(self - other).abs().simd_le(epsilon)
 			| !(self.is_nan() | other.is_nan())
 				& !(self.is_sign_negative() ^ other.is_sign_negative())
-				& self_bits.abs_sub(other_bits).lanes_le(ulp)
+				& self_bits.abs_sub(other_bits).simd_le(ulp)
 	}
 	/// Tests lanes for approximate inequality wrt `epsilon` and `ulp`, "and" in the sense of `&&`.
 	#[must_use]
 	#[inline]
-	fn lanes_approx_ne(self, other: Self, epsilon: Self, ulp: Self::Bits) -> Self::Mask {
-		!self.lanes_approx_eq(other, epsilon, ulp)
+	fn simd_approx_ne(self, other: Self, epsilon: Self, ulp: Self::Bits) -> Self::Mask {
+		!self.simd_approx_eq(other, epsilon, ulp)
 	}
 
 	/// Test if each lane is equal to the corresponding lane in `other`.
 	#[must_use]
-	fn lanes_eq(self, other: Self) -> Self::Mask;
+	fn simd_eq(self, other: Self) -> Self::Mask;
 	/// Test if each lane is not equal to the corresponding lane in `other`.
 	#[must_use]
-	fn lanes_ne(self, other: Self) -> Self::Mask;
+	fn simd_ne(self, other: Self) -> Self::Mask;
 	/// Test if each lane is less than the corresponding lane in `other`.
 	#[must_use]
-	fn lanes_lt(self, other: Self) -> Self::Mask;
+	fn simd_lt(self, other: Self) -> Self::Mask;
 	/// Test if each lane is greater than the corresponding lane in `other`.
 	#[must_use]
-	fn lanes_gt(self, other: Self) -> Self::Mask;
+	fn simd_gt(self, other: Self) -> Self::Mask;
 	/// Test if each lane is less than or equal to the corresponding lane in `other`.
 	#[must_use]
-	fn lanes_le(self, other: Self) -> Self::Mask;
+	fn simd_le(self, other: Self) -> Self::Mask;
 	/// Test if each lane is greater than or equal to the corresponding lane in `other`.
 	#[must_use]
-	fn lanes_ge(self, other: Self) -> Self::Mask;
+	fn simd_ge(self, other: Self) -> Self::Mask;
 
 	/// Returns true for each lane if it has a positive sign, including `+0.0`, NaNs with positive
 	/// sign bit and positive infinity.
@@ -323,19 +323,19 @@ where
 	///
 	/// If one of the values is [`Real::NAN`], then the other value is returned.
 	#[must_use]
-	fn min(self, other: Self) -> Self;
+	fn simd_min(self, other: Self) -> Self;
 	/// Returns the maximum of each lane.
 	///
 	/// If one of the values is [`Real::NAN`], then the other value is returned.
 	#[must_use]
-	fn max(self, other: Self) -> Self;
+	fn simd_max(self, other: Self) -> Self;
 	/// Restrict each lane to a certain interval unless it is NaN.
 	///
 	/// For each lane in `self`, returns the corresponding lane in `max` if the lane is
 	/// greater than `max`, and the corresponding lane in `min` if the lane is less
 	/// than `min`.  Otherwise returns the lane in `self`.
 	#[must_use]
-	fn clamp(self, min: Self, max: Self) -> Self;
+	fn simd_clamp(self, min: Self, max: Self) -> Self;
 
 	/// Takes the reciprocal (inverse) of each lane, ${1 \over x}$.
 	#[must_use]

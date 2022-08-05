@@ -77,22 +77,22 @@ where
 
 	/// Test if each lane is equal to the corresponding lane in `other`.
 	#[must_use]
-	fn lanes_eq(self, other: Self) -> Self::Mask;
+	fn simd_eq(self, other: Self) -> Self::Mask;
 	/// Test if each lane is not equal to the corresponding lane in `other`.
 	#[must_use]
-	fn lanes_ne(self, other: Self) -> Self::Mask;
+	fn simd_ne(self, other: Self) -> Self::Mask;
 	/// Test if each lane is less than the corresponding lane in `other`.
 	#[must_use]
-	fn lanes_lt(self, other: Self) -> Self::Mask;
+	fn simd_lt(self, other: Self) -> Self::Mask;
 	/// Test if each lane is greater than the corresponding lane in `other`.
 	#[must_use]
-	fn lanes_gt(self, other: Self) -> Self::Mask;
+	fn simd_gt(self, other: Self) -> Self::Mask;
 	/// Test if each lane is less than or equal to the corresponding lane in `other`.
 	#[must_use]
-	fn lanes_le(self, other: Self) -> Self::Mask;
+	fn simd_le(self, other: Self) -> Self::Mask;
 	/// Test if each lane is greater than or equal to the corresponding lane in `other`.
 	#[must_use]
-	fn lanes_ge(self, other: Self) -> Self::Mask;
+	fn simd_ge(self, other: Self) -> Self::Mask;
 
 	/// Lanewise saturating add.
 	#[must_use]

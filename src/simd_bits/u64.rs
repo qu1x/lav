@@ -5,7 +5,9 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 use super::{Select, SimdBits};
-use core::simd::{LaneCount, Mask, Simd, SupportedLaneCount};
+use core::simd::{
+	LaneCount, Mask, Simd, SimdPartialEq, SimdPartialOrd, SimdUint, SupportedLaneCount,
+};
 
 impl<const LANES: usize> SimdBits<u64, LANES> for Simd<u64, LANES>
 where
@@ -19,37 +21,37 @@ where
 	}
 
 	#[inline]
-	fn lanes_eq(self, other: Self) -> Self::Mask {
-		self.lanes_eq(other)
+	fn simd_eq(self, other: Self) -> Self::Mask {
+		SimdPartialEq::simd_eq(self, other)
 	}
 	#[inline]
-	fn lanes_ne(self, other: Self) -> Self::Mask {
-		self.lanes_ne(other)
+	fn simd_ne(self, other: Self) -> Self::Mask {
+		SimdPartialEq::simd_ne(self, other)
 	}
 	#[inline]
-	fn lanes_lt(self, other: Self) -> Self::Mask {
-		self.lanes_lt(other)
+	fn simd_lt(self, other: Self) -> Self::Mask {
+		SimdPartialOrd::simd_lt(self, other)
 	}
 	#[inline]
-	fn lanes_gt(self, other: Self) -> Self::Mask {
-		self.lanes_gt(other)
+	fn simd_gt(self, other: Self) -> Self::Mask {
+		SimdPartialOrd::simd_gt(self, other)
 	}
 	#[inline]
-	fn lanes_le(self, other: Self) -> Self::Mask {
-		self.lanes_le(other)
+	fn simd_le(self, other: Self) -> Self::Mask {
+		SimdPartialOrd::simd_le(self, other)
 	}
 	#[inline]
-	fn lanes_ge(self, other: Self) -> Self::Mask {
-		self.lanes_ge(other)
+	fn simd_ge(self, other: Self) -> Self::Mask {
+		SimdPartialOrd::simd_ge(self, other)
 	}
 
 	#[inline]
 	fn saturating_add(self, other: Self) -> Self {
-		self.saturating_add(other)
+		SimdUint::saturating_add(self, other)
 	}
 	#[inline]
 	fn saturating_sub(self, other: Self) -> Self {
-		self.saturating_sub(other)
+		SimdUint::saturating_sub(self, other)
 	}
 }
 

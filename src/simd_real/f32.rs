@@ -5,7 +5,10 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 use super::{ApproxEq, Select, SimdReal};
-use core::simd::{LaneCount, Mask, Simd, SupportedLaneCount, Swizzle, Swizzle2};
+use core::simd::{
+	LaneCount, Mask, Simd, SimdFloat, SimdPartialEq, SimdPartialOrd, SupportedLaneCount, Swizzle,
+	Swizzle2,
+};
 
 #[cfg(feature = "libm")]
 use super::Real;
@@ -89,28 +92,28 @@ where
 
 	#[inline]
 	fn from_bits(bits: Self::Bits) -> Self {
-		Self::from_bits(bits)
+		SimdFloat::from_bits(bits)
 	}
 	#[inline]
 	fn to_bits(self) -> Self::Bits {
-		self.to_bits()
+		SimdFloat::to_bits(self)
 	}
 
 	#[inline]
 	fn reduce_sum(self) -> f32 {
-		self.reduce_sum()
+		SimdFloat::reduce_sum(self)
 	}
 	#[inline]
 	fn reduce_product(self) -> f32 {
-		self.reduce_product()
+		SimdFloat::reduce_product(self)
 	}
 	#[inline]
 	fn reduce_min(self) -> f32 {
-		self.reduce_min()
+		SimdFloat::reduce_min(self)
 	}
 	#[inline]
 	fn reduce_max(self) -> f32 {
-		self.reduce_max()
+		SimdFloat::reduce_max(self)
 	}
 
 	#[inline]
@@ -144,96 +147,96 @@ where
 	}
 
 	#[inline]
-	fn lanes_eq(self, other: Self) -> Self::Mask {
-		self.lanes_eq(other)
+	fn simd_eq(self, other: Self) -> Self::Mask {
+		SimdPartialEq::simd_eq(self, other)
 	}
 	#[inline]
-	fn lanes_ne(self, other: Self) -> Self::Mask {
-		self.lanes_ne(other)
+	fn simd_ne(self, other: Self) -> Self::Mask {
+		SimdPartialEq::simd_ne(self, other)
 	}
 	#[inline]
-	fn lanes_lt(self, other: Self) -> Self::Mask {
-		self.lanes_lt(other)
+	fn simd_lt(self, other: Self) -> Self::Mask {
+		SimdPartialOrd::simd_lt(self, other)
 	}
 	#[inline]
-	fn lanes_gt(self, other: Self) -> Self::Mask {
-		self.lanes_gt(other)
+	fn simd_gt(self, other: Self) -> Self::Mask {
+		SimdPartialOrd::simd_gt(self, other)
 	}
 	#[inline]
-	fn lanes_le(self, other: Self) -> Self::Mask {
-		self.lanes_le(other)
+	fn simd_le(self, other: Self) -> Self::Mask {
+		SimdPartialOrd::simd_le(self, other)
 	}
 	#[inline]
-	fn lanes_ge(self, other: Self) -> Self::Mask {
-		self.lanes_ge(other)
+	fn simd_ge(self, other: Self) -> Self::Mask {
+		SimdPartialOrd::simd_ge(self, other)
 	}
 
 	#[inline]
 	fn is_sign_positive(self) -> Self::Mask {
-		self.is_sign_positive()
+		SimdFloat::is_sign_positive(self)
 	}
 	#[inline]
 	fn is_sign_negative(self) -> Self::Mask {
-		self.is_sign_negative()
+		SimdFloat::is_sign_negative(self)
 	}
 	#[inline]
 	fn is_nan(self) -> Self::Mask {
-		self.is_nan()
+		SimdFloat::is_nan(self)
 	}
 	#[inline]
 	fn is_infinite(self) -> Self::Mask {
-		self.is_infinite()
+		SimdFloat::is_infinite(self)
 	}
 	#[inline]
 	fn is_finite(self) -> Self::Mask {
-		self.is_finite()
+		SimdFloat::is_finite(self)
 	}
 	#[inline]
 	fn is_subnormal(self) -> Self::Mask {
-		self.is_subnormal()
+		SimdFloat::is_subnormal(self)
 	}
 	#[inline]
 	fn is_normal(self) -> Self::Mask {
-		self.is_normal()
+		SimdFloat::is_normal(self)
 	}
 
 	#[inline]
 	fn abs(self) -> Self {
-		self.abs()
+		SimdFloat::abs(self)
 	}
 	#[inline]
 	fn signum(self) -> Self {
-		self.signum()
+		SimdFloat::signum(self)
 	}
 	#[inline]
 	fn copysign(self, sign: Self) -> Self {
-		self.copysign(sign)
+		SimdFloat::copysign(self, sign)
 	}
 	#[inline]
-	fn min(self, other: Self) -> Self {
-		self.min(other)
+	fn simd_min(self, other: Self) -> Self {
+		SimdFloat::simd_min(self, other)
 	}
 	#[inline]
-	fn max(self, other: Self) -> Self {
-		self.max(other)
+	fn simd_max(self, other: Self) -> Self {
+		SimdFloat::simd_max(self, other)
 	}
 	#[inline]
-	fn clamp(self, min: Self, max: Self) -> Self {
-		self.clamp(min, max)
+	fn simd_clamp(self, min: Self, max: Self) -> Self {
+		SimdFloat::simd_clamp(self, min, max)
 	}
 
 	#[inline]
 	fn recip(self) -> Self {
-		self.recip()
+		SimdFloat::recip(self)
 	}
 
 	#[inline]
 	fn to_degrees(self) -> Self {
-		self.to_degrees()
+		SimdFloat::to_degrees(self)
 	}
 	#[inline]
 	fn to_radians(self) -> Self {
-		self.to_radians()
+		SimdFloat::to_radians(self)
 	}
 
 	#[cfg(feature = "libm")]
@@ -323,7 +326,7 @@ where
 {
 	#[inline]
 	fn approx_eq(&self, other: &Self, epsilon: f32, ulp: u32) -> bool {
-		self.lanes_approx_eq(*other, Simd::splat(epsilon), Simd::splat(ulp))
+		self.simd_approx_eq(*other, Simd::splat(epsilon), Simd::splat(ulp))
 			.all()
 	}
 }
