@@ -7,34 +7,58 @@ on:
 env:
   CARGO_TERM_COLOR: always
 jobs:
-  std:
+  default:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout (std)
+    - name: checkout
       uses: actions/checkout@v2
-    - name: Toolchain (std)
+    - name: toolchain
       uses: actions-rs/toolchain@v1
       with:
         profile: minimal
         toolchain: nightly
         override: true
-    - name: Test (std)
+    - name: test
       uses: actions-rs/cargo@v1
       with:
         command: test
+    - name: clippy
+      uses: actions-rs/cargo@v1
+      with:
+        command: clippy
+        args: -- --deny clippy::pedantic
+    - name: doc
+      uses: actions-rs/cargo@v1
+      with:
+        command: doc
+    - name: fmt
+      uses: actions-rs/cargo@v1
+      with:
+        command: fmt
+        args: --check
   libm:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout (libm)
+    - name: checkout
       uses: actions/checkout@v2
-    - name: Toolchain (libm)
+    - name: toolchain
       uses: actions-rs/toolchain@v1
       with:
         profile: minimal
         toolchain: nightly
         override: true
-    - name: Test (libm)
+    - name: test
       uses: actions-rs/cargo@v1
       with:
         command: test
+        args: --features libm
+    - name: clippy
+      uses: actions-rs/cargo@v1
+      with:
+        command: clippy
+        args: --features libm -- --deny clippy::pedantic
+    - name: doc
+      uses: actions-rs/cargo@v1
+      with:
+        command: doc
         args: --features libm
