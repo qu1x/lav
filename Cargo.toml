@@ -33,5 +33,5 @@ include = [
 rustdoc-args = [ "--html-in-header", "katex.html" ]
 
 [dependencies.libm]
-version = "0.2.3"
+version = "0.2.5"
 optional = true
