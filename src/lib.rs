@@ -46,7 +46,6 @@
 #![allow(clippy::type_repetition_in_bounds)]
 #![allow(clippy::trait_duplication_in_bounds)]
 #![allow(clippy::tabs_in_doc_comments)]
-#![feature(generic_associated_types)]
 #![feature(const_trait_impl)]
 #![feature(portable_simd)]
 #![feature(convert_float_to_int)]
@@ -107,6 +106,7 @@ where
 ///
 ///   * [`FromUnchecked`]`<T> for U` implies (auto-implements) [`IntoUnchecked`]`<U> for T`.
 ///   * [`FromUnchecked`]`<T>` implies (auto-implements) [`FromUnchecked`]`<T> for T` (reflexive).
+#[const_trait]
 pub trait FromUnchecked<T> {
 	/// Performs the conversation.
 	#[must_use]
@@ -134,6 +134,7 @@ impl<T> FromUnchecked<T> for T {
 /// # Generic Implementations
 ///
 ///   * Implied (auto-implemented) by [`FromUnchecked`]`<T> for U`.
+#[const_trait]
 pub trait IntoUnchecked<U> {
 	/// Performs the conversation.
 	#[must_use]
@@ -157,6 +158,7 @@ where
 /// # Generic Implementations
 ///
 ///   * [`PeelFrom`]`<T> for U` implies (auto-implements) [`PeelInto`]`<U> for T`.
+#[const_trait]
 pub trait PeelFrom<T> {
 	/// Performs the conversation.
 	#[must_use]
@@ -170,6 +172,7 @@ pub trait PeelFrom<T> {
 /// # Generic Implementations
 ///
 ///   * Implied (auto-implemented) by [`PeelFrom`]`<T> for U`.
+#[const_trait]
 pub trait PeelInto<U> {
 	/// Performs the conversation.
 	#[must_use]
@@ -200,6 +203,7 @@ where
 /// # Generic Implementations
 ///
 ///   * [`WrapFromUnchecked`]`<T> for U` implies (auto-implements) [`WrapIntoUnchecked`]`<U> for T`.
+#[const_trait]
 pub trait WrapFromUnchecked<T> {
 	/// Performs the conversation.
 	#[must_use]
@@ -220,6 +224,7 @@ pub trait WrapFromUnchecked<T> {
 /// # Generic Implementations
 ///
 ///   * Implied (auto-implemented) by [`WrapFromUnchecked`]`<T> for U`.
+#[const_trait]
 pub trait WrapIntoUnchecked<U> {
 	/// Performs the conversation.
 	#[must_use]
@@ -240,6 +245,7 @@ where
 pub struct Assert<const E: bool> {}
 
 /// Implemented for [`Assert`] with true expression.
+#[const_trait]
 pub trait True {}
 
-impl True for Assert<true> {}
+impl const True for Assert<true> {}
