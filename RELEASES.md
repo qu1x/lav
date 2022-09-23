@@ -1,3 +1,7 @@
+# Version 0.7.1 (2022-09-23)
+
+  * Synchronize with nightly Rust (by marking traits with `const_trait`).
+
 # Version 0.7.0 (2022-08-05)
 
   * Extend CI workflow.
