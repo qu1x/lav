@@ -1,3 +1,8 @@
+# Version 0.7.3 (2023-02-15)
+
+  * Improve `FromStr<Err>` bounds.
+  * Add `R::NATIVE_LANE_COUNT` featured by crate `target-features`.
+
 # Version 0.7.2 (2023-02-15)
 
   * Add `Send + Sync` and `FromStr<Err: Debug>` bounds.
