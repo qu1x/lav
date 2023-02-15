@@ -11,11 +11,17 @@ use core::{
 	simd::{LaneCount, Simd, SupportedLaneCount},
 };
 
+#[cfg(feature = "target-features")]
+use target_features::CURRENT_TARGET;
+
 impl Real for f64 {
 	type Bits = u64;
 	type Simd<const LANES: usize> = Simd<Self, LANES>
 	where
 		LaneCount<LANES>: SupportedLaneCount;
+
+	#[cfg(feature = "target-features")]
+	const NATIVE_LANE_COUNT: usize = CURRENT_TARGET.suggested_simd_width::<Self>().unwrap_or(1);
 
 	const ZERO: Self = 0.0;
 	const ONE: Self = 1.0;

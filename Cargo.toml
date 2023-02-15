@@ -30,8 +30,16 @@ include = [
 ]
 
 [package.metadata.docs.rs]
+all-features = true
 rustdoc-args = [ "--html-in-header", "katex.html" ]
+
+[package.metadata.playground]
+all-features = true
 
 [dependencies.libm]
 version = "0.2.6"
+optional = true
+
+[dependencies.target-features]
+version = "0.1.2"
 optional = true

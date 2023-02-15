@@ -59,6 +59,10 @@ where
 	where
 		LaneCount<LANES>: SupportedLaneCount;
 
+	/// Native lane count of current build target or `1` if unknown.
+	#[cfg(feature = "target-features")]
+	const NATIVE_LANE_COUNT: usize;
+
 	/// $0$
 	const ZERO: Self;
 	/// $1$

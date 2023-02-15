@@ -50,6 +50,8 @@
 #![feature(portable_simd)]
 #![feature(convert_float_to_int)]
 #![feature(associated_type_bounds)]
+#![feature(const_option_ext)]
+#![feature(doc_auto_cfg)]
 #![cfg_attr(feature = "libm", no_std)]
 
 mod bits;
