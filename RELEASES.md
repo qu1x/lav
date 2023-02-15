@@ -1,3 +1,8 @@
+# Version 0.7.2 (2023-02-15)
+
+  * Add `Send + Sync` and `FromStr<Err: Debug>` bounds.
+  * Update KaTeX.
+
 # Version 0.7.1 (2022-09-23)
 
   * Synchronize with nightly Rust (by marking traits with `const_trait`).
