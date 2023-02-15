@@ -25,7 +25,7 @@ mod u64;
 pub trait SimdBits<B: Bits, const LANES: usize>
 where
 	LaneCount<LANES>: SupportedLaneCount,
-	Self: Clone + Copy + Default,
+	Self: Send + Sync + Clone + Copy + Default,
 	Self: PartialEq + Eq + PartialOrd + Ord,
 	Self: From<Simd<B, LANES>> + Into<Simd<B, LANES>>,
 	Self: From<[B; LANES]> + Into<[B; LANES]>,

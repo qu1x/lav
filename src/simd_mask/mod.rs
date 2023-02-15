@@ -21,7 +21,7 @@ mod i64;
 pub trait SimdMask<const LANES: usize>
 where
 	LaneCount<LANES>: SupportedLaneCount,
-	Self: Clone + Copy + Default,
+	Self: Send + Sync + Clone + Copy + Default,
 	Self: PartialEq + PartialOrd,
 	Self: Debug,
 	Self: From<[bool; LANES]> + Into<[bool; LANES]>,

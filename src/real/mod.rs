@@ -25,11 +25,11 @@ mod f64;
 /// [`SimdReal`] vector.
 pub trait Real
 where
-	Self: Clone + Copy + Default,
+	Self: Send + Sync + Clone + Copy + Default,
 	Self: ApproxEq<Self, Self> + PartialEq + PartialOrd,
 	Self: From<u8> + From<i8>,
 	Self: From<u16> + From<i16>,
-	Self: FromStr,
+	Self: FromStr<Err: Debug>,
 	Self: Product<Self> + Sum<Self>,
 	for<'a> Self: Product<&'a Self> + Sum<&'a Self>,
 	Self: FloatToInt<usize> + FloatToInt<isize>,

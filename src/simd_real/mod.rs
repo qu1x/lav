@@ -60,7 +60,7 @@ macro_rules! swizzle {
 pub trait SimdReal<R: Real, const LANES: usize>
 where
 	LaneCount<LANES>: SupportedLaneCount,
-	Self: Clone + Copy + Default,
+	Self: Send + Sync + Clone + Copy + Default,
 	Self: ApproxEq<R, Self> + PartialEq + PartialOrd,
 	Self: Debug + LowerExp + UpperExp,
 	Self: From<Simd<R, LANES>> + Into<Simd<R, LANES>>,

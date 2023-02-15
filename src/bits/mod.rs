@@ -23,7 +23,7 @@ mod u64;
 /// [`Real`]: `super::Real`
 pub trait Bits
 where
-	Self: Clone + Copy + Default,
+	Self: Send + Sync + Clone + Copy + Default,
 	Self: PartialEq + Eq + PartialOrd + Ord,
 	Self: Product<Self> + Sum<Self>,
 	for<'a> Self: Product<&'a Self> + Sum<&'a Self>,
