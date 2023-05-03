@@ -1,6 +1,6 @@
 [package]
 name = "lav"
-version = "0.7.3"
+version = "0.7.4"
 edition = "2021"
 authors = ["Rouven Spreckels <rs@qu1x.dev>"]
 description = "Lane-Associated Vector (LAV): Portable SIMD vector trait as GAT of SIMD lane trait."
@@ -41,5 +41,5 @@ version = "0.2.6"
 optional = true
 
 [dependencies.target-features]
-version = "0.1.2"
+version = "0.1.3"
 optional = true

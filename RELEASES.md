@@ -1,6 +1,11 @@
+# Version 0.7.4 (2023-05-03)
+
+  * Fix build by using explicit `FromStr<Err = ParseFloatError>` bound.
+  * Update KaTeX.
+
 # Version 0.7.3 (2023-02-15)
 
-  * Improve `FromStr<Err>` bounds.
+  * Improve `FromStr<Err>` bound.
   * Add `R::NATIVE_LANE_COUNT` featured by crate `target-features`.
 
 # Version 0.7.2 (2023-02-15)
