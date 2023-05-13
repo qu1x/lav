@@ -8,7 +8,7 @@
 
 use super::{ApproxEq, Real, Select, SimdBits, SimdMask};
 use core::{
-	fmt::{Debug, LowerExp, UpperExp},
+	fmt::Debug,
 	iter::{Product, Sum},
 	ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssign, Sub, SubAssign},
 	ops::{Index, IndexMut},
@@ -62,7 +62,7 @@ where
 	LaneCount<LANES>: SupportedLaneCount,
 	Self: Send + Sync + Clone + Copy + Default,
 	Self: ApproxEq<R, Self> + PartialEq + PartialOrd,
-	Self: Debug + LowerExp + UpperExp,
+	Self: Debug,
 	Self: From<Simd<R, LANES>> + Into<Simd<R, LANES>>,
 	Self: From<[R; LANES]> + Into<[R; LANES]>,
 	Self: AsRef<[R; LANES]> + AsMut<[R; LANES]>,

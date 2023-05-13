@@ -6,7 +6,7 @@
 
 use super::{Bits, Select, SimdMask};
 use core::{
-	fmt::{Debug, Octal},
+	fmt::Debug,
 	hash::Hash,
 	iter::{Product, Sum},
 	ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign},
@@ -33,7 +33,7 @@ where
 	Self: Product<Self> + Sum<Self>,
 	for<'a> Self: Product<&'a Self> + Sum<&'a Self>,
 	Self: Hash,
-	Self: Debug + Octal,
+	Self: Debug,
 	Self: Index<usize, Output = B> + IndexMut<usize, Output = B>,
 	Self: Select<Self::Mask>,
 	Self: Add<Output = Self> + AddAssign,

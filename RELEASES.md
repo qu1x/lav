@@ -1,5 +1,6 @@
-# Version 0.7.4 (2023-05-03)
+# Version 0.7.4 (2023-05-13)
 
+  * Fix build by removing `Octal`/`LowerExp + UpperExp + Display` bound.
   * Fix build by using explicit `FromStr<Err = ParseFloatError>` bound.
   * Update KaTeX.
 

@@ -10,7 +10,7 @@ use super::{ApproxEq, Bits, SimdReal};
 use core::{
 	cmp::Ordering,
 	convert::FloatToInt,
-	fmt::{Debug, Display, LowerExp, UpperExp},
+	fmt::Debug,
 	iter::{Product, Sum},
 	num::{FpCategory, ParseFloatError},
 	ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssign, Sub, SubAssign},
@@ -38,7 +38,7 @@ where
 	Self: FloatToInt<u32> + FloatToInt<i32>,
 	Self: FloatToInt<u16> + FloatToInt<i16>,
 	Self: FloatToInt<u8> + FloatToInt<i8>,
-	Self: Debug + LowerExp + UpperExp + Display,
+	Self: Debug,
 	Self: Add<Output = Self> + AddAssign,
 	Self: Sub<Output = Self> + SubAssign,
 	Self: Mul<Output = Self> + MulAssign,
