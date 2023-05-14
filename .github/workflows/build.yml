@@ -64,3 +64,30 @@ jobs:
       with:
         command: doc
         args: --features libm
+  target-features:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: toolchain
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        profile: minimal
+        components: rustfmt, rust-docs, clippy
+        override: true
+    - name: test
+      uses: actions-rs/cargo@v1
+      with:
+        command: test
+        args: --features target-features
+    - name: clippy
+      uses: actions-rs/cargo@v1
+      with:
+        command: clippy
+        args: --features target-features --tests -- --deny clippy::pedantic
+    - name: doc
+      uses: actions-rs/cargo@v1
+      with:
+        command: doc
+        args: --features target-features
