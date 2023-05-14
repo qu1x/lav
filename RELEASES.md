@@ -1,3 +1,7 @@
+# Version 0.7.5 (2023-05-14)
+
+  * Fix build by avoiding broken `const_option_ext` feature.
+
 # Version 0.7.4 (2023-05-13)
 
   * Fix build by removing `Octal`/`LowerExp + UpperExp + Display` bound.
