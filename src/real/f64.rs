@@ -21,7 +21,10 @@ impl Real for f64 {
 		LaneCount<LANES>: SupportedLaneCount;
 
 	#[cfg(feature = "target-features")]
-	const NATIVE_LANE_COUNT: usize = CURRENT_TARGET.suggested_simd_width::<Self>().unwrap_or(1);
+	const NATIVE_LANE_COUNT: usize = match CURRENT_TARGET.suggested_simd_width::<Self>() {
+		Some(width) => width,
+		None => 1,
+	};
 
 	const ZERO: Self = 0.0;
 	const ONE: Self = 1.0;
