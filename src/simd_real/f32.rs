@@ -326,7 +326,7 @@ where
 {
 	#[inline]
 	fn approx_eq(&self, other: &Self, epsilon: f32, ulp: u32) -> bool {
-		self.simd_approx_eq(*other, Simd::splat(epsilon), Simd::splat(ulp))
+		self.simd_approx_eq(*other, Self::splat(epsilon), Simd::splat(ulp))
 			.all()
 	}
 }

@@ -12,8 +12,8 @@ impl Bits for u64 {
 	where
 		LaneCount<LANES>: SupportedLaneCount;
 
-	const MIN: Self = u64::MIN;
-	const MAX: Self = u64::MAX;
+	const MIN: Self = Self::MIN;
+	const MAX: Self = Self::MAX;
 
 	const ONE: Self = 1;
 

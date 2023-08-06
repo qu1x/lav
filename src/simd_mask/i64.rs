@@ -44,12 +44,12 @@ where
 	}
 }
 
-impl<const LANES: usize> Select<Mask<i64, LANES>> for Mask<i64, LANES>
+impl<const LANES: usize> Select<Self> for Mask<i64, LANES>
 where
 	LaneCount<LANES>: SupportedLaneCount,
 {
 	#[inline]
-	fn select(mask: Mask<i64, LANES>, true_values: Self, false_values: Self) -> Self {
+	fn select(mask: Self, true_values: Self, false_values: Self) -> Self {
 		mask.select_mask(true_values, false_values)
 	}
 }

@@ -12,8 +12,8 @@ impl Bits for u32 {
 	where
 		LaneCount<LANES>: SupportedLaneCount;
 
-	const MIN: Self = u32::MIN;
-	const MAX: Self = u32::MAX;
+	const MIN: Self = Self::MIN;
+	const MAX: Self = Self::MAX;
 
 	const ONE: Self = 1;
 
