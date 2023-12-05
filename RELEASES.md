@@ -1,3 +1,8 @@
+# Version 0.7.7 (2023-12-05)
+
+  * Synchronize with nightly Rust.
+  * Update KaTeX.
+
 # Version 0.7.6 (2023-08-06)
 
   * Fix build by removing broken `const`-related features.
