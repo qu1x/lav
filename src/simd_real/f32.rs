@@ -16,12 +16,12 @@ use super::Real;
 #[cfg(not(feature = "libm"))]
 use std::simd::StdFloat;
 
-impl<const LANES: usize> SimdReal<f32, LANES> for Simd<f32, LANES>
+impl<const N: usize> SimdReal<f32, N> for Simd<f32, N>
 where
-	LaneCount<LANES>: SupportedLaneCount,
+	LaneCount<N>: SupportedLaneCount,
 {
-	type Bits = Simd<u32, LANES>;
-	type Mask = Mask<i32, LANES>;
+	type Bits = Simd<u32, N>;
+	type Mask = Mask<i32, N>;
 
 	#[inline]
 	fn splat(value: f32) -> Self {
@@ -29,19 +29,19 @@ where
 	}
 
 	#[inline]
-	fn as_array(&self) -> &[f32; LANES] {
+	fn as_array(&self) -> &[f32; N] {
 		self.as_array()
 	}
 	#[inline]
-	fn as_mut_array(&mut self) -> &mut [f32; LANES] {
+	fn as_mut_array(&mut self) -> &mut [f32; N] {
 		self.as_mut_array()
 	}
 	#[inline]
-	fn from_array(array: [f32; LANES]) -> Self {
+	fn from_array(array: [f32; N]) -> Self {
 		Self::from_array(array)
 	}
 	#[inline]
-	fn to_array(self) -> [f32; LANES] {
+	fn to_array(self) -> [f32; N] {
 		Self::to_array(self)
 	}
 
@@ -51,42 +51,37 @@ where
 	}
 
 	#[inline]
-	fn gather_or(slice: &[f32], idxs: Simd<usize, LANES>, or: Self) -> Self
+	fn gather_or(slice: &[f32], idxs: Simd<usize, N>, or: Self) -> Self
 	where
-		LaneCount<LANES>: SupportedLaneCount,
+		LaneCount<N>: SupportedLaneCount,
 	{
 		Self::gather_or(slice, idxs, or)
 	}
 	#[inline]
-	fn gather_or_default(slice: &[f32], idxs: Simd<usize, LANES>) -> Self
+	fn gather_or_default(slice: &[f32], idxs: Simd<usize, N>) -> Self
 	where
-		LaneCount<LANES>: SupportedLaneCount,
+		LaneCount<N>: SupportedLaneCount,
 	{
 		Self::gather_or_default(slice, idxs)
 	}
 	#[inline]
-	fn gather_select(
-		slice: &[f32],
-		enable: Mask<isize, LANES>,
-		idxs: Simd<usize, LANES>,
-		or: Self,
-	) -> Self
+	fn gather_select(slice: &[f32], enable: Mask<isize, N>, idxs: Simd<usize, N>, or: Self) -> Self
 	where
-		LaneCount<LANES>: SupportedLaneCount,
+		LaneCount<N>: SupportedLaneCount,
 	{
 		Self::gather_select(slice, enable, idxs, or)
 	}
 	#[inline]
-	fn scatter(self, slice: &mut [f32], idxs: Simd<usize, LANES>)
+	fn scatter(self, slice: &mut [f32], idxs: Simd<usize, N>)
 	where
-		LaneCount<LANES>: SupportedLaneCount,
+		LaneCount<N>: SupportedLaneCount,
 	{
 		self.scatter(slice, idxs);
 	}
 	#[inline]
-	fn scatter_select(self, slice: &mut [f32], enable: Mask<isize, LANES>, idxs: Simd<usize, LANES>)
+	fn scatter_select(self, slice: &mut [f32], enable: Mask<isize, N>, idxs: Simd<usize, N>)
 	where
-		LaneCount<LANES>: SupportedLaneCount,
+		LaneCount<N>: SupportedLaneCount,
 	{
 		self.scatter_select(slice, enable, idxs);
 	}
@@ -122,11 +117,11 @@ where
 		self.reverse()
 	}
 	#[inline]
-	fn rotate_lanes_left<const OFFSET: usize>(self) -> Self {
+	fn simd_rotate_left<const OFFSET: usize>(self) -> Self {
 		self.rotate_elements_left::<OFFSET>()
 	}
 	#[inline]
-	fn rotate_lanes_right<const OFFSET: usize>(self) -> Self {
+	fn simd_rotate_right<const OFFSET: usize>(self) -> Self {
 		self.rotate_elements_right::<OFFSET>()
 	}
 	#[inline]
@@ -139,11 +134,11 @@ where
 	}
 
 	#[inline]
-	fn swizzle<T: Swizzle<LANES>>(self) -> Self {
+	fn swizzle<T: Swizzle<N>>(self) -> Self {
 		T::swizzle(self)
 	}
 	#[inline]
-	fn concat_swizzle<T: Swizzle<LANES>>(self, other: Self) -> Self {
+	fn concat_swizzle<T: Swizzle<N>>(self, other: Self) -> Self {
 		T::concat_swizzle(self, other)
 	}
 
@@ -311,19 +306,19 @@ where
 	}
 }
 
-impl<const LANES: usize> Select<Mask<i32, LANES>> for Simd<f32, LANES>
+impl<const N: usize> Select<Mask<i32, N>> for Simd<f32, N>
 where
-	LaneCount<LANES>: SupportedLaneCount,
+	LaneCount<N>: SupportedLaneCount,
 {
 	#[inline]
-	fn select(mask: Mask<i32, LANES>, true_values: Self, false_values: Self) -> Self {
+	fn select(mask: Mask<i32, N>, true_values: Self, false_values: Self) -> Self {
 		mask.select(true_values, false_values)
 	}
 }
 
-impl<const LANES: usize> ApproxEq<f32> for Simd<f32, LANES>
+impl<const N: usize> ApproxEq<f32> for Simd<f32, N>
 where
-	LaneCount<LANES>: SupportedLaneCount,
+	LaneCount<N>: SupportedLaneCount,
 {
 	#[inline]
 	fn approx_eq(&self, other: &Self, epsilon: f32, ulp: u32) -> bool {

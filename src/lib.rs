@@ -11,11 +11,11 @@
 //! # Features
 //!
 //!   * SIMD lane trait [`Real`] abstracting over [`f32`] and [`f64`].
-//!   * SIMD vector trait [`SimdReal<Real, LANES>`] abstracting over [`Simd<f32, LANES>`] and
-//!     [`Simd<f64, LANES>`].
-//!   * Generic associated type (GAT) [`Real::Simd<LANES>`] as part of SIMD lane trait [`Real`]
-//!     implementing SIMD vector trait [`SimdReal<Self, LANES>`] for itself as lane type where the
-//!     GAT is generic over the number of SIMD vector `LANES`.
+//!   * SIMD vector trait [`SimdReal<Real, N>`] abstracting over [`Simd<f32, N>`] and
+//!     [`Simd<f64, N>`].
+//!   * Generic associated type (GAT) [`Real::Simd<N>`] as part of SIMD lane trait [`Real`]
+//!     implementing SIMD vector trait [`SimdReal<Self, N>`] for itself as lane type where the
+//!     GAT is generic over the number of SIMD vector lanes `N`.
 //!   * Lanewise approximate equality test wrt to epsilon and [ULP] SIMD vectors.
 //!   * [`ApproxEq`] trait complementing [`PartialEq`].
 //!   * [`no_std`] without loss of functionality by enabling the [`libm`] feature.
@@ -23,9 +23,9 @@
 //! This [`example`] uses SIMD generically over floating-point types while hiding it from the user.
 //!
 //! [Portable SIMD]: `core::simd`
-//! [`Simd<f32, LANES>`]: `core::simd::Simd`
-//! [`Simd<f64, LANES>`]: `core::simd::Simd`
-//! [`Real::Simd<LANES>`]: `Real::Simd`
+//! [`Simd<f32, N>`]: `core::simd::Simd`
+//! [`Simd<f64, N>`]: `core::simd::Simd`
+//! [`Real::Simd<N>`]: `Real::Simd`
 //! [`libm`]: https://docs.rs/libm
 //! [`no_std`]: https://docs.rust-embedded.org/book/intro/no-std.html
 //! [ULP]: https://en.wikipedia.org/wiki/Unit_in_the_last_place
@@ -57,13 +57,13 @@ pub use simd_real::*;
 pub mod example;
 
 /// Selects lanes from two vectors by mask vector.
-pub trait Select<M> {
+pub trait Select<Mask> {
 	/// Selects lanes from two vectors by mask vector.
 	///
 	/// For each lane in the mask, choose the corresponding lane from `true_values` if that lane
 	/// mask is true, and `false_values` if that lane mask is false.
 	#[must_use]
-	fn select(mask: M, true_values: Self, false_values: Self) -> Self;
+	fn select(mask: Mask, true_values: Self, false_values: Self) -> Self;
 }
 
 /// Tests for approximate equality.

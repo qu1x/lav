@@ -53,9 +53,9 @@ where
 	Self: SimdElement,
 {
 	/// Associated vector.
-	type Simd<const LANES: usize>: SimdBits<Self, LANES>
+	type Simd<const N: usize>: SimdBits<Self, N>
 	where
-		LaneCount<LANES>: SupportedLaneCount;
+		LaneCount<N>: SupportedLaneCount;
 
 	/// The smallest value that can be represented by this integer type.
 	const MIN: Self;
@@ -84,9 +84,9 @@ where
 	/// Constructs a SIMD vector by setting all lanes to the given value.
 	#[must_use]
 	#[inline]
-	fn splat<const LANES: usize>(self) -> Self::Simd<LANES>
+	fn splat<const N: usize>(self) -> Self::Simd<N>
 	where
-		LaneCount<LANES>: SupportedLaneCount,
+		LaneCount<N>: SupportedLaneCount,
 	{
 		Self::Simd::splat(self)
 	}

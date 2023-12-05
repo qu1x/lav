@@ -11,11 +11,11 @@ use core::simd::{
 	LaneCount, Mask, Simd, SupportedLaneCount,
 };
 
-impl<const LANES: usize> SimdBits<u32, LANES> for Simd<u32, LANES>
+impl<const N: usize> SimdBits<u32, N> for Simd<u32, N>
 where
-	LaneCount<LANES>: SupportedLaneCount,
+	LaneCount<N>: SupportedLaneCount,
 {
-	type Mask = Mask<i32, LANES>;
+	type Mask = Mask<i32, N>;
 
 	#[inline]
 	fn splat(value: u32) -> Self {
@@ -57,12 +57,12 @@ where
 	}
 }
 
-impl<const LANES: usize> Select<Mask<i32, LANES>> for Simd<u32, LANES>
+impl<const N: usize> Select<Mask<i32, N>> for Simd<u32, N>
 where
-	LaneCount<LANES>: SupportedLaneCount,
+	LaneCount<N>: SupportedLaneCount,
 {
 	#[inline]
-	fn select(mask: Mask<i32, LANES>, true_values: Self, false_values: Self) -> Self {
+	fn select(mask: Mask<i32, N>, true_values: Self, false_values: Self) -> Self {
 		mask.select(true_values, false_values)
 	}
 }

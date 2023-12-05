@@ -7,9 +7,9 @@
 use super::{Select, SimdMask};
 use core::simd::{LaneCount, Mask, SupportedLaneCount};
 
-impl<const LANES: usize> SimdMask<LANES> for Mask<i64, LANES>
+impl<const N: usize> SimdMask<N> for Mask<i64, N>
 where
-	LaneCount<LANES>: SupportedLaneCount,
+	LaneCount<N>: SupportedLaneCount,
 {
 	#[inline]
 	fn splat(value: bool) -> Self {
@@ -17,11 +17,11 @@ where
 	}
 
 	#[inline]
-	fn from_array(array: [bool; LANES]) -> Self {
+	fn from_array(array: [bool; N]) -> Self {
 		Self::from(array)
 	}
 	#[inline]
-	fn to_array(self) -> [bool; LANES] {
+	fn to_array(self) -> [bool; N] {
 		self.to_array()
 	}
 
@@ -44,9 +44,9 @@ where
 	}
 }
 
-impl<const LANES: usize> Select<Self> for Mask<i64, LANES>
+impl<const N: usize> Select<Self> for Mask<i64, N>
 where
-	LaneCount<LANES>: SupportedLaneCount,
+	LaneCount<N>: SupportedLaneCount,
 {
 	#[inline]
 	fn select(mask: Self, true_values: Self, false_values: Self) -> Self {

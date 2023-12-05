@@ -51,20 +51,21 @@ pub macro swizzle {
 	}
 }
 
-/// Real number vector of [`Simd<f32, LANES>`] or [`Simd<f64, LANES>`] with associated [`SimdBits`]
+/// Real number vector of [`Simd<f32, N>`] or [`Simd<f64, N>`] with associated [`SimdBits`]
 /// and [`SimdMask`] vector.
 ///
-/// [`Simd<f32, LANES>`]: `core::simd::Simd`
-/// [`Simd<f64, LANES>`]: `core::simd::Simd`
-pub trait SimdReal<R: Real, const LANES: usize>
+/// [`Simd<f32, N>`]: `core::simd::Simd`
+/// [`Simd<f64, N>`]: `core::simd::Simd`
+#[allow(clippy::len_without_is_empty)]
+pub trait SimdReal<R: Real, const N: usize>
 where
-	LaneCount<LANES>: SupportedLaneCount,
+	LaneCount<N>: SupportedLaneCount,
 	Self: Send + Sync + Clone + Copy + Default,
 	Self: ApproxEq<R, Self> + PartialEq + PartialOrd,
 	Self: Debug,
-	Self: From<Simd<R, LANES>> + Into<Simd<R, LANES>>,
-	Self: From<[R; LANES]> + Into<[R; LANES]>,
-	Self: AsRef<[R; LANES]> + AsMut<[R; LANES]>,
+	Self: From<Simd<R, N>> + Into<Simd<R, N>>,
+	Self: From<[R; N]> + Into<[R; N]>,
+	Self: AsRef<[R; N]> + AsMut<[R; N]>,
 	Self: Product<Self> + Sum<Self>,
 	for<'a> Self: Product<&'a Self> + Sum<&'a Self>,
 	Self: Index<usize, Output = R> + IndexMut<usize, Output = R>,
@@ -82,18 +83,18 @@ where
 	Self: Neg<Output = Self>,
 {
 	/// Associated bits representation vector.
-	type Bits: SimdBits<R::Bits, LANES, Mask = Self::Mask>;
+	type Bits: SimdBits<R::Bits, N, Mask = Self::Mask>;
 	/// Associated mask vector.
-	type Mask: SimdMask<LANES>;
+	type Mask: SimdMask<N>;
 
 	/// Number of lanes in this vector.
-	const LANES: usize = LANES;
+	const N: usize = N;
 
 	/// Get the number of lanes in this vector.
 	#[must_use]
 	#[inline]
-	fn lanes(&self) -> usize {
-		LANES
+	fn len(&self) -> usize {
+		N
 	}
 
 	/// Constructs a SIMD vector by setting all lanes to the given value.
@@ -102,22 +103,22 @@ where
 
 	/// Returns an array reference containing the entire SIMD vector.
 	#[must_use]
-	fn as_array(&self) -> &[R; LANES];
+	fn as_array(&self) -> &[R; N];
 	/// Returns a mutable array reference containing the entire SIMD vector.
 	#[must_use]
-	fn as_mut_array(&mut self) -> &mut [R; LANES];
+	fn as_mut_array(&mut self) -> &mut [R; N];
 	/// Converts an array to a SIMD vector.
 	#[must_use]
-	fn from_array(array: [R; LANES]) -> Self;
+	fn from_array(array: [R; N]) -> Self;
 	/// Converts a SIMD vector to an array.
 	#[must_use]
-	fn to_array(self) -> [R; LANES];
+	fn to_array(self) -> [R; N];
 
-	/// Converts a slice to a SIMD vector containing `slice[..LANES]`
+	/// Converts a slice to a SIMD vector containing `slice[..N]`
 	///
 	/// # Panics
 	///
-	/// Panics if the slice's `len` is less than the vector's `Simd::LANES`.
+	/// Panics if the slice's `len` is less than the vector's `Simd::N`.
 	#[must_use]
 	fn from_slice(slice: &[R]) -> Self;
 
@@ -125,45 +126,40 @@ where
 	///
 	/// If an index is out-of-bounds, the lane is instead selected from the `or` vector.
 	#[must_use]
-	fn gather_or(slice: &[R], idxs: Simd<usize, LANES>, or: Self) -> Self
+	fn gather_or(slice: &[R], idxs: Simd<usize, N>, or: Self) -> Self
 	where
-		LaneCount<LANES>: SupportedLaneCount;
+		LaneCount<N>: SupportedLaneCount;
 	/// Reads from potentially discontiguous indices in `slice` to construct a SIMD vector.
 	///
 	/// If an index is out-of-bounds, the lane is set to the default value for the type.
 	#[must_use]
-	fn gather_or_default(slice: &[R], idxs: Simd<usize, LANES>) -> Self
+	fn gather_or_default(slice: &[R], idxs: Simd<usize, N>) -> Self
 	where
 		R: Default,
-		LaneCount<LANES>: SupportedLaneCount;
+		LaneCount<N>: SupportedLaneCount;
 	/// Reads from potentially discontiguous indices in `slice` to construct a SIMD vector.
 	///
 	/// The mask `enable`s all `true` lanes and disables all `false` lanes.
 	/// If an index is disabled or is out-of-bounds, the lane is selected from the `or` vector.
 	#[must_use]
-	fn gather_select(
-		slice: &[R],
-		enable: Mask<isize, LANES>,
-		idxs: Simd<usize, LANES>,
-		or: Self,
-	) -> Self
+	fn gather_select(slice: &[R], enable: Mask<isize, N>, idxs: Simd<usize, N>, or: Self) -> Self
 	where
-		LaneCount<LANES>: SupportedLaneCount;
+		LaneCount<N>: SupportedLaneCount;
 	/// Writes the values in a SIMD vector to potentially discontiguous indices in `slice`.
 	///
 	/// If two lanes in the scattered vector would write to the same index only the last lane is
 	/// guaranteed to actually be written.
-	fn scatter(self, slice: &mut [R], idxs: Simd<usize, LANES>)
+	fn scatter(self, slice: &mut [R], idxs: Simd<usize, N>)
 	where
-		LaneCount<LANES>: SupportedLaneCount;
+		LaneCount<N>: SupportedLaneCount;
 	/// Writes the values in a SIMD vector to multiple potentially discontiguous indices in `slice`.
 	///
 	/// The mask `enable`s all `true` lanes and disables all `false` lanes. If an enabled index is
 	/// out-of-bounds, the lane is not written. If two enabled lanes in the scattered vector would
 	/// write to the same index, only the last lane is guaranteed to actually be written.
-	fn scatter_select(self, slice: &mut [R], enable: Mask<isize, LANES>, idxs: Simd<usize, LANES>)
+	fn scatter_select(self, slice: &mut [R], enable: Mask<isize, N>, idxs: Simd<usize, N>)
 	where
-		LaneCount<LANES>: SupportedLaneCount;
+		LaneCount<N>: SupportedLaneCount;
 
 	/// Raw transmutation from an unsigned integer vector type with the same size and number of
 	/// lanes.
@@ -205,24 +201,24 @@ where
 	#[must_use]
 	fn reverse(self) -> Self;
 	/// Rotates the vector such that the first `OFFSET` lanes of the slice move to the end while
-	/// the last `Self::LANES - OFFSET` lanes move to the front. The lane previously in lane
+	/// the last `Self::N - OFFSET` lanes move to the front. The lane previously in lane
 	/// `OFFSET` will become the first lane in the slice.
 	#[must_use]
-	fn rotate_lanes_left<const OFFSET: usize>(self) -> Self;
-	/// Rotates the vector such that the first `Self::LANES - OFFSET` lanes of the vector move to
+	fn simd_rotate_left<const OFFSET: usize>(self) -> Self;
+	/// Rotates the vector such that the first `Self::N - OFFSET` lanes of the vector move to
 	/// the end while the last `OFFSET` lanes move to the front. The lane previously at index
-	/// `Self::LANES - OFFSET` will become the first lane in the slice.
+	/// `Self::N - OFFSET` will become the first lane in the slice.
 	#[must_use]
-	fn rotate_lanes_right<const OFFSET: usize>(self) -> Self;
+	fn simd_rotate_right<const OFFSET: usize>(self) -> Self;
 	/// Interleaves two vectors.
 	///
 	/// Produces two vectors with lanes taken alternately from `self` and `other`.
 	///
-	/// The first result contains the first `Self::LANES / 2` lanes from `self` and `other`,
+	/// The first result contains the first `Self::N / 2` lanes from `self` and `other`,
 	/// alternating, starting with the first lane of `self`.
 	///
-	/// The second result contains the last `Self::LANES / 2` lanes from `self` and `other`,
-	/// alternating, starting with the lane `Self::LANES / 2` from the start of `self`.
+	/// The second result contains the last `Self::N / 2` lanes from `self` and `other`,
+	/// alternating, starting with the lane `Self::N / 2` from the start of `self`.
 	#[must_use]
 	fn interleave(self, other: Self) -> (Self, Self);
 	/// Deinterleaves two vectors.
@@ -235,12 +231,12 @@ where
 	#[must_use]
 	fn deinterleave(self, other: Self) -> (Self, Self);
 
-	/// Creates a new vector by selecting values from the lanes of `self`.
+	/// Creates new vector by copying lanes from selected lanes of `self`.
 	#[must_use]
-	fn swizzle<T: Swizzle<LANES>>(self) -> Self;
-	/// Creates a new vector by selecting values from the lanes of `self` and `other`.
+	fn swizzle<T: Swizzle<N>>(self) -> Self;
+	/// Creates new vector by copying lanes from selected lanes of `self` and `other`.
 	#[must_use]
-	fn concat_swizzle<T: Swizzle<LANES>>(self, other: Self) -> Self;
+	fn concat_swizzle<T: Swizzle<N>>(self, other: Self) -> Self;
 
 	/// Tests lanes for approximate equality wrt `epsilon` or `ulp`, "or" in the sense of `||`.
 	#[must_use]
@@ -378,7 +374,7 @@ where
 	/// Converts an array to a SIMD vector mask.
 	#[must_use]
 	#[inline]
-	fn mask_from_array(array: [bool; LANES]) -> Self::Mask {
+	fn mask_from_array(array: [bool; N]) -> Self::Mask {
 		Self::Mask::from_array(array)
 	}
 	/// Constructs a mask with `lane` set to `value` and all the other lanes set to `!value`.

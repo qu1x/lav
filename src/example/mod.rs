@@ -30,7 +30,7 @@
 //! 	}
 //! 	pub fn from_xyzw(xyzw: [R; 4]) -> Self {
 //! 		Self {
-//! 			wxyz: R::Simd::from_array(xyzw).rotate_lanes_right::<1>(),
+//! 			wxyz: R::Simd::from_array(xyzw).simd_rotate_right::<1>(),
 //! 		}
 //! 	}
 //! 	pub fn norm(&self) -> R {
@@ -62,7 +62,7 @@
 //! 		self.wxyz.to_array()
 //! 	}
 //! 	pub fn to_xyzw(self) -> [R; 4] {
-//! 		self.wxyz.rotate_lanes_left::<1>().to_array()
+//! 		self.wxyz.simd_rotate_left::<1>().to_array()
 //! 	}
 //! 	pub fn w(&self) -> R {
 //! 		self.wxyz[0]
@@ -251,7 +251,7 @@
 //! 	}
 //! 	pub fn from_XYZw(XYZw: [R; 4]) -> Self {
 //! 		Self {
-//! 			wXYZ: R::Simd::from_array(XYZw).rotate_lanes_right::<1>(),
+//! 			wXYZ: R::Simd::from_array(XYZw).simd_rotate_right::<1>(),
 //! 		}
 //! 	}
 //! 	pub fn norm(&self) -> R {
@@ -274,7 +274,7 @@
 //! 		self.wXYZ.to_array()
 //! 	}
 //! 	pub fn to_XYZw(self) -> [R; 4] {
-//! 		self.wXYZ.rotate_lanes_left::<1>().to_array()
+//! 		self.wXYZ.simd_rotate_left::<1>().to_array()
 //! 	}
 //! 	pub fn w(&self) -> R {
 //! 		self.wXYZ[0]

@@ -21,11 +21,10 @@ Lane-Associated Vector (LAV): [Portable SIMD] vector trait as GAT of SIMD lane t
 # Features
 
   * SIMD lane trait [`Real`] abstracting over [`f32`] and [`f64`].
-  * SIMD vector trait [`SimdReal<Real, LANES>`] abstracting over [`Simd<f32, LANES>`] and
-    [`Simd<f64, LANES>`].
-  * Generic associated type (GAT) [`Real::Simd<LANES>`] as part of SIMD lane trait [`Real`]
-    implementing SIMD vector trait [`SimdReal<Self, LANES>`] for itself as lane type where the
-    GAT is generic over the number of SIMD vector `LANES`.
+  * SIMD vector trait [`SimdReal<Real, N>`] abstracting over `Simd<f32, N>` and `Simd<f64, N>`.
+  * Generic associated type (GAT) [`Real::Simd<N>`] as part of SIMD lane trait [`Real`]
+    implementing SIMD vector trait [`SimdReal<Self, N>`] for itself as lane type where the
+    GAT is generic over the number of SIMD vector lanes `N`.
   * Lanewise approximate equality test wrt to epsilon and [ULP] SIMD vectors.
   * [`ApproxEq`] trait complementing [`PartialEq`].
   * [`no_std`] without loss of functionality by enabling the [`libm`] feature.
@@ -35,14 +34,12 @@ This [`example`] uses SIMD generically over floating-point types while hiding it
 See the [release history] to keep track of the development.
 
 [Portable SIMD]: https://doc.rust-lang.org/nightly/core/simd/index.html
+[`Real`]: https://docs.rs/lav/latest/lav/trait.Real.html
 [`f32`]: https://doc.rust-lang.org/nightly/core/primitive.f32.html
 [`f64`]: https://doc.rust-lang.org/nightly/core/primitive.f64.html
-[`Real`]: https://docs.rs/lav/latest/lav/trait.Real.html
-[`SimdReal<Real, LANES>`]: https://docs.rs/lav/latest/lav/trait.SimdReal.html
-[`SimdReal<Self, LANES>`]: https://docs.rs/lav/latest/lav/trait.SimdReal.html
-[`Simd<f32, LANES>`]: https://doc.rust-lang.org/nightly/core/simd/struct.Simd.html#impl-10
-[`Simd<f64, LANES>`]: https://doc.rust-lang.org/nightly/core/simd/struct.Simd.html#impl-11
-[`Real::Simd<LANES>`]: https://docs.rs/lav/latest/lav/trait.Real.html#associatedtype.Simd
+[`SimdReal<Real, N>`]: https://docs.rs/lav/latest/lav/trait.SimdReal.html
+[`SimdReal<Self, N>`]: https://docs.rs/lav/latest/lav/trait.SimdReal.html
+[`Real::Simd<N>`]: https://docs.rs/lav/latest/lav/trait.Real.html#associatedtype.Simd
 [ULP]: https://en.wikipedia.org/wiki/Unit_in_the_last_place
 [`ApproxEq`]: https://docs.rs/lav/latest/lav/trait.ApproxEq.html
 [`PartialEq`]: https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html

@@ -16,9 +16,9 @@ use target_features::CURRENT_TARGET;
 
 impl Real for f64 {
 	type Bits = u64;
-	type Simd<const LANES: usize> = Simd<Self, LANES>
+	type Simd<const N: usize> = Simd<Self, N>
 	where
-		LaneCount<LANES>: SupportedLaneCount;
+		LaneCount<N>: SupportedLaneCount;
 
 	#[cfg(feature = "target-features")]
 	const NATIVE_LANE_COUNT: usize = match CURRENT_TARGET.suggested_simd_width::<Self>() {

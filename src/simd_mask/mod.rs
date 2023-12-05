@@ -14,17 +14,18 @@ use core::{
 mod i32;
 mod i64;
 
-/// Mask vector of [`Mask<i32, LANES>`] or [`Mask<i64, LANES>`].
+/// Mask vector of [`Mask<i32, N>`] or [`Mask<i64, N>`].
 ///
-/// [`Mask<i32, LANES>`]: `core::simd::Mask`
-/// [`Mask<i64, LANES>`]: `core::simd::Mask`
-pub trait SimdMask<const LANES: usize>
+/// [`Mask<i32, N>`]: `core::simd::Mask`
+/// [`Mask<i64, N>`]: `core::simd::Mask`
+#[allow(clippy::len_without_is_empty)]
+pub trait SimdMask<const N: usize>
 where
-	LaneCount<LANES>: SupportedLaneCount,
+	LaneCount<N>: SupportedLaneCount,
 	Self: Send + Sync + Clone + Copy + Default,
 	Self: PartialEq + PartialOrd,
 	Self: Debug,
-	Self: From<[bool; LANES]> + Into<[bool; LANES]>,
+	Self: From<[bool; N]> + Into<[bool; N]>,
 	Self: Select<Self>,
 	Self: BitAnd<Output = Self> + BitAndAssign + BitAnd<bool, Output = Self> + BitAndAssign<bool>,
 	Self: BitOr<Output = Self> + BitOrAssign + BitOr<bool, Output = Self> + BitOrAssign<bool>,
@@ -32,13 +33,13 @@ where
 	Self: Not<Output = Self>,
 {
 	/// Number of lanes in this vector.
-	const LANES: usize = LANES;
+	const N: usize = N;
 
 	/// Get the number of lanes in this vector.
 	#[must_use]
 	#[inline]
-	fn lanes(&self) -> usize {
-		LANES
+	fn len(&self) -> usize {
+		N
 	}
 
 	/// Constructs a mask by setting all lanes to the given value.
@@ -47,16 +48,16 @@ where
 
 	/// Converts an array to a SIMD vector mask.
 	#[must_use]
-	fn from_array(array: [bool; LANES]) -> Self;
+	fn from_array(array: [bool; N]) -> Self;
 	/// Converts a SIMD vector mask to an array.
 	#[must_use]
-	fn to_array(self) -> [bool; LANES];
+	fn to_array(self) -> [bool; N];
 
 	/// Constructs a mask with `lane` set to `value` and all the other lanes set to `!value`.
 	#[must_use]
 	#[inline]
 	fn flag(lane: usize, value: bool) -> Self {
-		let mut array = [!value; LANES];
+		let mut array = [!value; N];
 		array[lane] = value;
 		Self::from_array(array)
 	}

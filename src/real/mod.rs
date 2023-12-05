@@ -55,9 +55,9 @@ where
 	/// Associated bits representation.
 	type Bits: Bits;
 	/// Associated vector.
-	type Simd<const LANES: usize>: SimdReal<Self, LANES>
+	type Simd<const N: usize>: SimdReal<Self, N>
 	where
-		LaneCount<LANES>: SupportedLaneCount;
+		LaneCount<N>: SupportedLaneCount;
 
 	/// Native lane count of current build target or `1` if unknown.
 	#[cfg(feature = "target-features")]
@@ -445,9 +445,9 @@ where
 	/// Constructs a SIMD vector by setting all lanes to the given value.
 	#[must_use]
 	#[inline]
-	fn splat<const LANES: usize>(self) -> Self::Simd<LANES>
+	fn splat<const N: usize>(self) -> Self::Simd<N>
 	where
-		LaneCount<LANES>: SupportedLaneCount,
+		LaneCount<N>: SupportedLaneCount,
 	{
 		Self::Simd::splat(self)
 	}

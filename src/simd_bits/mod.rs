@@ -22,14 +22,15 @@ mod u64;
 /// Bits representation vector of [`SimdReal`] vector with associated [`SimdMask`] vector.
 ///
 /// [`SimdReal`]: `super::SimdReal`
-pub trait SimdBits<B: Bits, const LANES: usize>
+#[allow(clippy::len_without_is_empty)]
+pub trait SimdBits<B: Bits, const N: usize>
 where
-	LaneCount<LANES>: SupportedLaneCount,
+	LaneCount<N>: SupportedLaneCount,
 	Self: Send + Sync + Clone + Copy + Default,
 	Self: PartialEq + Eq + PartialOrd + Ord,
-	Self: From<Simd<B, LANES>> + Into<Simd<B, LANES>>,
-	Self: From<[B; LANES]> + Into<[B; LANES]>,
-	Self: AsRef<[B; LANES]> + AsMut<[B; LANES]>,
+	Self: From<Simd<B, N>> + Into<Simd<B, N>>,
+	Self: From<[B; N]> + Into<[B; N]>,
+	Self: AsRef<[B; N]> + AsMut<[B; N]>,
 	Self: Product<Self> + Sum<Self>,
 	for<'a> Self: Product<&'a Self> + Sum<&'a Self>,
 	Self: Hash,
@@ -59,16 +60,16 @@ where
 	Self: Not<Output = Self>,
 {
 	/// Associated mask vector.
-	type Mask: SimdMask<LANES>;
+	type Mask: SimdMask<N>;
 
 	/// Number of lanes in this vector.
-	const LANES: usize = LANES;
+	const N: usize = N;
 
 	/// Get the number of lanes in this vector.
 	#[must_use]
 	#[inline]
-	fn lanes(&self) -> usize {
-		LANES
+	fn len(&self) -> usize {
+		N
 	}
 
 	/// Constructs a SIMD vector by setting all lanes to the given value.
