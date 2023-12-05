@@ -36,6 +36,7 @@
 #![allow(clippy::type_repetition_in_bounds)]
 #![allow(clippy::trait_duplication_in_bounds)]
 #![allow(clippy::tabs_in_doc_comments)]
+#![feature(decl_macro)]
 #![feature(portable_simd)]
 #![feature(convert_float_to_int)]
 #![feature(doc_auto_cfg)]

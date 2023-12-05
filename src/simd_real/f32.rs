@@ -6,8 +6,9 @@
 
 use super::{ApproxEq, Select, SimdReal};
 use core::simd::{
-	LaneCount, Mask, Simd, SimdFloat, SimdPartialEq, SimdPartialOrd, SupportedLaneCount, Swizzle,
-	Swizzle2,
+	cmp::{SimdPartialEq, SimdPartialOrd},
+	num::SimdFloat,
+	LaneCount, Mask, Simd, SupportedLaneCount, Swizzle,
 };
 
 #[cfg(feature = "libm")]
@@ -122,11 +123,11 @@ where
 	}
 	#[inline]
 	fn rotate_lanes_left<const OFFSET: usize>(self) -> Self {
-		self.rotate_lanes_left::<OFFSET>()
+		self.rotate_elements_left::<OFFSET>()
 	}
 	#[inline]
 	fn rotate_lanes_right<const OFFSET: usize>(self) -> Self {
-		self.rotate_lanes_right::<OFFSET>()
+		self.rotate_elements_right::<OFFSET>()
 	}
 	#[inline]
 	fn interleave(self, other: Self) -> (Self, Self) {
@@ -138,12 +139,12 @@ where
 	}
 
 	#[inline]
-	fn swizzle<T: Swizzle<LANES, LANES>>(self) -> Self {
+	fn swizzle<T: Swizzle<LANES>>(self) -> Self {
 		T::swizzle(self)
 	}
 	#[inline]
-	fn swizzle2<T: Swizzle2<LANES, LANES>>(self, other: Self) -> Self {
-		T::swizzle2(self, other)
+	fn concat_swizzle<T: Swizzle<LANES>>(self, other: Self) -> Self {
+		T::concat_swizzle(self, other)
 	}
 
 	#[inline]

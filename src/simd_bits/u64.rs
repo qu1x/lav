@@ -6,7 +6,9 @@
 
 use super::{Select, SimdBits};
 use core::simd::{
-	LaneCount, Mask, Simd, SimdPartialEq, SimdPartialOrd, SimdUint, SupportedLaneCount,
+	cmp::{SimdPartialEq, SimdPartialOrd},
+	num::SimdUint,
+	LaneCount, Mask, Simd, SupportedLaneCount,
 };
 
 impl<const LANES: usize> SimdBits<u64, LANES> for Simd<u64, LANES>

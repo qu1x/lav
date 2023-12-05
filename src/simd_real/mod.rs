@@ -12,42 +12,41 @@ use core::{
 	iter::{Product, Sum},
 	ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssign, Sub, SubAssign},
 	ops::{Index, IndexMut},
-	simd::{LaneCount, Mask, Simd, SupportedLaneCount, Swizzle, Swizzle2},
+	simd::{LaneCount, Mask, Simd, SupportedLaneCount, Swizzle},
 };
 
 mod f32;
 mod f64;
 
-/// Constructs vector by selecting values from the lanes of one or two source vectors.
+/// Constructs vector by copying lanes from selected lanes of one or two input vectors.
 ///
-/// When swizzling one vector, the indices of the result vector are indicated by a `const` array of
-/// `usize`. When swizzling two vectors, the indices are indicated by a `const` array of [`Which`].
+/// When swizzling one vector, lanes are selected like [`Swizzle::swizzle`].
 ///
-/// [`Which`]: `core::simd::Which`
-#[macro_export]
-macro_rules! swizzle {
-	{
+/// When swizzling two vectors, lanes are selected like [`Swizzle::concat_swizzle`].
+#[allow(unused_macros)]
+pub macro swizzle {
+	(
 		$vector:expr, $index:expr $(,)?
-	} => {
+	) => {
 		{
 			use core::simd::Swizzle;
 			struct Impl;
-			impl<const LANES: usize> Swizzle<LANES, {$index.len()}> for Impl {
+			impl Swizzle<{$index.len()}> for Impl {
 				const INDEX: [usize; {$index.len()}] = $index;
 			}
-			$vector.swizzle::<Impl>()
+				$vector.swizzle::<Impl>()
 		}
-	};
-	{
+	},
+	(
 		$first:expr, $second:expr, $index:expr $(,)?
-	} => {
+	) => {
 		{
-			use core::simd::{Which, Swizzle2};
+			use core::simd::Swizzle;
 			struct Impl;
-			impl<const LANES: usize> Swizzle2<LANES, {$index.len()}> for Impl {
-				const INDEX: [Which; {$index.len()}] = $index;
+			impl Swizzle<{$index.len()}> for Impl {
+				const INDEX: [usize; {$index.len()}] = $index;
 			}
-			$first.swizzle2::<Impl>($second)
+				$first.concat_swizzle::<Impl>($second)
 		}
 	}
 }
@@ -205,14 +204,14 @@ where
 	/// Reverse the order of the lanes in the vector.
 	#[must_use]
 	fn reverse(self) -> Self;
-	/// Rotates the vector such that the first `OFFSET` elements of the slice move to the end while
-	/// the last `Self::LANES - OFFSET` elements move to the front. The element previously in lane
-	/// `OFFSET` will become the first element in the slice.
+	/// Rotates the vector such that the first `OFFSET` lanes of the slice move to the end while
+	/// the last `Self::LANES - OFFSET` lanes move to the front. The lane previously in lane
+	/// `OFFSET` will become the first lane in the slice.
 	#[must_use]
 	fn rotate_lanes_left<const OFFSET: usize>(self) -> Self;
-	/// Rotates the vector such that the first `Self::LANES - OFFSET` elements of the vector move to
-	/// the end while the last `OFFSET` elements move to the front. The element previously at index
-	/// `Self::LANES - OFFSET` will become the first element in the slice.
+	/// Rotates the vector such that the first `Self::LANES - OFFSET` lanes of the vector move to
+	/// the end while the last `OFFSET` lanes move to the front. The lane previously at index
+	/// `Self::LANES - OFFSET` will become the first lane in the slice.
 	#[must_use]
 	fn rotate_lanes_right<const OFFSET: usize>(self) -> Self;
 	/// Interleaves two vectors.
@@ -238,10 +237,10 @@ where
 
 	/// Creates a new vector by selecting values from the lanes of `self`.
 	#[must_use]
-	fn swizzle<T: Swizzle<LANES, LANES>>(self) -> Self;
+	fn swizzle<T: Swizzle<LANES>>(self) -> Self;
 	/// Creates a new vector by selecting values from the lanes of `self` and `other`.
 	#[must_use]
-	fn swizzle2<T: Swizzle2<LANES, LANES>>(self, other: Self) -> Self;
+	fn concat_swizzle<T: Swizzle<LANES>>(self, other: Self) -> Self;
 
 	/// Tests lanes for approximate equality wrt `epsilon` or `ulp`, "or" in the sense of `||`.
 	#[must_use]
