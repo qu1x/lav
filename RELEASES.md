@@ -1,3 +1,7 @@
+# Version 0.7.8 (2023-12-10)
+
+  * Fix KaTeX.
+
 # Version 0.7.7 (2023-12-05)
 
   * Synchronize with nightly Rust.
