@@ -63,7 +63,7 @@ requires web access as KaTeX is embedded via remote CDN.
 
 ## License
 
-Copyright © 2021-2022 Rouven Spreckels <rs@qu1x.dev>
+Copyright © 2021-2024 Rouven Spreckels <rs@qu1x.dev>
 
 Licensed under the terms of the [`MPL-2.0`](LICENSES/MPL-2.0).
 
