@@ -1,6 +1,7 @@
 # Version 0.8.0 (2024-04-30)
 
   * Add `{Real,Bits}::{slice_as_simd,slice_as_simd_mut}`.
+  * Update KaTeX.
 
 # Version 0.7.8 (2023-12-10)
 
