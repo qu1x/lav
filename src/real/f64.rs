@@ -524,4 +524,22 @@ impl Real for f64 {
 	fn total_cmp(&self, other: &Self) -> Ordering {
 		self.total_cmp(other)
 	}
+
+	#[inline]
+	fn slice_as_simd<const N: usize>(slice: &[Self]) -> (&[Self], &[Self::Simd<N>], &[Self])
+	where
+		LaneCount<N>: SupportedLaneCount,
+	{
+		slice.as_simd()
+	}
+
+	#[inline]
+	fn slice_as_simd_mut<const N: usize>(
+		slice: &mut [Self],
+	) -> (&mut [Self], &mut [Self::Simd<N>], &mut [Self])
+	where
+		LaneCount<N>: SupportedLaneCount,
+	{
+		slice.as_simd_mut()
+	}
 }
