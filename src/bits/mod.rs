@@ -90,4 +90,51 @@ where
 	{
 		Self::Simd::splat(self)
 	}
+
+	/// Split a slice into a prefix, a middle of aligned SIMD types, and a suffix.
+	///
+	/// You're only assured thatc`self.len() == prefix.len() + middle.len() * N + suffix.len()`.
+	///
+	/// Notably, all of the following are possible:
+	///
+	///   * `prefix.len() >= N`,
+	///   * `middle.is_empty()` despite `self.len() >= 3 * N`,
+	///   * `suffix.len() >= N`.
+	///
+	/// That said, this is a safe method, so if you're only writing safe code, then this can at most
+	/// cause incorrect logic, not unsoundness.
+	///
+	/// # Panics
+	///
+	/// Panic if the size of the SIMD type is different from `N` times that of the scalar.
+	#[must_use]
+	fn slice_as_simd<const N: usize>(slice: &[Self]) -> (&[Self], &[Self::Simd<N>], &[Self])
+	where
+		LaneCount<N>: SupportedLaneCount;
+
+	/// Split a mutable slice into a mutable prefix, a middle of aligned SIMD types, and a mutable
+	/// suffix.
+	///
+	/// You're only assured that `self.len() == prefix.len() + middle.len() * N + suffix.len()`.
+	///
+	/// Notably, all of the following are possible:
+	///
+	///   * `prefix.len() >= N`,
+	///   * `middle.is_empty()` despite `self.len() >= 3 * N`,
+	///   * `suffix.len() >= N`.
+	///
+	/// That said, this is a safe method, so if you're only writing safe code, then this can at most
+	/// cause incorrect logic, not unsoundness.
+	///
+	/// This is the mutable version of [`Self::slice_as_simd`].
+	///
+	/// # Panics
+	///
+	/// Panic if the size of the SIMD type is different from `N` times that of the scalar.
+	#[must_use]
+	fn slice_as_simd_mut<const N: usize>(
+		slice: &mut [Self],
+	) -> (&mut [Self], &mut [Self::Simd<N>], &mut [Self])
+	where
+		LaneCount<N>: SupportedLaneCount;
 }
