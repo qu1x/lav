@@ -9,9 +9,11 @@ repository = "https://github.com/qu1x/lav"
 readme = "README.md"
 license = "MPL-2.0"
 keywords = [
-	"simd-traits",
 	"portable-simd",
+	"simd-traits",
+	"num-traits",
 	"computer-graphics",
+	"geometric-algebra",
 ]
 categories = [
 	"no-std",
