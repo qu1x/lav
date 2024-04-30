@@ -23,6 +23,16 @@ where
 	}
 
 	#[inline]
+	fn as_simd(slice: &[u32]) -> (&[u32], &[Self], &[u32]) {
+		slice.as_simd()
+	}
+
+	#[inline]
+	fn as_simd_mut(slice: &mut [u32]) -> (&mut [u32], &mut [Self], &mut [u32]) {
+		slice.as_simd_mut()
+	}
+
+	#[inline]
 	fn simd_eq(self, other: Self) -> Self::Mask {
 		SimdPartialEq::simd_eq(self, other)
 	}

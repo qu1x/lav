@@ -76,6 +76,47 @@ where
 	#[must_use]
 	fn splat(value: B) -> Self;
 
+	/// Split a slice into a prefix, a middle of aligned SIMD types, and a suffix.
+	///
+	/// You're only assured thatc`self.len() == prefix.len() + middle.len() * N + suffix.len()`.
+	///
+	/// Notably, all of the following are possible:
+	///
+	///   * `prefix.len() >= N`,
+	///   * `middle.is_empty()` despite `self.len() >= 3 * N`,
+	///   * `suffix.len() >= N`.
+	///
+	/// That said, this is a safe method, so if you're only writing safe code, then this can at most
+	/// cause incorrect logic, not unsoundness.
+	///
+	/// # Panics
+	///
+	/// Panic if the size of the SIMD type is different from `N` times that of the scalar.
+	#[must_use]
+	fn as_simd(slice: &[B]) -> (&[B], &[Self], &[B]);
+
+	/// Split a mutable slice into a mutable prefix, a middle of aligned SIMD types, and a mutable
+	/// suffix.
+	///
+	/// You're only assured that `self.len() == prefix.len() + middle.len() * N + suffix.len()`.
+	///
+	/// Notably, all of the following are possible:
+	///
+	///   * `prefix.len() >= N`,
+	///   * `middle.is_empty()` despite `self.len() >= 3 * N`,
+	///   * `suffix.len() >= N`.
+	///
+	/// That said, this is a safe method, so if you're only writing safe code, then this can at most
+	/// cause incorrect logic, not unsoundness.
+	///
+	/// This is the mutable version of [`Self::as_simd`].
+	///
+	/// # Panics
+	///
+	/// Panic if the size of the SIMD type is different from `N` times that of the scalar.
+	#[must_use]
+	fn as_simd_mut(slice: &mut [B]) -> (&mut [B], &mut [Self], &mut [B]);
+
 	/// Test if each lane is equal to the corresponding lane in `other`.
 	#[must_use]
 	fn simd_eq(self, other: Self) -> Self::Mask;

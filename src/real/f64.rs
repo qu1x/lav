@@ -526,7 +526,7 @@ impl Real for f64 {
 	}
 
 	#[inline]
-	fn slice_as_simd<const N: usize>(slice: &[Self]) -> (&[Self], &[Self::Simd<N>], &[Self])
+	fn as_simd<const N: usize>(slice: &[Self]) -> (&[Self], &[Self::Simd<N>], &[Self])
 	where
 		LaneCount<N>: SupportedLaneCount,
 	{
@@ -534,7 +534,7 @@ impl Real for f64 {
 	}
 
 	#[inline]
-	fn slice_as_simd_mut<const N: usize>(
+	fn as_simd_mut<const N: usize>(
 		slice: &mut [Self],
 	) -> (&mut [Self], &mut [Self::Simd<N>], &mut [Self])
 	where

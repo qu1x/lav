@@ -16,6 +16,8 @@
 //!   * Generic associated type (GAT) [`Real::Simd<N>`] as part of SIMD lane trait [`Real`]
 //!     implementing SIMD vector trait [`SimdReal<Self, N>`] for itself as lane type where the
 //!     GAT is generic over the number of SIMD vector lanes `N`.
+//!   * Supports AOS/SOA/AOSOA via [`Real::as_simd`]/[`Real::as_simd_mut`] abstracting over
+//!     [`as_simd`]/[`as_simd_mut`] of [`f32`] and [`f64`] slices.
 //!   * Lanewise approximate equality test wrt to epsilon and [ULP] SIMD vectors.
 //!   * [`ApproxEq`] trait complementing [`PartialEq`].
 //!   * [`no_std`] without loss of functionality by enabling the [`libm`] feature.
@@ -26,6 +28,8 @@
 //! [`Simd<f32, N>`]: `core::simd::Simd`
 //! [`Simd<f64, N>`]: `core::simd::Simd`
 //! [`Real::Simd<N>`]: `Real::Simd`
+//! [`as_simd`]: `slice::as_simd`
+//! [`as_simd_mut`]: `slice::as_simd_mut`
 //! [`libm`]: https://docs.rs/libm
 //! [`no_std`]: https://docs.rust-embedded.org/book/intro/no-std.html
 //! [ULP]: https://en.wikipedia.org/wiki/Unit_in_the_last_place

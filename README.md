@@ -25,6 +25,8 @@ Lane-Associated Vector (LAV): [Portable SIMD] vector trait as GAT of SIMD lane t
   * Generic associated type (GAT) [`Real::Simd<N>`] as part of SIMD lane trait [`Real`]
     implementing SIMD vector trait [`SimdReal<Self, N>`] for itself as lane type where the
     GAT is generic over the number of SIMD vector lanes `N`.
+  * Supports AOS/SOA/AOSOA via [`Real::as_simd`]/[`Real::as_simd_mut`] abstracting over
+    [`as_simd`]/[`as_simd_mut`] of [`f32`] and [`f64`] slices.
   * Lanewise approximate equality test wrt to epsilon and [ULP] SIMD vectors.
   * [`ApproxEq`] trait complementing [`PartialEq`].
   * [`no_std`] without loss of functionality by enabling the [`libm`] feature.
@@ -40,6 +42,10 @@ See the [release history] to keep track of the development.
 [`SimdReal<Real, N>`]: https://docs.rs/lav/latest/lav/trait.SimdReal.html
 [`SimdReal<Self, N>`]: https://docs.rs/lav/latest/lav/trait.SimdReal.html
 [`Real::Simd<N>`]: https://docs.rs/lav/latest/lav/trait.Real.html#associatedtype.Simd
+[`Real::as_simd`]: https://docs.rs/lav/latest/lav/trait.Real.html#tymethod.as_simd
+[`Real::as_simd_mut`]: https://docs.rs/lav/latest/lav/trait.Real.html#tymethod.as_simd_mut
+[`as_simd`]: https://doc.rust-lang.org/nightly/core/primitive.slice.html#method.as_simd
+[`as_simd_mut`]: https://doc.rust-lang.org/nightly/core/primitive.slice.html#method.as_simd_mut
 [ULP]: https://en.wikipedia.org/wiki/Unit_in_the_last_place
 [`ApproxEq`]: https://docs.rs/lav/latest/lav/trait.ApproxEq.html
 [`PartialEq`]: https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html

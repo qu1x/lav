@@ -29,6 +29,16 @@ where
 	}
 
 	#[inline]
+	fn as_simd(slice: &[f64]) -> (&[f64], &[Self], &[f64]) {
+		slice.as_simd()
+	}
+
+	#[inline]
+	fn as_simd_mut(slice: &mut [f64]) -> (&mut [f64], &mut [Self], &mut [f64]) {
+		slice.as_simd_mut()
+	}
+
+	#[inline]
 	fn as_array(&self) -> &[f64; N] {
 		self.as_array()
 	}

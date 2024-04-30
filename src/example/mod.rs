@@ -10,12 +10,16 @@
 //! #![allow(non_snake_case)]
 //! #![feature(portable_simd)]
 //!
-//! use core::ops::{
-//! 	Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Shl, ShlAssign, Sub, SubAssign,
+//! use core::{
+//! 	mem::transmute,
+//! 	ops::{
+//! 		Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Shl, ShlAssign, Sub, SubAssign,
+//! 	},
 //! };
 //! use lav::{swizzle, ApproxEq, Real, SimdMask, SimdReal};
 //!
 //! #[derive(Debug, Copy, Clone, PartialEq, Eq)]
+//! #[repr(transparent)]
 //! pub struct Rotator3<R: Real> {
 //! 	wxyz: R::Simd<4>,
 //! }
@@ -92,7 +96,7 @@
 //! 		self.wxyz[3] = z;
 //! 		self
 //! 	}
-//! 	pub fn point_fn(self) -> impl Fn(Point3<R>) -> Point3<R> {
+//! 	pub fn point_fn(self) -> impl Fn(&mut Point3<R>) {
 //! 		// +(+[+1ww+1zz+(+1xx+1yy)]~w+[+0zy+0wx]~w+[+0yw-0zx]~w)e123
 //! 		// +(+[+1xx+1ww-(+1yy+1zz)]~X+[+2wz+2xy]~Y+[+2zx-2wy]~Z)e032
 //! 		// +(+[+1yy+1ww-(+1zz+1xx)]~Y+[+2wx+2yz]~Z+[+2xy-2wz]~X)e013
@@ -113,7 +117,15 @@
 //! 			let wYZX = swizzle!(wXYZ, [0, 2, 3, 1]);
 //! 			let wZXY = swizzle!(wXYZ, [0, 3, 1, 2]);
 //! 			let wXYZ = pin0.mul_add(wXYZ, pin1.mul_add(wYZX, pin2 * wZXY));
-//! 			Point3 { wXYZ }
+//! 			point3.wXYZ = wXYZ;
+//! 		}
+//! 	}
+//! 	pub fn points_fn(self) -> impl Fn(&mut [Point3<R>]) {
+//! 		let rotate = self.point_fn();
+//! 		move |points| {
+//! 			for point3 in points {
+//! 				rotate(point3);
+//! 			}
 //! 		}
 //! 	}
 //! }
@@ -238,6 +250,7 @@
 //! }
 //!
 //! #[derive(Debug, Copy, Clone, PartialEq, Eq)]
+//! #[repr(transparent)]
 //! pub struct Point3<R: Real> {
 //! 	wXYZ: R::Simd<4>,
 //! }
@@ -253,6 +266,18 @@
 //! 		Self {
 //! 			wXYZ: R::Simd::from_array(XYZw).simd_rotate_right::<1>(),
 //! 		}
+//! 	}
+//! 	pub fn as_points(points: &[R]) -> &[Self] {
+//! 		let (prefix, points, suffix) = R::as_simd::<4>(points);
+//! 		assert!(prefix.is_empty() && suffix.is_empty(), "misaligned");
+//! 		// Safe due to `#[repr(transparent)]`.
+//! 		unsafe { transmute::<&[R::Simd<4>], &[Point3<R>]>(points) }
+//! 	}
+//! 	pub fn as_points_mut(points: &mut [R]) -> &mut [Self] {
+//! 		let (prefix, points, suffix) = R::as_simd_mut::<4>(points);
+//! 		assert!(prefix.is_empty() && suffix.is_empty(), "misaligned");
+//! 		// Safe due to `#[repr(transparent)]`.
+//! 		unsafe { transmute::<&mut [R::Simd<4>], &mut [Point3<R>]>(points) }
 //! 	}
 //! 	pub fn norm(&self) -> R {
 //! 		self.w().abs()
@@ -389,8 +414,9 @@
 //! impl<R: Real> Shl<Rotator3<R>> for Point3<R> {
 //! 	type Output = Self;
 //!
-//! 	fn shl(self, other: Rotator3<R>) -> Self::Output {
-//! 		other.point_fn()(self)
+//! 	fn shl(mut self, other: Rotator3<R>) -> Self::Output {
+//! 		other.point_fn()(&mut self);
+//! 		self
 //! 	}
 //! }
 //!
