@@ -1,3 +1,7 @@
+# Version 0.8.1 (2024-04-30)
+
+  * Fix misnamed `Bits::{slice_as_simd,slice_as_simd_mut}`.
+
 # Version 0.8.0 (2024-04-30)
 
   * Add `{Real,SimdReal,Bits,SimdBits}::{as_simd,as_simd_mut}`.
