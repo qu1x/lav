@@ -43,3 +43,17 @@ optional = true
 [dependencies.target-features]
 version = "0.1.6"
 optional = true
+
+[lints.rust]
+unsafe-code = "forbid"
+missing-docs = "forbid"
+
+[lints.rustdoc]
+broken-intra-doc-links = "forbid"
+
+[lints.clippy]
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+nursery = { level = "deny", priority = -1 }
+tabs-in-doc-comments = "allow"
+type-repetition-in-bounds = "allow"

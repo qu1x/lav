@@ -35,12 +35,6 @@
 //! [AoS/SoA/AoSoA]: https://en.wikipedia.org/wiki/AoS_and_SoA
 //! [ULP]: https://en.wikipedia.org/wiki/Unit_in_the_last_place
 
-#![forbid(unsafe_code)]
-#![forbid(missing_docs)]
-#![deny(rustdoc::broken_intra_doc_links)]
-#![allow(clippy::type_repetition_in_bounds)]
-#![allow(clippy::trait_duplication_in_bounds)]
-#![allow(clippy::tabs_in_doc_comments)]
 #![feature(decl_macro)]
 #![feature(portable_simd)]
 #![feature(convert_float_to_int)]
