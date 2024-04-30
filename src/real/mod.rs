@@ -452,7 +452,7 @@ where
 		Self::Simd::splat(self)
 	}
 
-	/// Split a slice into a prefix, a middle of aligned SIMD types, and a suffix.
+	/// Split a slice into a prefix, a middle of aligned SIMD vectors, and a suffix.
 	///
 	/// You're only assured thatc`self.len() == prefix.len() + middle.len() * N + suffix.len()`.
 	///
@@ -467,13 +467,17 @@ where
 	///
 	/// # Panics
 	///
-	/// Panic if the size of the SIMD type is different from `N` times that of the scalar.
+	/// Panic if the size of the SIMD vector is different from `N` times that of the scalar.
 	#[must_use]
+	#[inline]
 	fn as_simd<const N: usize>(slice: &[Self]) -> (&[Self], &[Self::Simd<N>], &[Self])
 	where
-		LaneCount<N>: SupportedLaneCount;
+		LaneCount<N>: SupportedLaneCount,
+	{
+		Self::Simd::as_simd(slice)
+	}
 
-	/// Split a mutable slice into a mutable prefix, a middle of aligned SIMD types, and a mutable
+	/// Split a mutable slice into a mutable prefix, a middle of aligned SIMD vectors, and a mutable
 	/// suffix.
 	///
 	/// You're only assured that `self.len() == prefix.len() + middle.len() * N + suffix.len()`.
@@ -491,13 +495,17 @@ where
 	///
 	/// # Panics
 	///
-	/// Panic if the size of the SIMD type is different from `N` times that of the scalar.
+	/// Panic if the size of the SIMD vector is different from `N` times that of the scalar.
 	#[must_use]
+	#[inline]
 	fn as_simd_mut<const N: usize>(
 		slice: &mut [Self],
 	) -> (&mut [Self], &mut [Self::Simd<N>], &mut [Self])
 	where
-		LaneCount<N>: SupportedLaneCount;
+		LaneCount<N>: SupportedLaneCount,
+	{
+		Self::Simd::as_simd_mut(slice)
+	}
 }
 
 impl<R: Real> ApproxEq<R> for R {

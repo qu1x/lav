@@ -101,7 +101,7 @@ where
 	#[must_use]
 	fn splat(value: R) -> Self;
 
-	/// Split a slice into a prefix, a middle of aligned SIMD types, and a suffix.
+	/// Split a slice into a prefix, a middle of aligned SIMD vectors, and a suffix.
 	///
 	/// You're only assured thatc`self.len() == prefix.len() + middle.len() * N + suffix.len()`.
 	///
@@ -116,11 +116,11 @@ where
 	///
 	/// # Panics
 	///
-	/// Panic if the size of the SIMD type is different from `N` times that of the scalar.
+	/// Panic if the size of the SIMD vector is different from `N` times that of the scalar.
 	#[must_use]
 	fn as_simd(slice: &[R]) -> (&[R], &[Self], &[R]);
 
-	/// Split a mutable slice into a mutable prefix, a middle of aligned SIMD types, and a mutable
+	/// Split a mutable slice into a mutable prefix, a middle of aligned SIMD vectors, and a mutable
 	/// suffix.
 	///
 	/// You're only assured that `self.len() == prefix.len() + middle.len() * N + suffix.len()`.
@@ -138,7 +138,7 @@ where
 	///
 	/// # Panics
 	///
-	/// Panic if the size of the SIMD type is different from `N` times that of the scalar.
+	/// Panic if the size of the SIMD vector is different from `N` times that of the scalar.
 	#[must_use]
 	fn as_simd_mut(slice: &mut [R]) -> (&mut [R], &mut [Self], &mut [R]);
 
