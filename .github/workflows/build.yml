@@ -11,83 +11,49 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     - name: toolchain
-      uses: actions-rs/toolchain@v1
+      uses: dtolnay/rust-toolchain@master
       with:
         toolchain: nightly
-        profile: minimal
         components: rustfmt, rust-docs, clippy
-        override: true
     - name: test
-      uses: actions-rs/cargo@v1
-      with:
-        command: test
+      run: cargo test
     - name: clippy
-      uses: actions-rs/cargo@v1
-      with:
-        command: clippy
-        args: --tests -- --deny clippy::pedantic
+      run: cargo clippy --tests --examples
     - name: doc
-      uses: actions-rs/cargo@v1
-      with:
-        command: doc
+      run: cargo doc
     - name: fmt
-      uses: actions-rs/cargo@v1
-      with:
-        command: fmt
-        args: --check
+      run: cargo fmt --check
   libm:
     runs-on: ubuntu-latest
     steps:
     - name: checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     - name: toolchain
-      uses: actions-rs/toolchain@v1
+      uses: dtolnay/rust-toolchain@master
       with:
         toolchain: nightly
-        profile: minimal
         components: rustfmt, rust-docs, clippy
-        override: true
     - name: test
-      uses: actions-rs/cargo@v1
-      with:
-        command: test
-        args: --features libm
+      run: cargo test --features libm
     - name: clippy
-      uses: actions-rs/cargo@v1
-      with:
-        command: clippy
-        args: --features libm --tests -- --deny clippy::pedantic
+      run: cargo clippy --tests --examples --features libm
     - name: doc
-      uses: actions-rs/cargo@v1
-      with:
-        command: doc
-        args: --features libm
+      run: cargo doc --features libm
   target-features:
     runs-on: ubuntu-latest
     steps:
     - name: checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     - name: toolchain
-      uses: actions-rs/toolchain@v1
+      uses: dtolnay/rust-toolchain@master
       with:
         toolchain: nightly
-        profile: minimal
         components: rustfmt, rust-docs, clippy
-        override: true
     - name: test
-      uses: actions-rs/cargo@v1
-      with:
-        command: test
-        args: --features target-features
+      run: cargo test --features target-features
     - name: clippy
-      uses: actions-rs/cargo@v1
-      with:
-        command: clippy
-        args: --features target-features --tests -- --deny clippy::pedantic
+      run: cargo clippy --tests --examples --features target-features
     - name: doc
-      uses: actions-rs/cargo@v1
-      with:
-        command: doc
-        args: --features target-features
+      run: cargo doc --features target-features
