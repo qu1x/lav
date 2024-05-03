@@ -93,12 +93,12 @@ where
 
 	/// Split a slice into a prefix, a middle of aligned SIMD vectors, and a suffix.
 	///
-	/// You're only assured thatc`self.len() == prefix.len() + middle.len() * N + suffix.len()`.
+	/// You're only assured that `slice.len() == prefix.len() + middle.len() * N + suffix.len()`.
 	///
 	/// Notably, all of the following are possible:
 	///
 	///   * `prefix.len() >= N`,
-	///   * `middle.is_empty()` despite `self.len() >= 3 * N`,
+	///   * `middle.is_empty()` despite `slice.len() >= 3 * N`,
 	///   * `suffix.len() >= N`.
 	///
 	/// That said, this is a safe method, so if you're only writing safe code, then this can at most
@@ -119,12 +119,12 @@ where
 	/// Split a mutable slice into a mutable prefix, a middle of aligned SIMD vectors, and a mutable
 	/// suffix.
 	///
-	/// You're only assured that `self.len() == prefix.len() + middle.len() * N + suffix.len()`.
+	/// You're only assured that `self.slice() == prefix.len() + middle.len() * N + suffix.len()`.
 	///
 	/// Notably, all of the following are possible:
 	///
 	///   * `prefix.len() >= N`,
-	///   * `middle.is_empty()` despite `self.len() >= 3 * N`,
+	///   * `middle.is_empty()` despite `self.slice() >= 3 * N`,
 	///   * `suffix.len() >= N`.
 	///
 	/// That said, this is a safe method, so if you're only writing safe code, then this can at most
