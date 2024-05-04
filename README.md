@@ -18,6 +18,8 @@ Lane-Associated Vector (LAV): [Portable SIMD] vector trait as GAT of SIMD lane t
 
 **NOTE**: This crate requires nightly Rust.
 
+This [`example`] uses SIMD generically over floating-point types while hiding it from the user.
+
 # Features
 
   * SIMD lane trait [`Real`] abstracting over [`f32`] and [`f64`].
@@ -25,15 +27,18 @@ Lane-Associated Vector (LAV): [Portable SIMD] vector trait as GAT of SIMD lane t
   * Generic associated type (GAT) [`Real::Simd<N>`] as part of SIMD lane trait [`Real`]
     implementing SIMD vector trait [`SimdReal<Self, N>`] for itself as lane type where the
     GAT is generic over the number of SIMD vector lanes `N`.
-  * Supports [AoS/SoA/AoSoA] via [`Real::as_simd`]/[`Real::as_simd_mut`] abstracting over
+  * [AoS/SoA/AoSoA] via [`Real::as_simd`]/[`Real::as_simd_mut`] abstracting over
     [`as_simd`]/[`as_simd_mut`] of [`f32`] and [`f64`] slices.
   * Lanewise approximate equality test wrt to epsilon and [ULP] SIMD vectors.
   * [`ApproxEq`] trait complementing [`PartialEq`].
-  * [`no_std`] without loss of functionality by enabling the [`libm`] feature.
 
-This [`example`] uses SIMD generically over floating-point types while hiding it from the user.
+# Optional Features
 
-See the [release history] to keep track of the development.
+Following features are disabled by default unless their feature gate is enabled:
+
+  * [`target-features`]: Provides native number of SIMD vector lanes
+    `Real::NATIVE_LANE_COUNT` for the current build target.
+  * [`libm`]: Enables [`no_std`] without loss of functionality.
 
 [Portable SIMD]: https://doc.rust-lang.org/nightly/core/simd/index.html
 [`Real`]: https://docs.rs/lav/latest/lav/trait.Real.html
@@ -50,23 +55,21 @@ See the [release history] to keep track of the development.
 [ULP]: https://en.wikipedia.org/wiki/Unit_in_the_last_place
 [`ApproxEq`]: https://docs.rs/lav/latest/lav/trait.ApproxEq.html
 [`PartialEq`]: https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html
-[`no_std`]: https://docs.rust-embedded.org/book/intro/no-std.html
+[`target-features`]: https://docs.rs/target-features
 [`libm`]: https://docs.rs/libm
+[`no_std`]: https://docs.rust-embedded.org/book/intro/no-std.html
 [`example`]: https://docs.rs/lav/latest/lav/example/index.html
 [release history]: RELEASES.md
 
 # Documentation Builds
 
+Build and open documentation of this crate and its dependencies using KaTeX.
+
 ```sh
-# Build and open documentation inclusive dependencies.
-cargo doc --open
-# Rebuild this crate's documentation with KaTeX.
-cargo tex
-# Refresh opened documentation.
+env RUSTDOCFLAGS="--html-in-header $PWD/katex.html" cargo doc --features target-features --open
 ```
 
-With `cargo tex` defined in [.cargo/config.toml](.cargo/config.toml). Note that navigating the
-documentation requires web access as KaTeX is embedded via remote CDN.
+Note that navigating the documentation requires web access as KaTeX is embedded via remote CDN.
 
 ## License
 

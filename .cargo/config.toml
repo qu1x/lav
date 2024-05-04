@@ -1,4 +1,0 @@
-[alias]
-tex = ["rustdoc", "--", "--html-in-header", "katex.html"]
-[build]
-rustflags = ["-C", "target-cpu=native"]

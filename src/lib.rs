@@ -8,6 +8,8 @@
 //!
 //! **NOTE**: This crate requires nightly Rust.
 //!
+//! This [`example`] uses SIMD generically over floating-point types while hiding it from the user.
+//!
 //! # Features
 //!
 //!   * SIMD lane trait [`Real`] abstracting over [`f32`] and [`f64`].
@@ -16,13 +18,18 @@
 //!   * Generic associated type (GAT) [`Real::Simd<N>`] as part of SIMD lane trait [`Real`]
 //!     implementing SIMD vector trait [`SimdReal<Self, N>`] for itself as lane type where the
 //!     GAT is generic over the number of SIMD vector lanes `N`.
-//!   * Supports [AoS/SoA/AoSoA] via [`Real::as_simd`]/[`Real::as_simd_mut`] abstracting over
+//!   * [AoS/SoA/AoSoA] via [`Real::as_simd`]/[`Real::as_simd_mut`] abstracting over
 //!     [`as_simd`]/[`as_simd_mut`] of [`f32`] and [`f64`] slices.
 //!   * Lanewise approximate equality test wrt to epsilon and [ULP] SIMD vectors.
 //!   * [`ApproxEq`] trait complementing [`PartialEq`].
-//!   * [`no_std`] without loss of functionality by enabling the [`libm`] feature.
 //!
-//! This [`example`] uses SIMD generically over floating-point types while hiding it from the user.
+//! # Optional Features
+//!
+//! Following features are disabled by default unless their feature gate is enabled:
+//!
+//!   * [`target-features`]: Provides native number of SIMD vector lanes
+//!     `Real::NATIVE_LANE_COUNT` for the current build target.
+//!   * [`libm`]: Enables [`no_std`] without loss of functionality.
 //!
 //! [Portable SIMD]: `core::simd`
 //! [`Simd<f32, N>`]: `core::simd::Simd`
@@ -30,6 +37,7 @@
 //! [`Real::Simd<N>`]: `Real::Simd`
 //! [`as_simd`]: `slice::as_simd`
 //! [`as_simd_mut`]: `slice::as_simd_mut`
+//! [`target-features`]: https://docs.rs/target-features
 //! [`libm`]: https://docs.rs/libm
 //! [`no_std`]: https://docs.rust-embedded.org/book/intro/no-std.html
 //! [AoS/SoA/AoSoA]: https://en.wikipedia.org/wiki/AoS_and_SoA
