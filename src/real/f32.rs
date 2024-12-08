@@ -16,7 +16,8 @@ use target_features::CURRENT_TARGET;
 
 impl Real for f32 {
 	type Bits = u32;
-	type Simd<const N: usize> = Simd<Self, N>
+	type Simd<const N: usize>
+		= Simd<Self, N>
 	where
 		LaneCount<N>: SupportedLaneCount;
 

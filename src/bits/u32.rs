@@ -8,7 +8,8 @@ use super::Bits;
 use core::simd::{LaneCount, Simd, SupportedLaneCount};
 
 impl Bits for u32 {
-	type Simd<const N: usize> = Simd<Self, N>
+	type Simd<const N: usize>
+		= Simd<Self, N>
 	where
 		LaneCount<N>: SupportedLaneCount;
 
