@@ -1,8 +1,7 @@
-// Copyright © 2021-2024 Rouven Spreckels <rs@qu1x.dev>
+// Copyright © 2021-2025 Rouven Spreckels <rs@qu1x.dev>
 //
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of
+// the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 //! Portably SIMD-optimized 3D rotator implementation generic over lane type [`f32`] and [`f64`].
 //!

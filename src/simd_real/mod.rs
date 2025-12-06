@@ -1,8 +1,7 @@
-// Copyright © 2021-2024 Rouven Spreckels <rs@qu1x.dev>
+// Copyright © 2021-2025 Rouven Spreckels <rs@qu1x.dev>
 //
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of
+// the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 // Derivative work of `core::simd` licensed under `MIT OR Apache-2.0`.
 
@@ -373,7 +372,7 @@ where
 	#[must_use]
 	fn simd_clamp(self, min: Self, max: Self) -> Self;
 
-	/// Takes the reciprocal (inverse) of each lane, ${1 \over x}$.
+	/// Takes the reciprocal (inverse) of each lane, `${1 \over x}$`.
 	#[must_use]
 	fn recip(self) -> Self;
 

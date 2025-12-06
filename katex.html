@@ -1,28 +1,78 @@
 
 
 <!-- KaTeX -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css"
-	integrity="sha384-wcIxkf4k558AjM3Yz3BBFQUbk/zgIYC2R0QpeeYb+TwlBVMrlgLqwRjRtGZiK7ww" crossorigin="anonymous">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"
-	integrity="sha384-hIoBPJpTUs74ddyc4bFZSM1TVlQDA60VBbJS0oA934VSz82sBx1X7kSx2ATBDIyd" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
-	integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css"
+	integrity="sha384-WcoG4HRXMzYzfCgiyfrySxx90XSl2rxY5mnVY5TwtWE6KLrArNKn0T/mOgNL0Mmi" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.js"
+	integrity="sha384-J+9dG2KMoiR9hqcFao0IBLwxt6zpcyN68IgwzsCSkbreXUjmNVRhPFTssqdSGjwQ" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/contrib/auto-render.min.js"
+	integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"></script>
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-	renderMathInElement(document.body, {
-		delimiters: [
-			{left: "$$", right: "$$", display: true},
-			{left: "$", right: "$", display: false},
-		]
-	});
-});
+let tex = function() {
+	const macros = {};
+	let to_do = [];
+	for (let e of document.getElementsByTagName("code")) {
+		if (e.parentNode.classList.contains("language-gdef")) {
+			to_do.push(function () {
+				if (!e.hasAttribute("data-tex")) {
+					e.setAttribute("data-tex", "true");
+					let x = document.createElement('span');
+					e.parentNode.parentNode.remove();
+					katex.render(e.innerText, x, {displayMode: true, throwOnError: true, macros});
+				}
+			});
+		} else if (e.parentNode.classList.contains("language-math")) {
+			to_do.push(function () {
+				if (!e.hasAttribute("data-tex")) {
+					e.setAttribute("data-tex", "true");
+					let x = document.createElement('span');
+					e.parentNode.appendChild(x);
+					katex.render(e.innerText, x, {displayMode: true, throwOnError: true, macros});
+				}
+			});
+		} else {
+			let n = e.nextSibling;
+			let p = e.previousSibling;
+			if (n && p && /^\$/.test(n.data) && /\$$/.test(p.data)) {
+				to_do.push(function () {
+					if (!e.hasAttribute("data-tex")) {
+						e.setAttribute("data-tex", "true");
+						let n = e.nextSibling;
+						let p = e.previousSibling;
+						let x = document.createElement('span');
+						katex.render(e.innerText, x, {throwOnError: true, macros});
+						e.parentNode.replaceChild(x, e);
+						n.splitText(1);
+						n.remove();
+						p.splitText(p.data.length - 1).remove();
+					}
+				});
+			}
+		}
+	}
+	let t = function() { for (let f of to_do) f() };
+	t();
+	for (let i = 0; i < 8; i++)
+		setTimeout(t, 100 * 2 ** i);
+}
+tex();
+document.addEventListener("readystatechange", tex);
 </script>
 <style>
-	.docblock > * {
+	.docblock > p {
 		overflow-x: visible !important;
 	}
 	.katex {
-		font-size: 1.1em !important;
+		font-size: 1.0em !important;
+	}
+	.language-inline-math {
+		background-color: transparent !important;
+	}
+	.language-math {
+		background-color: transparent !important;
+	}
+	.language-math > code {
+		display: none !important;
 	}
 </style>
 <!-- KaTeX -->

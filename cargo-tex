@@ -1,0 +1,28 @@
+#! /bin/sh
+
+export RUSTDOCFLAGS="$RUSTDOCFLAGS --html-in-header $PWD/katex.html"
+
+nightly=""
+$CARGO -V | grep -q nightly && {
+	export RUSTDOCFLAGS="$RUSTDOCFLAGS --cfg docsrs"
+	nightly="-Z unstable-options -Z rustdoc-scrape-examples"
+}
+
+shift
+
+help="\
+Build a package's documentation with KaTeX support
+
+Wraps \`cargo doc \"\$@\"\` and embeds \`\"katex.html\"\`.
+
+Note that navigating the documentation requires
+web access as KaTeX is embedded via remote CDN."
+
+case "$1" in
+	'-h'|'--help'|'help')
+		echo "$help"
+	;;
+	*)
+		$CARGO doc $nightly "$@"
+	;;
+esac

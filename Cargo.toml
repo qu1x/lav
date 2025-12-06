@@ -1,7 +1,7 @@
 [package]
 name = "lav"
-version = "0.8.1"
-edition = "2021"
+version = "0.8.2"
+edition = "2024"
 authors = ["Rouven Spreckels <rs@qu1x.dev>"]
 description = "Lane-Associated Vector (LAV): Portable SIMD vector trait as GAT of SIMD lane trait."
 documentation = "https://docs.rs/lav"
@@ -28,7 +28,7 @@ include = [
 	"Cargo.toml",
 	"README.md",
 	"RELEASES.md",
-	"LICENSES/*",
+	"LICENSE-*",
 ]
 
 [package.metadata.docs.rs]
@@ -39,7 +39,7 @@ rustdoc-args = [ "--html-in-header", "katex.html" ]
 features = ["target-features"]
 
 [dependencies.libm]
-version = "0.2.8"
+version = "0.2.15"
 optional = true
 
 [dependencies.target-features]

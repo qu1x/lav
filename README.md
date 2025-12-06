@@ -20,7 +20,7 @@ Lane-Associated Vector (LAV): [Portable SIMD] vector trait as GAT of SIMD lane t
 
 This [`example`] uses SIMD generically over floating-point types while hiding it from the user.
 
-# Features
+## Features
 
   * SIMD lane trait [`Real`] abstracting over [`f32`] and [`f64`].
   * SIMD vector trait [`SimdReal<Real, N>`] abstracting over `Simd<f32, N>` and `Simd<f64, N>`.
@@ -32,7 +32,7 @@ This [`example`] uses SIMD generically over floating-point types while hiding it
   * Lanewise approximate equality test wrt to epsilon and [ULP] SIMD vectors.
   * [`ApproxEq`] trait complementing [`PartialEq`].
 
-# Optional Features
+## Optional Features
 
 Following features are disabled by default unless their feature gate is enabled:
 
@@ -61,24 +61,20 @@ Following features are disabled by default unless their feature gate is enabled:
 [`example`]: https://docs.rs/lav/latest/lav/example/index.html
 [release history]: RELEASES.md
 
-# Documentation Builds
+## Pseudo-Local Documentation Builds
 
-Build and open documentation of this crate and its dependencies using KaTeX.
+Build the documentation with [cargo-tex](cargo-tex). Note that navigating the documentation requires
+web access as KaTeX is embedded via remote CDN.
 
 ```sh
-env RUSTDOCFLAGS="--html-in-header $PWD/katex.html" cargo doc --features target-features --open
+cargo tex --open
 ```
-
-Note that navigating the documentation requires web access as KaTeX is embedded via remote CDN.
 
 ## License
 
-Copyright © 2021-2024 Rouven Spreckels <rs@qu1x.dev>
+Copyright © 2021-2025 Rouven Spreckels <rs@qu1x.dev>
 
-Licensed under the terms of the [`MPL-2.0`](LICENSES/MPL-2.0).
-
-The MPL allows the integration of MPL-licensed code into proprietary codebases, as long as the
-MPL-licensed components remain accessible under the terms of the MPL.
+Licensed under the terms of the [`MPL-2.0`](LICENSE-MPL).
 
 ## Contribution
 

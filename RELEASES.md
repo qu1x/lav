@@ -1,3 +1,9 @@
+# Version 0.8.2 (2025-12-06)
+
+  * Fix build.
+  * Update KaTeX.
+  * Use Rust Edition 2024.
+
 # Version 0.8.1 (2024-04-30)
 
   * Fix misnamed `Bits::{slice_as_simd,slice_as_simd_mut}`.
