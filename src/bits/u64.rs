@@ -7,22 +7,22 @@ use super::Bits;
 use core::simd::{LaneCount, Simd, SupportedLaneCount};
 
 impl Bits for u64 {
-	type Simd<const N: usize>
-		= Simd<Self, N>
-	where
-		LaneCount<N>: SupportedLaneCount;
+    type Simd<const N: usize>
+        = Simd<Self, N>
+    where
+        LaneCount<N>: SupportedLaneCount;
 
-	const MIN: Self = Self::MIN;
-	const MAX: Self = Self::MAX;
+    const MIN: Self = Self::MIN;
+    const MAX: Self = Self::MAX;
 
-	const ONE: Self = 1;
+    const ONE: Self = 1;
 
-	#[inline]
-	fn saturating_add(self, other: Self) -> Self {
-		self.saturating_add(other)
-	}
-	#[inline]
-	fn saturating_sub(self, other: Self) -> Self {
-		self.saturating_sub(other)
-	}
+    #[inline]
+    fn saturating_add(self, other: Self) -> Self {
+        self.saturating_add(other)
+    }
+    #[inline]
+    fn saturating_sub(self, other: Self) -> Self {
+        self.saturating_sub(other)
+    }
 }

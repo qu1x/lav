@@ -63,26 +63,26 @@ pub mod example;
 
 /// Selects lanes from two vectors by mask vector.
 pub trait Select<Mask> {
-	/// Selects lanes from two vectors by mask vector.
-	///
-	/// For each lane in the mask, choose the corresponding lane from `true_values` if that lane
-	/// mask is true, and `false_values` if that lane mask is false.
-	#[must_use]
-	fn select(mask: Mask, true_values: Self, false_values: Self) -> Self;
+    /// Selects lanes from two vectors by mask vector.
+    ///
+    /// For each lane in the mask, choose the corresponding lane from `true_values` if that lane
+    /// mask is true, and `false_values` if that lane mask is false.
+    #[must_use]
+    fn select(mask: Mask, true_values: Self, false_values: Self) -> Self;
 }
 
 /// Tests for approximate equality.
 pub trait ApproxEq<R: Real, Rhs = Self>
 where
-	Rhs: ?Sized,
+    Rhs: ?Sized,
 {
-	/// Tests for approximate equality wrt `epsilon` or `ulp`, "or" in the sense of `||`.
-	#[must_use]
-	fn approx_eq(&self, other: &Rhs, epsilon: R, ulp: R::Bits) -> bool;
-	/// Tests for approximate inequality wrt `epsilon` and `ulp`, "and" in the sense of `&&`.
-	#[must_use]
-	#[inline]
-	fn approx_ne(&self, other: &Rhs, epsilon: R, ulp: R::Bits) -> bool {
-		!self.approx_eq(other, epsilon, ulp)
-	}
+    /// Tests for approximate equality wrt `epsilon` or `ulp`, "or" in the sense of `||`.
+    #[must_use]
+    fn approx_eq(&self, other: &Rhs, epsilon: R, ulp: R::Bits) -> bool;
+    /// Tests for approximate inequality wrt `epsilon` and `ulp`, "and" in the sense of `&&`.
+    #[must_use]
+    #[inline]
+    fn approx_ne(&self, other: &Rhs, epsilon: R, ulp: R::Bits) -> bool {
+        !self.approx_eq(other, epsilon, ulp)
+    }
 }

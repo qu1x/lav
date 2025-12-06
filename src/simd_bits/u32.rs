@@ -5,73 +5,73 @@
 
 use super::{Select, SimdBits};
 use core::simd::{
-	cmp::{SimdPartialEq, SimdPartialOrd},
-	num::SimdUint,
-	LaneCount, Mask, Simd, SupportedLaneCount,
+    LaneCount, Mask, Simd, SupportedLaneCount,
+    cmp::{SimdPartialEq, SimdPartialOrd},
+    num::SimdUint,
 };
 
 impl<const N: usize> SimdBits<u32, N> for Simd<u32, N>
 where
-	LaneCount<N>: SupportedLaneCount,
+    LaneCount<N>: SupportedLaneCount,
 {
-	type Mask = Mask<i32, N>;
+    type Mask = Mask<i32, N>;
 
-	#[inline]
-	fn splat(value: u32) -> Self {
-		Self::splat(value)
-	}
+    #[inline]
+    fn splat(value: u32) -> Self {
+        Self::splat(value)
+    }
 
-	#[inline]
-	fn as_simd(slice: &[u32]) -> (&[u32], &[Self], &[u32]) {
-		slice.as_simd()
-	}
+    #[inline]
+    fn as_simd(slice: &[u32]) -> (&[u32], &[Self], &[u32]) {
+        slice.as_simd()
+    }
 
-	#[inline]
-	fn as_simd_mut(slice: &mut [u32]) -> (&mut [u32], &mut [Self], &mut [u32]) {
-		slice.as_simd_mut()
-	}
+    #[inline]
+    fn as_simd_mut(slice: &mut [u32]) -> (&mut [u32], &mut [Self], &mut [u32]) {
+        slice.as_simd_mut()
+    }
 
-	#[inline]
-	fn simd_eq(self, other: Self) -> Self::Mask {
-		SimdPartialEq::simd_eq(self, other)
-	}
-	#[inline]
-	fn simd_ne(self, other: Self) -> Self::Mask {
-		SimdPartialEq::simd_ne(self, other)
-	}
-	#[inline]
-	fn simd_lt(self, other: Self) -> Self::Mask {
-		SimdPartialOrd::simd_lt(self, other)
-	}
-	#[inline]
-	fn simd_gt(self, other: Self) -> Self::Mask {
-		SimdPartialOrd::simd_gt(self, other)
-	}
-	#[inline]
-	fn simd_le(self, other: Self) -> Self::Mask {
-		SimdPartialOrd::simd_le(self, other)
-	}
-	#[inline]
-	fn simd_ge(self, other: Self) -> Self::Mask {
-		SimdPartialOrd::simd_ge(self, other)
-	}
+    #[inline]
+    fn simd_eq(self, other: Self) -> Self::Mask {
+        SimdPartialEq::simd_eq(self, other)
+    }
+    #[inline]
+    fn simd_ne(self, other: Self) -> Self::Mask {
+        SimdPartialEq::simd_ne(self, other)
+    }
+    #[inline]
+    fn simd_lt(self, other: Self) -> Self::Mask {
+        SimdPartialOrd::simd_lt(self, other)
+    }
+    #[inline]
+    fn simd_gt(self, other: Self) -> Self::Mask {
+        SimdPartialOrd::simd_gt(self, other)
+    }
+    #[inline]
+    fn simd_le(self, other: Self) -> Self::Mask {
+        SimdPartialOrd::simd_le(self, other)
+    }
+    #[inline]
+    fn simd_ge(self, other: Self) -> Self::Mask {
+        SimdPartialOrd::simd_ge(self, other)
+    }
 
-	#[inline]
-	fn saturating_add(self, other: Self) -> Self {
-		SimdUint::saturating_add(self, other)
-	}
-	#[inline]
-	fn saturating_sub(self, other: Self) -> Self {
-		SimdUint::saturating_sub(self, other)
-	}
+    #[inline]
+    fn saturating_add(self, other: Self) -> Self {
+        SimdUint::saturating_add(self, other)
+    }
+    #[inline]
+    fn saturating_sub(self, other: Self) -> Self {
+        SimdUint::saturating_sub(self, other)
+    }
 }
 
 impl<const N: usize> Select<Mask<i32, N>> for Simd<u32, N>
 where
-	LaneCount<N>: SupportedLaneCount,
+    LaneCount<N>: SupportedLaneCount,
 {
-	#[inline]
-	fn select(mask: Mask<i32, N>, true_values: Self, false_values: Self) -> Self {
-		mask.select(true_values, false_values)
-	}
+    #[inline]
+    fn select(mask: Mask<i32, N>, true_values: Self, false_values: Self) -> Self {
+        mask.select(true_values, false_values)
+    }
 }
