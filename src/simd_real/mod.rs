@@ -372,7 +372,7 @@ where
     #[must_use]
     fn simd_clamp(self, min: Self, max: Self) -> Self;
 
-    /// Takes the reciprocal (inverse) of each lane, `${1 \over x}$`.
+    /// Takes the reciprocal (inverse) of each lane, $`{1 \over x}`$.
     #[must_use]
     fn recip(self) -> Self;
 

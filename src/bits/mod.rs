@@ -61,7 +61,7 @@ where
     /// The largest value that can be represented by this integer type.
     const MAX: Self;
 
-    /// `$1$`
+    /// $`1`$
     const ONE: Self;
 
     /// Saturating add.

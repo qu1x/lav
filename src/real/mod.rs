@@ -62,67 +62,67 @@ where
     #[cfg(feature = "target-features")]
     const NATIVE_LANE_COUNT: usize;
 
-    /// `$0$`
+    /// $`0`$
     const ZERO: Self;
-    /// `$1$`
+    /// $`1`$
     const ONE: Self;
-    /// `$2$`
+    /// $`2`$
     const TWO: Self;
 
-    /// `$\pi$`
+    /// $`\pi`$
     const PI: Self;
-    /// `$\tau$`
+    /// $`\tau`$
     const TAU: Self;
-    /// `$\sqrt{2}$`
+    /// $`\sqrt{2}`$
     const SQRT_2: Self;
 
-    /// `$\frac{1}{2}$`
+    /// $`\frac{1}{2}`$
     const FRAC_1_2: Self;
-    /// `$\frac{1}{3}$`
+    /// $`\frac{1}{3}`$
     const FRAC_1_3: Self;
-    /// `$\frac{1}{4}$`
+    /// $`\frac{1}{4}`$
     const FRAC_1_4: Self;
-    /// `$\frac{1}{6}$`
+    /// $`\frac{1}{6}`$
     const FRAC_1_6: Self;
-    /// `$\frac{1}{8}$`
+    /// $`\frac{1}{8}`$
     const FRAC_1_8: Self;
 
-    /// `$\frac{\pi}{2}$`
+    /// $`\frac{\pi}{2}`$
     const FRAC_PI_2: Self;
-    /// `$\frac{\pi}{3}$`
+    /// $`\frac{\pi}{3}`$
     const FRAC_PI_3: Self;
-    /// `$\frac{\pi}{4}$`
+    /// $`\frac{\pi}{4}`$
     const FRAC_PI_4: Self;
-    /// `$\frac{\pi}{6}$`
+    /// $`\frac{\pi}{6}`$
     const FRAC_PI_6: Self;
-    /// `$\frac{\pi}{8}$`
+    /// $`\frac{\pi}{8}`$
     const FRAC_PI_8: Self;
 
-    /// `$\frac{1}{\pi}$`
+    /// $`\frac{1}{\pi}`$
     const FRAC_1_PI: Self;
-    /// `$\frac{1}{\tau}$`
+    /// $`\frac{1}{\tau}`$
     const FRAC_1_TAU: Self;
-    /// `$\frac{1}{\sqrt{2}}$`
+    /// $`\frac{1}{\sqrt{2}}`$
     const FRAC_1_SQRT_2: Self;
-    /// `$\frac{2}{\pi}$`
+    /// $`\frac{2}{\pi}`$
     const FRAC_2_PI: Self;
-    /// `$\frac{2}{\sqrt{\pi}}$`
+    /// $`\frac{2}{\sqrt{\pi}}`$
     const FRAC_2_SQRT_PI: Self;
 
-    /// [Machine epsilon] `$\epsilon$` of floating-point type.
+    /// [Machine epsilon] $`\epsilon`$ of floating-point type.
     ///
     /// [Machine epsilon]: https://en.wikipedia.org/wiki/Machine_epsilon
     const EPSILON: Self;
-    /// `$\sqrt{\epsilon}$`
+    /// $`\sqrt{\epsilon}`$
     const SQRT_EPSILON: Self;
-    /// `$\sqrt\[3]{\epsilon}$`
+    /// $`\sqrt\[3]{\epsilon}`$
     const CBRT_EPSILON: Self;
 
     /// The radix or base of the internal representation of floating-point type.
     const RADIX: u32;
-    /// Number of significant digits in base `$2$`.
+    /// Number of significant digits in base $`2`$.
     const MANTISSA_DIGITS: u32;
-    /// Approximate number of significant digits in base `$10$`.
+    /// Approximate number of significant digits in base $`10`$.
     const DIGITS: u32;
     /// Smallest finite floating-point type value.
     const MIN: Self;
@@ -130,20 +130,20 @@ where
     const MIN_POSITIVE: Self;
     /// Largest finite floating-point type value.
     const MAX: Self;
-    /// One greater than the minimum possible normal power of `$2$` exponent.
+    /// One greater than the minimum possible normal power of $`2`$ exponent.
     const MIN_EXP: i32;
-    /// Maximum possible power of `$2$` exponent.
+    /// Maximum possible power of $`2`$ exponent.
     const MAX_EXP: i32;
-    /// Minimum possible normal power of `$10$` exponent.
+    /// Minimum possible normal power of $`10`$ exponent.
     const MIN_10_EXP: i32;
-    /// Maximum possible power of `$10$` exponent.
+    /// Maximum possible power of $`10`$ exponent.
     const MAX_10_EXP: i32;
 
     /// Not a number (NaN).
     const NAN: Self;
-    /// Infinity `$\infty$`.
+    /// Infinity $`\infty`$.
     const INFINITY: Self;
-    /// Negative infinity `$-\infty$`.
+    /// Negative infinity $`-\infty`$.
     const NEG_INFINITY: Self;
 
     /// Raw transmutation from `u64`.
@@ -312,13 +312,13 @@ where
     /// Raises a number to a floating-point power.
     #[must_use]
     fn powf(self, n: Self) -> Self;
-    /// Returns `$e^x$`.
+    /// Returns $`e^x`$.
     #[must_use]
     fn exp(self) -> Self;
-    /// Returns `$e^x - 1$` in a way that is accurate even if the number is close to zero.
+    /// Returns $`e^x - 1`$ in a way that is accurate even if the number is close to zero.
     #[must_use]
     fn exp_m1(self) -> Self;
-    /// Returns `$2^x$`.
+    /// Returns $`2^x`$.
     #[must_use]
     fn exp2(self) -> Self;
     /// Returns the natural logarithm of the number.
@@ -332,14 +332,14 @@ where
     ///
     /// The result might not be correctly rounded owing to implementation details:
     ///
-    ///   * [`Self::log2()`] can produce more accurate results for base `$2$`, and
-    ///   * [`Self::log10()`] can produce more accurate results for base `$10$`.
+    ///   * [`Self::log2()`] can produce more accurate results for base $`2`$, and
+    ///   * [`Self::log10()`] can produce more accurate results for base $`10`$.
     #[must_use]
     fn log(self, base: Self) -> Self;
-    /// Returns the base `$2$` logarithm of the number.
+    /// Returns the base $`2`$ logarithm of the number.
     #[must_use]
     fn log2(self) -> Self;
-    /// Returns the base `$10$` logarithm of the number.
+    /// Returns the base $`10`$ logarithm of the number.
     #[must_use]
     fn log10(self) -> Self;
 
@@ -379,8 +379,8 @@ where
     fn tan(self) -> Self;
     /// Computes the arcsine of a number.
     ///
-    /// Return value is in radians in the range `$[-{\pi \over 2}, {\pi \over 2}]$` or NaN if the
-    /// number is outside the range `$[-1, 1]$`.
+    /// Return value is in radians in the range $`[-{\pi \over 2}, {\pi \over 2}]`$ or NaN if the
+    /// number is outside the range $`[-1, 1]`$.
     #[must_use]
     fn asin(self) -> Self;
     /// Inverse hyperbolic sine function.
@@ -388,8 +388,8 @@ where
     fn asinh(self) -> Self;
     /// Computes the arccosine of a number.
     ///
-    /// Return value is in radians in the range `$[0, \pi]$` or NaN if the number is outside the
-    /// range `$[-1, 1]$`.
+    /// Return value is in radians in the range $`[0, \pi]`$ or NaN if the number is outside the
+    /// range $`[-1, 1]`$.
     #[must_use]
     fn acos(self) -> Self;
     /// Inverse hyperbolic cosine function.
@@ -397,15 +397,15 @@ where
     fn acosh(self) -> Self;
     /// Computes the arctangent of a number.
     ///
-    /// Return value is in radians in the range `$[-{\pi \over 2}, {\pi \over 2}]$`.
+    /// Return value is in radians in the range $`[-{\pi \over 2}, {\pi \over 2}]`$.
     #[must_use]
     fn atan(self) -> Self;
     /// Inverse hyperbolic tangent function.
     #[must_use]
     fn atanh(self) -> Self;
-    /// Computes the four quadrant arctangent of `self` as `$y$` and `other` as `$x$` in radians.
+    /// Computes the four quadrant arctangent of `self` as $`y`$ and `other` as $`x`$ in radians.
     ///
-    /// ```nath
+    /// ```math
     /// \arctan(y, x) = \begin{cases}
     ///   0 & \text{if } x = 0 \wedge y = 0 \\\\
     ///   \arctan({y \over x}) \in [-{\pi \over 2}, {\pi \over 2}] & \text{if } x \ge 0 \\\\
