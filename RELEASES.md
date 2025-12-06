@@ -1,3 +1,7 @@
+# Version 0.8.3 (2025-12-06)
+
+  * Fix KaTeX.
+
 # Version 0.8.2 (2025-12-06)
 
   * Fix build.
