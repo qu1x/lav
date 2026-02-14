@@ -1,11 +1,11 @@
-// Copyright © 2021-2025 Rouven Spreckels <rs@qu1x.dev>
+// Copyright © 2021-2026 Rouven Spreckels <rs@qu1x.dev>
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of
 // the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 use super::{ApproxEq, Select, SimdReal};
 use core::simd::{
-    LaneCount, Mask, Simd, SupportedLaneCount, Swizzle,
+    Mask, Select as _, Simd, Swizzle,
     cmp::{SimdPartialEq, SimdPartialOrd},
     num::SimdFloat,
 };
@@ -15,10 +15,7 @@ use super::Real;
 #[cfg(not(feature = "libm"))]
 use std::simd::StdFloat;
 
-impl<const N: usize> SimdReal<f32, N> for Simd<f32, N>
-where
-    LaneCount<N>: SupportedLaneCount,
-{
+impl<const N: usize> SimdReal<f32, N> for Simd<f32, N> {
     type Bits = Simd<u32, N>;
     type Mask = Mask<i32, N>;
 
@@ -60,38 +57,28 @@ where
     }
 
     #[inline]
-    fn gather_or(slice: &[f32], idxs: Simd<usize, N>, or: Self) -> Self
-    where
-        LaneCount<N>: SupportedLaneCount,
-    {
+    fn gather_or(slice: &[f32], idxs: Simd<usize, N>, or: Self) -> Self {
         Self::gather_or(slice, idxs, or)
     }
     #[inline]
-    fn gather_or_default(slice: &[f32], idxs: Simd<usize, N>) -> Self
-    where
-        LaneCount<N>: SupportedLaneCount,
-    {
+    fn gather_or_default(slice: &[f32], idxs: Simd<usize, N>) -> Self {
         Self::gather_or_default(slice, idxs)
     }
     #[inline]
-    fn gather_select(slice: &[f32], enable: Mask<isize, N>, idxs: Simd<usize, N>, or: Self) -> Self
-    where
-        LaneCount<N>: SupportedLaneCount,
-    {
+    fn gather_select(
+        slice: &[f32],
+        enable: Mask<isize, N>,
+        idxs: Simd<usize, N>,
+        or: Self,
+    ) -> Self {
         Self::gather_select(slice, enable, idxs, or)
     }
     #[inline]
-    fn scatter(self, slice: &mut [f32], idxs: Simd<usize, N>)
-    where
-        LaneCount<N>: SupportedLaneCount,
-    {
+    fn scatter(self, slice: &mut [f32], idxs: Simd<usize, N>) {
         self.scatter(slice, idxs);
     }
     #[inline]
-    fn scatter_select(self, slice: &mut [f32], enable: Mask<isize, N>, idxs: Simd<usize, N>)
-    where
-        LaneCount<N>: SupportedLaneCount,
-    {
+    fn scatter_select(self, slice: &mut [f32], enable: Mask<isize, N>, idxs: Simd<usize, N>) {
         self.scatter_select(slice, enable, idxs);
     }
 
@@ -315,20 +302,14 @@ where
     }
 }
 
-impl<const N: usize> Select<Mask<i32, N>> for Simd<f32, N>
-where
-    LaneCount<N>: SupportedLaneCount,
-{
+impl<const N: usize> Select<Mask<i32, N>> for Simd<f32, N> {
     #[inline]
     fn select(mask: Mask<i32, N>, true_values: Self, false_values: Self) -> Self {
         mask.select(true_values, false_values)
     }
 }
 
-impl<const N: usize> ApproxEq<f32> for Simd<f32, N>
-where
-    LaneCount<N>: SupportedLaneCount,
-{
+impl<const N: usize> ApproxEq<f32> for Simd<f32, N> {
     #[inline]
     fn approx_eq(&self, other: &Self, epsilon: f32, ulp: u32) -> bool {
         self.simd_approx_eq(*other, Self::splat(epsilon), Simd::splat(ulp))

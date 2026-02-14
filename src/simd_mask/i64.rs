@@ -1,15 +1,12 @@
-// Copyright © 2021-2025 Rouven Spreckels <rs@qu1x.dev>
+// Copyright © 2021-2026 Rouven Spreckels <rs@qu1x.dev>
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of
 // the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 use super::{Select, SimdMask};
-use core::simd::{LaneCount, Mask, SupportedLaneCount};
+use core::simd::{Mask, Select as SelectMask};
 
-impl<const N: usize> SimdMask<N> for Mask<i64, N>
-where
-    LaneCount<N>: SupportedLaneCount,
-{
+impl<const N: usize> SimdMask<N> for Mask<i64, N> {
     #[inline]
     fn splat(value: bool) -> Self {
         Self::splat(value)
@@ -43,12 +40,9 @@ where
     }
 }
 
-impl<const N: usize> Select<Self> for Mask<i64, N>
-where
-    LaneCount<N>: SupportedLaneCount,
-{
+impl<const N: usize> Select<Self> for Mask<i64, N> {
     #[inline]
     fn select(mask: Self, true_values: Self, false_values: Self) -> Self {
-        mask.select_mask(true_values, false_values)
+        SelectMask::select(mask, true_values, false_values)
     }
 }

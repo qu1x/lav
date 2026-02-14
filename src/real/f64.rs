@@ -1,24 +1,17 @@
-// Copyright © 2021-2025 Rouven Spreckels <rs@qu1x.dev>
+// Copyright © 2021-2026 Rouven Spreckels <rs@qu1x.dev>
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of
 // the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 use super::Real;
-use core::{
-    cmp::Ordering,
-    num::FpCategory,
-    simd::{LaneCount, Simd, SupportedLaneCount},
-};
+use core::{cmp::Ordering, num::FpCategory, simd::Simd};
 
 #[cfg(feature = "target-features")]
 use target_features::CURRENT_TARGET;
 
 impl Real for f64 {
     type Bits = u64;
-    type Simd<const N: usize>
-        = Simd<Self, N>
-    where
-        LaneCount<N>: SupportedLaneCount;
+    type Simd<const N: usize> = Simd<Self, N>;
 
     #[cfg(feature = "target-features")]
     const NATIVE_LANE_COUNT: usize = match CURRENT_TARGET.suggested_simd_width::<Self>() {

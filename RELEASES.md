@@ -1,3 +1,8 @@
+# Version 0.8.4 (2026-02-14)
+
+  * Synchronize with nightly Rust.
+  * Update KaTeX.
+
 # Version 0.8.3 (2025-12-06)
 
   * Fix KaTeX.

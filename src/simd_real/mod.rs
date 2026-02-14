@@ -1,4 +1,4 @@
-// Copyright © 2021-2025 Rouven Spreckels <rs@qu1x.dev>
+// Copyright © 2021-2026 Rouven Spreckels <rs@qu1x.dev>
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of
 // the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -11,7 +11,7 @@ use core::{
     iter::{Product, Sum},
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssign, Sub, SubAssign},
     ops::{Index, IndexMut},
-    simd::{LaneCount, Mask, Simd, SupportedLaneCount, Swizzle},
+    simd::{Mask, Simd, Swizzle},
 };
 
 mod f32;
@@ -58,7 +58,6 @@ pub macro swizzle {
 #[allow(clippy::len_without_is_empty)]
 pub trait SimdReal<R: Real, const N: usize>
 where
-    LaneCount<N>: SupportedLaneCount,
     Self: Send + Sync + Clone + Copy + Default,
     Self: ApproxEq<R, Self> + PartialEq + PartialOrd,
     Self: Debug,
@@ -166,40 +165,31 @@ where
     ///
     /// If an index is out-of-bounds, the lane is instead selected from the `or` vector.
     #[must_use]
-    fn gather_or(slice: &[R], idxs: Simd<usize, N>, or: Self) -> Self
-    where
-        LaneCount<N>: SupportedLaneCount;
+    fn gather_or(slice: &[R], idxs: Simd<usize, N>, or: Self) -> Self;
     /// Reads from potentially discontiguous indices in `slice` to construct a SIMD vector.
     ///
     /// If an index is out-of-bounds, the lane is set to the default value for the type.
     #[must_use]
     fn gather_or_default(slice: &[R], idxs: Simd<usize, N>) -> Self
     where
-        R: Default,
-        LaneCount<N>: SupportedLaneCount;
+        R: Default;
     /// Reads from potentially discontiguous indices in `slice` to construct a SIMD vector.
     ///
     /// The mask `enable`s all `true` lanes and disables all `false` lanes.
     /// If an index is disabled or is out-of-bounds, the lane is selected from the `or` vector.
     #[must_use]
-    fn gather_select(slice: &[R], enable: Mask<isize, N>, idxs: Simd<usize, N>, or: Self) -> Self
-    where
-        LaneCount<N>: SupportedLaneCount;
+    fn gather_select(slice: &[R], enable: Mask<isize, N>, idxs: Simd<usize, N>, or: Self) -> Self;
     /// Writes the values in a SIMD vector to potentially discontiguous indices in `slice`.
     ///
     /// If two lanes in the scattered vector would write to the same index only the last lane is
     /// guaranteed to actually be written.
-    fn scatter(self, slice: &mut [R], idxs: Simd<usize, N>)
-    where
-        LaneCount<N>: SupportedLaneCount;
+    fn scatter(self, slice: &mut [R], idxs: Simd<usize, N>);
     /// Writes the values in a SIMD vector to multiple potentially discontiguous indices in `slice`.
     ///
     /// The mask `enable`s all `true` lanes and disables all `false` lanes. If an enabled index is
     /// out-of-bounds, the lane is not written. If two enabled lanes in the scattered vector would
     /// write to the same index, only the last lane is guaranteed to actually be written.
-    fn scatter_select(self, slice: &mut [R], enable: Mask<isize, N>, idxs: Simd<usize, N>)
-    where
-        LaneCount<N>: SupportedLaneCount;
+    fn scatter_select(self, slice: &mut [R], enable: Mask<isize, N>, idxs: Simd<usize, N>);
 
     /// Raw transmutation from an unsigned integer vector type with the same size and number of
     /// lanes.

@@ -1,4 +1,4 @@
-// Copyright © 2021-2025 Rouven Spreckels <rs@qu1x.dev>
+// Copyright © 2021-2026 Rouven Spreckels <rs@qu1x.dev>
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of
 // the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -12,7 +12,7 @@ use core::{
     ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXor, BitXorAssign, Not},
     ops::{Index, IndexMut},
     ops::{Shl, ShlAssign, Shr, ShrAssign},
-    simd::{LaneCount, Simd, SupportedLaneCount},
+    simd::Simd,
 };
 
 mod u32;
@@ -24,7 +24,6 @@ mod u64;
 #[allow(clippy::len_without_is_empty)]
 pub trait SimdBits<B: Bits, const N: usize>
 where
-    LaneCount<N>: SupportedLaneCount,
     Self: Send + Sync + Clone + Copy + Default,
     Self: PartialEq + Eq + PartialOrd + Ord,
     Self: From<Simd<B, N>> + Into<Simd<B, N>>,

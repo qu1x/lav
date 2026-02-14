@@ -1,4 +1,4 @@
-// Copyright © 2021-2025 Rouven Spreckels <rs@qu1x.dev>
+// Copyright © 2021-2026 Rouven Spreckels <rs@qu1x.dev>
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of
 // the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -7,7 +7,6 @@ use super::Select;
 use core::{
     fmt::Debug,
     ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXor, BitXorAssign, Neg, Not},
-    simd::{LaneCount, SupportedLaneCount},
 };
 
 mod i32;
@@ -20,7 +19,6 @@ mod i64;
 #[allow(clippy::len_without_is_empty)]
 pub trait SimdMask<const N: usize>
 where
-    LaneCount<N>: SupportedLaneCount,
     Self: Send + Sync + Clone + Copy + Default,
     Self: PartialEq + PartialOrd,
     Self: Debug,

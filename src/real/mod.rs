@@ -13,7 +13,7 @@ use core::{
     iter::{Product, Sum},
     num::{FpCategory, ParseFloatError},
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssign, Sub, SubAssign},
-    simd::{LaneCount, SimdElement, SupportedLaneCount},
+    simd::SimdElement,
     str::FromStr,
 };
 
@@ -54,9 +54,7 @@ where
     /// Associated bits representation.
     type Bits: Bits;
     /// Associated vector.
-    type Simd<const N: usize>: SimdReal<Self, N>
-    where
-        LaneCount<N>: SupportedLaneCount;
+    type Simd<const N: usize>: SimdReal<Self, N>;
 
     /// Native lane count of current build target or `1` if unknown.
     #[cfg(feature = "target-features")]
@@ -444,10 +442,7 @@ where
     /// Constructs a SIMD vector by setting all lanes to the given value.
     #[must_use]
     #[inline]
-    fn splat<const N: usize>(self) -> Self::Simd<N>
-    where
-        LaneCount<N>: SupportedLaneCount,
-    {
+    fn splat<const N: usize>(self) -> Self::Simd<N> {
         Self::Simd::splat(self)
     }
 
@@ -469,10 +464,7 @@ where
     /// Panic if the size of the SIMD vector is different from `N` times that of the scalar.
     #[must_use]
     #[inline]
-    fn as_simd<const N: usize>(slice: &[Self]) -> (&[Self], &[Self::Simd<N>], &[Self])
-    where
-        LaneCount<N>: SupportedLaneCount,
-    {
+    fn as_simd<const N: usize>(slice: &[Self]) -> (&[Self], &[Self::Simd<N>], &[Self]) {
         Self::Simd::as_simd(slice)
     }
 
@@ -499,10 +491,7 @@ where
     #[inline]
     fn as_simd_mut<const N: usize>(
         slice: &mut [Self],
-    ) -> (&mut [Self], &mut [Self::Simd<N>], &mut [Self])
-    where
-        LaneCount<N>: SupportedLaneCount,
-    {
+    ) -> (&mut [Self], &mut [Self::Simd<N>], &mut [Self]) {
         Self::Simd::as_simd_mut(slice)
     }
 }

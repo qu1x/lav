@@ -1,16 +1,13 @@
-// Copyright © 2021-2025 Rouven Spreckels <rs@qu1x.dev>
+// Copyright © 2021-2026 Rouven Spreckels <rs@qu1x.dev>
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of
 // the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 use super::Bits;
-use core::simd::{LaneCount, Simd, SupportedLaneCount};
+use core::simd::Simd;
 
 impl Bits for u32 {
-    type Simd<const N: usize>
-        = Simd<Self, N>
-    where
-        LaneCount<N>: SupportedLaneCount;
+    type Simd<const N: usize> = Simd<Self, N>;
 
     const MIN: Self = Self::MIN;
     const MAX: Self = Self::MAX;

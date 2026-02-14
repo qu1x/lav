@@ -1,4 +1,4 @@
-// Copyright © 2021-2025 Rouven Spreckels <rs@qu1x.dev>
+// Copyright © 2021-2026 Rouven Spreckels <rs@qu1x.dev>
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of
 // the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -11,7 +11,7 @@ use core::{
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign},
     ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXor, BitXorAssign, Not},
     ops::{Shl, ShlAssign, Shr, ShrAssign},
-    simd::{LaneCount, SimdElement, SupportedLaneCount},
+    simd::SimdElement,
 };
 
 mod u32;
@@ -52,9 +52,7 @@ where
     Self: SimdElement,
 {
     /// Associated vector.
-    type Simd<const N: usize>: SimdBits<Self, N>
-    where
-        LaneCount<N>: SupportedLaneCount;
+    type Simd<const N: usize>: SimdBits<Self, N>;
 
     /// The smallest value that can be represented by this integer type.
     const MIN: Self;
@@ -83,10 +81,7 @@ where
     /// Constructs a SIMD vector by setting all lanes to the given value.
     #[must_use]
     #[inline]
-    fn splat<const N: usize>(self) -> Self::Simd<N>
-    where
-        LaneCount<N>: SupportedLaneCount,
-    {
+    fn splat<const N: usize>(self) -> Self::Simd<N> {
         Self::Simd::splat(self)
     }
 
@@ -108,10 +103,7 @@ where
     /// Panic if the size of the SIMD vector is different from `N` times that of the scalar.
     #[must_use]
     #[inline]
-    fn as_simd<const N: usize>(slice: &[Self]) -> (&[Self], &[Self::Simd<N>], &[Self])
-    where
-        LaneCount<N>: SupportedLaneCount,
-    {
+    fn as_simd<const N: usize>(slice: &[Self]) -> (&[Self], &[Self::Simd<N>], &[Self]) {
         Self::Simd::as_simd(slice)
     }
 
@@ -138,10 +130,7 @@ where
     #[inline]
     fn as_simd_mut<const N: usize>(
         slice: &mut [Self],
-    ) -> (&mut [Self], &mut [Self::Simd<N>], &mut [Self])
-    where
-        LaneCount<N>: SupportedLaneCount,
-    {
+    ) -> (&mut [Self], &mut [Self::Simd<N>], &mut [Self]) {
         Self::Simd::as_simd_mut(slice)
     }
 }

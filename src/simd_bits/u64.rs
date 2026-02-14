@@ -1,19 +1,16 @@
-// Copyright © 2021-2025 Rouven Spreckels <rs@qu1x.dev>
+// Copyright © 2021-2026 Rouven Spreckels <rs@qu1x.dev>
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of
 // the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 use super::{Select, SimdBits};
 use core::simd::{
-    LaneCount, Mask, Simd, SupportedLaneCount,
+    Mask, Select as _, Simd,
     cmp::{SimdPartialEq, SimdPartialOrd},
     num::SimdUint,
 };
 
-impl<const N: usize> SimdBits<u64, N> for Simd<u64, N>
-where
-    LaneCount<N>: SupportedLaneCount,
-{
+impl<const N: usize> SimdBits<u64, N> for Simd<u64, N> {
     type Mask = Mask<i64, N>;
 
     #[inline]
@@ -66,10 +63,7 @@ where
     }
 }
 
-impl<const N: usize> Select<Mask<i64, N>> for Simd<u64, N>
-where
-    LaneCount<N>: SupportedLaneCount,
-{
+impl<const N: usize> Select<Mask<i64, N>> for Simd<u64, N> {
     #[inline]
     fn select(mask: Mask<i64, N>, true_values: Self, false_values: Self) -> Self {
         mask.select(true_values, false_values)
